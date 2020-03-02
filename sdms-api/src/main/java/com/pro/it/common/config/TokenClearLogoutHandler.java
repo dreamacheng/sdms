@@ -1,4 +1,4 @@
-package com.pro.it.common.auth;
+package com.pro.it.common.config;
 
 import com.pro.it.common.service.JwtUserService;
 import org.springframework.security.core.Authentication;
@@ -29,5 +29,6 @@ public class TokenClearLogoutHandler implements LogoutHandler {
         if (user != null && user.getUsername() != null) {
             jwtUserService.deleteUserLoginInfo(user.getUsername());
         }
+        AuthenticationContextHolder.reset();
     }
 }

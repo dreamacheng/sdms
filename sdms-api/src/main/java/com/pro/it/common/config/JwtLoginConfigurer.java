@@ -1,4 +1,4 @@
-package com.pro.it.common.auth;
+package com.pro.it.common.config;
 
 import com.pro.it.common.filter.JwtAuthenticationFilter;
 import org.springframework.security.authentication.AuthenticationManager;

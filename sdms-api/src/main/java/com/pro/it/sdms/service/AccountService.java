@@ -12,4 +12,6 @@ public interface AccountService {
     Account getUserByLoginInfo(String username, String password);
 
     void registerAccount(AccountVO vo);
+
+    boolean verifyAccountInfoValid(AccountVO vo);
 }

@@ -4,7 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.pro.it.common.auth.JwtAuthenticationToken;
+import com.pro.it.common.config.AuthenticationContextHolder;
+import com.pro.it.common.config.JwtAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -28,8 +29,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         if (jwt.getExpiresAt().before(Calendar.getInstance().getTime())) {
             throw new NonceExpiredException("Token expires");
         }
-        String username = jwt.getSubject();
-        UserDetails user = userService.getUserLoginInfo(username);
+        String accountNo = jwt.getSubject();
+        UserDetails user = userService.getUserLoginInfo(accountNo);
         if (user == null || user.getPassword() == null) {
             throw  new NonceExpiredException("Token expires");
         }
@@ -37,9 +38,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         try {
             Algorithm algorithm = Algorithm.HMAC256(encryptSalt);
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withSubject(username)
+                    .withSubject(accountNo)
                     .build();
             verifier.verify(jwt.getToken());
+            jwt.getClaim("username").asString();
+            AuthenticationContextHolder.setUsername("username");
         } catch (Exception e) {
             throw new BadCredentialsException("JWT token verify fail", e);
         }

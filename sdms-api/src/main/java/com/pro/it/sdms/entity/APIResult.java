@@ -11,11 +11,9 @@ import lombok.*;
 public class APIResult<T> extends BeanBase {
 	private int code;
 	private String errMsg;
-	private T info;
 
-	public APIResult(int code, T into) {
+	public APIResult(int code) {
 		this.code = code;
-		this.info = into;
 	}
 
 }

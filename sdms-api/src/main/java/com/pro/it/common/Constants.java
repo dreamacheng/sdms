@@ -23,6 +23,8 @@ public final class Constants {
 	 */
 	public static final short VIOLATE_FILE_RESTRICT_EXTENSION = 1003;
 
+	public static final short REGISTER_CODE_INVALID = 2001;
+
 
 	public static class Code {
 		private Code() {

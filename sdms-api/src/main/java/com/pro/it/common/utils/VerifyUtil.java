@@ -14,7 +14,11 @@ public class VerifyUtil {
         for (Field field : fields) {
             field.setAccessible(true);
             Object value = field.get(vo);
+
             if(value == null || "".equals(value.toString())) {
+                if ("registerCode".equals(field.getName())) {
+                    continue;
+                }
                 return false;
             }
         }

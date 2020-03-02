@@ -45,6 +45,7 @@ public class JwtUserService implements UserDetailsService {
         Date expires = new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000);
         return JWT.create()
                 .withSubject(user.getUsername())
+                .withClaim("username", loginAccount.getUsername())
                 .withExpiresAt(expires)
                 .withIssuedAt(new Date())
                 .sign(algorithm);

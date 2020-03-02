@@ -1,6 +1,7 @@
 package com.pro.it.sdms.dao;
 
 import com.pro.it.sdms.entity.dto.Account;
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -13,4 +14,5 @@ public interface AccountDAO extends JpaSpecificationExecutor<Account>, JpaReposi
     Account getAccountByAccountNo(String accountNo);
 
     Account getAccountByAccountNoAndPassword(String accountNo, String password);
+
 }

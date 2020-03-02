@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,13 +13,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "sdms_account")
+@EntityListeners(AuditingEntityListener.class)
 @Setter
 @Getter
 @NoArgsConstructor
 @ToString
 public class Account extends BaseDTO{
-    @Id
-    private BigDecimal id;
+
     /** 姓名 */
     @Column(name = "username", nullable = false, columnDefinition = "varchar(30)")
     private String username;
@@ -55,9 +56,11 @@ public class Account extends BaseDTO{
     /** 政治面貌 */
     @Column(name = "politics_status", nullable = false, columnDefinition = "int")
     private Short politicsStatus;
+
     /** 登录salt */
     @Column(name = "salt",columnDefinition = "varchar(30)")
     private String salt;
+
     @Column(name = "role",columnDefinition = "varchar(10)")
     private String role;
 

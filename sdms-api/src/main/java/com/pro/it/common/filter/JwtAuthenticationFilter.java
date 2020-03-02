@@ -2,7 +2,7 @@ package com.pro.it.common.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.pro.it.common.auth.JwtAuthenticationToken;
+import com.pro.it.common.config.JwtAuthenticationToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
