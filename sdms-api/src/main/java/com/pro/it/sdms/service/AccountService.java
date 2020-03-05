@@ -1,5 +1,6 @@
 package com.pro.it.sdms.service;
 
+import com.pro.it.sdms.controller.request.ResetPwdRequestEntity;
 import com.pro.it.sdms.entity.dto.Account;
 import com.pro.it.sdms.entity.vo.AccountVO;
 
@@ -14,4 +15,6 @@ public interface AccountService {
     void registerAccount(AccountVO vo);
 
     boolean verifyAccountInfoValid(AccountVO vo);
+
+    void resetPwd(ResetPwdRequestEntity resetPwdRequestEntity);
 }

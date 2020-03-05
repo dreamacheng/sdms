@@ -2,6 +2,7 @@ package com.pro.it.sdms.service.impl;
 
 import com.pro.it.common.Constants;
 import com.pro.it.common.exceptions.BadRequestException;
+import com.pro.it.sdms.controller.request.ResetPwdRequestEntity;
 import com.pro.it.sdms.dao.AccountDAO;
 import com.pro.it.sdms.dao.RegisterCodeDAO;
 import com.pro.it.sdms.entity.dto.Account;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -39,6 +42,10 @@ public class AccountServiceImpl implements AccountService {
         return accountDAO.getAccountByAccountNoAndPassword(username, password);
     }
 
+    /**
+     * 注册用户
+     * @param vo
+     */
     @Override
     public void registerAccount(AccountVO vo) {
         if (verifyAccountInfoValid(vo)) {
@@ -64,6 +71,24 @@ public class AccountServiceImpl implements AccountService {
         }
         Account dto = voToDTO(vo);
         return accountDAO.exists(Example.of(dto));
+    }
+
+    /**
+     * 重置密码
+     * @param resetPwdRequestEntity
+     */
+    @Override
+    public void resetPwd(ResetPwdRequestEntity resetPwdRequestEntity) {
+        Account dto = new Account();
+        dto.setUsername(resetPwdRequestEntity.getUsername());
+        dto.setIdentityCard(resetPwdRequestEntity.getIdentityCard());
+        dto.setAccountNo(resetPwdRequestEntity.getAccountNo());
+        Optional<Account> optionalAccount = accountDAO.findOne(Example.of(dto));
+        if (optionalAccount.get() == null) {
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "user not exist");
+        }
+        Account account = optionalAccount.get();
+        accountDAO.save(dto);
     }
 
 

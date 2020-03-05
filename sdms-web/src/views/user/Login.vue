@@ -12,16 +12,47 @@
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick"
       >
-        <a-tab-pane key="tab1" >
+        <a-tab-pane key="tab1" tab="学生入口">
           <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误（admin/ant.design )" />
           <a-form-item>
             <a-input
               size="large"
               type="text"
-              placeholder="学号/身份证"
+              placeholder="学号"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: '请输入学号或身份证' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: '请输入学号' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+              ]"
+            >
+              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input>
+          </a-form-item>
+
+          <a-form-item>
+            <a-input
+              size="large"
+              type="password"
+              autocomplete="false"
+              placeholder="密码"
+              v-decorator="[
+                'password',
+                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+              ]"
+            >
+              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input>
+          </a-form-item>
+        </a-tab-pane>
+        <a-tab-pane key="tab2" tab="教师入口">
+          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误（admin/ant.design )" />
+          <a-form-item>
+            <a-input
+              size="large"
+              type="text"
+              placeholder="教职工号"
+              v-decorator="[
+                'username',
+                {rules: [{ required: true, message: '请输入教职工号' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -51,7 +82,7 @@
           :to="{ name: 'recover', params: { user: 'aaa'} }"
           class="forge-password"
           style="float: right;"
-        >忘记密码</router-link>
+        > 忘记密码</router-link>
       </a-form-item>
 
       <a-form-item style="margin-top:24px">
@@ -64,7 +95,10 @@
           :disabled="state.loginBtn"
         >确定</a-button>
       </a-form-item>
-
+      <div class="user-login-other">
+        <router-link style="float: left;" :to="{ name: 'register' }">学校官网</router-link>
+        <router-link class="register" :to="{ name: 'register' }">注册账户</router-link>
+      </div>
     </a-form>
 
     <two-step-captcha
