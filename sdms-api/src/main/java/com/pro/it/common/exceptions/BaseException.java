@@ -3,8 +3,10 @@ package com.pro.it.common.exceptions;
 
 import com.pro.it.common.ErrorCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @SuppressWarnings("serial")
+@ToString
 public class BaseException extends RuntimeException {
 
 	@Getter

@@ -5,13 +5,13 @@
         <a-col :span="6">&nbsp;</a-col>
         <a-col :span="6">
           <a-form-item label="学号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-input placeholder="学号" v-decorator="['accountNo', {rules: [{ required: true, message: '请输入正确的学号', pattern: /^\d{7,}$/ }], validateTrigger: ['change', 'blur'] }]"/>
+            <a-input size="large" placeholder="学号" v-decorator="['accountNo', {rules: [{ required: true, message: '请输入正确的学号', pattern: /^\d{7,}$/ }], validateTrigger: ['change', 'blur'] }]"/>
           </a-form-item>
           <a-form-item label="姓名" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-input placeholder="姓名" v-decorator="['username', {rules: [{ required: true, message: '请输入姓名' }], validateTrigger: ['change', 'blur'] }]"/>
+            <a-input placeholder="姓名" v-decorator="['username', {rules: [{ required: true, message: '请输入姓名' }], validateTrigger: ['blur'] }]"/>
           </a-form-item>
           <a-popover
-            placement="rightTop"
+            placement="leftTop"
             :trigger="['focus']"
             :getPopupContainer="(trigger) => trigger.parentElement"
             v-model="state.passwordLevelChecked">
@@ -45,29 +45,28 @@
             ></a-input>
           </a-form-item>
           <a-form-item label="在校公寓" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-input size="large" placeholder="在校公寓" v-decorator="['lodgingHouse', {rules: [{ required: true, message: '请输入在校公寓' }], validateTrigger: ['change', 'blur'] }]"/>
+            <a-input size="large" placeholder="在校公寓" v-decorator="['lodgingHouse', {rules: [{ required: true, message: '请输入在校公寓' }], validateTrigger: ['blur'] }]"/>
           </a-form-item>
           <a-form-item label="身份证号码" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-input size="large" placeholder="身份证号码" v-decorator="['identityCard', {rules: [{ required: true, message: '请输入正确的身份证号码', pattern: /^\d{17}(\w?\d?)$/ }], validateTrigger: ['change', 'blur'] }]"/>
+            <a-input size="large" placeholder="身份证号码" v-decorator="['identityCard', {rules: [{ required: true, message: '请输入正确的身份证号码', pattern: /^\d{17}(\w?\d?)$/ }], validateTrigger: ['blur'] }]"/>
           </a-form-item >
           <a-form-item label="专业科系" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-input size="large" placeholder="专业科系" v-decorator="['department', {rules: [{ required: true, message: '请输入专业科系' }], validateTrigger: ['change', 'blur'] }]"/>
+            <a-input size="large" placeholder="专业科系" v-decorator="['department', {rules: [{ required: true, message: '请输入专业科系' }], validateTrigger: ['blur'] }]"/>
           </a-form-item>
         </a-col>
         <a-col :span="6">
           <a-form-item label="年龄" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-input size="large" placeholder="年龄" v-decorator="['age', {rules: [{ required: true, message: '请输入正确的年龄', pattern: /^\d{1,2}$/ }], validateTrigger: ['change', 'blur'] }]"/>
+            <a-input size="large" placeholder="年龄" v-decorator="['age', {rules: [{ required: true, message: '请输入正确的年龄', pattern: /^\d{1,2}$/ }], validateTrigger: ['blur'] }]"/>
           </a-form-item>
           <a-form-item label="性别" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-radio-group name="gender" :defaultValue="1" v-decorator="['gender', {rules: [{ required: true, message: '请选择性别'}], validateTrigger: ['change', 'blur'] }]">
-              <a-radio :value="1">男</a-radio>
+            <a-radio-group name="gender"  v-decorator="['gender', {rules: [{ required: true, message: '请选择性别'}], validateTrigger: ['change', 'blur'] }]">
+              <a-radio :value="1" initialValue>男</a-radio>
               <a-radio :value="2">女</a-radio>
             </a-radio-group>
           </a-form-item>
           <a-form-item label="民族" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
             <a-select
-              size="default"
-              :defaultValue="nations[0]"
+              size="large"
               v-decorator="['nation', {rules: [{ required: true, message: '请选择民族'}], validateTrigger: ['change', 'blur'] }]"
             >
               <a-select-option v-for="value in nations" :key="value">
@@ -75,29 +74,33 @@
               </a-select-option>
             </a-select>
             </a-form-item>
-            <a-form-item label="政治面貌" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-              <a-radio-group name="politicsStatus" :defaultValue="1" v-decorator="['politicsStatus', {rules: [{ required: true, message: '请选择政治面貌'}], validateTrigger: ['change', 'blur'] }]">
-                <a-radio :value="1">团员</a-radio>
+            <a-form-item label="政治面貌" :label-col="{ span: 6 }" :wrapper-col="{ span: 14 }">
+              <a-radio-group name="politicsStatus" v-decorator="['politicsStatus', {rules: [{ required: true, message: '请选择政治面貌'}], validateTrigger: ['change', 'blur'] }]">
+                <a-radio :value="1" initialValue>团员</a-radio>
                 <a-radio :value="2">党员</a-radio>
                 <a-radio :value="3">群众</a-radio>
               </a-radio-group>
             </a-form-item>
-            <a-form-item label="注册类型" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-              <a-radio-group name="role" :defaultValue="1" v-decorator="['role', {rules: [{ required: true, message: '请选择注册类型'}], validateTrigger: ['change', 'blur'] }]">
-                <a-radio :value="1">学生</a-radio>
-                <a-radio :value="2">教师</a-radio>
-              </a-radio-group>
+            <a-form-item  label="注册类型" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+              <a-row>
+                <a-col span="12">
+                  <a-radio-group name="role"  @change="typeChange" v-decorator="['role', {rules: [{ required: true, message: '请选择政治面貌'}], validateTrigger: ['change', 'blur'] }]">
+                    <a-radio :value="2" initialValue>学生</a-radio>
+                  <a-radio :value="1">教师</a-radio>
+                  </a-radio-group>
+                </a-col>
+                <a-col span="12" style="margin-bottom:-25px">
+                  <a-form-item v-show="registerModalShow" label="注册码" :label-col="{ span: 12 }" :wrapper-col="{ span: 12 }">
+                    <a-input v-decorator="['registerCode']"/>
+                  </a-form-item>
+                </a-col>
+              </a-row>
             </a-form-item>
-            <a-form-item label="出生日期" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }" v-decorator="['birthday', {rules: [{ required: true, message: '请选择出生日期'}], validateTrigger: ['change', 'blur'] }]">
-              <a-date-picker size="default" placeholder="出生日期" />
+            <a-form-item label="出生日期" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+              <a-date-picker size="large" placeholder="出生日期" v-decorator="['birthday', {rules: [{ required: true, message: '请选择出生日期'}], validateTrigger: ['change', 'blur'] }]"/>
             </a-form-item>
             <a-form-item label="手机号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-              <a-input size="large" placeholder="11 位手机号" v-decorator="['tel', {rules: [{ required: true, message: '请输入正确的手机号', pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
-                <a-select slot="addonBefore" size="large" defaultValue="+86">
-                  <a-select-option value="+86">+86</a-select-option>
-                  <a-select-option value="+87">+87</a-select-option>
-                </a-select>
-              </a-input>
+              <a-input size="large" placeholder="11 位手机号" v-decorator="['tel', {rules: [{ required: true, message: '请输入正确的手机号', pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['blur'] }]"/>
             </a-form-item>
         </a-col>
     </a-row>
@@ -123,8 +126,9 @@
 
 <script>
 import { mixinDevice } from '@/utils/mixin.js'
-import { getSmsCaptcha } from '@/api/login'
+import { getSmsCaptcha, registerAccount } from '@/api/login'
 import { nation } from './nation.js'
+import md5 from 'md5'
 
 const levelNames = {
   0: '低',
@@ -153,6 +157,8 @@ export default {
     return {
       form: this.$form.createForm(this),
       nations: nation,
+      registerModalShow: false,
+      registerCode: '',
       state: {
         time: 60,
         smsSendBtn: false,
@@ -206,6 +212,10 @@ export default {
       }
     },
 
+    typeChange (e) {
+      e.target.value === 1 ? this.registerModalShow = true : this.registerModalShow = false
+    },
+
     handlePasswordCheck (rule, value, callback) {
       const password = this.form.getFieldValue('password')
       console.log('value', value)
@@ -239,7 +249,35 @@ export default {
       validateFields({ force: true }, (err, values) => {
         if (!err) {
           state.passwordLevelChecked = false
-          $router.push({ name: 'registerResult', params: { ...values } })
+          const userInfo = { ...values }
+          userInfo.password = md5(values.password)
+          registerAccount(userInfo)
+            .then((res) => {
+              debugger
+              if (res && res.code === 90101) {
+                this.$notification.open({
+                  message: '身份证已存在',
+                  description: '请确认身份证是否正确或已被注册'
+                })
+                return
+              }
+              if (res && res.code === 90102) {
+                this.$notification.open({
+                  message: '学号或职工号已存在',
+                  description: '请确认学号或职工号是否正确或已被注册'
+                })
+                return
+              }
+              if (res && res.code === 90103) {
+                this.$notification.open({
+                  message: '注册码错误',
+                  description: '请确认注册码是否正确或已失效'
+                })
+                return
+              }
+              $router.push({ name: 'registerResult', params: { ...values } })
+            })
+            .catch(err => this.requestFailed(err))
         }
       })
     },

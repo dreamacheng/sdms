@@ -25,10 +25,25 @@ public final class Constants {
 
 	public static final short REGISTER_CODE_INVALID = 2001;
 
+	public static class Register {
+		private Register(){}
+
+		/**
+		 * 身份证已存在
+		 */
+		public static final int IDENTITY_CARD_EXIST = 90101;
+
+		/**
+		 * 学号或职工号已存在
+		 */
+		public static final int ACCOUNT_NO_EXIST = 90102;
+
+
+		public static final int REGISTER_CODE_INVALID = 90103;
+	}
 
 	public static class Code {
-		private Code() {
-		}
+		private Code() {}
 
 		/**
 		 * XX参数必须设置

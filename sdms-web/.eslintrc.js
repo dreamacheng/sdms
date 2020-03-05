@@ -18,7 +18,7 @@ module.exports = {
         'singleline': 5,
         'multiline': {
           'max': 1,
-          'allowFirstLine': false
+          'allowFirstLine': true
         }
       }
     ],
@@ -37,7 +37,7 @@ module.exports = {
       2,
       'single',
       {
-        'avoidEscape': true,
+        'avoidEscape': false,
         'allowTemplateLiterals': true
       }
     ],

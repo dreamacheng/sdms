@@ -12,7 +12,10 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "sdms_account")
+@Table(name = "sdms_account", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "account_no"),
+        @UniqueConstraint(columnNames = "identity_card")
+})
 @EntityListeners(AuditingEntityListener.class)
 @Setter
 @Getter
@@ -27,7 +30,7 @@ public class Account extends BaseDTO{
     @Column(name = "account_no", nullable = false, columnDefinition = "varchar(20)")
     private String accountNo;
     /** 密码 */
-    @Column(name = "password", nullable = false, columnDefinition = "varchar(20)")
+    @Column(name = "password", nullable = false, columnDefinition = "varchar(300)")
     private String password;
     /** 性别 */
     @Column(name = "gender", nullable = false, columnDefinition = "int")

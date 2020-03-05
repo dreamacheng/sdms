@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public interface AccountDAO extends JpaSpecificationExecutor<Account>, JpaRepository<Account, BigDecimal> {
@@ -14,5 +15,9 @@ public interface AccountDAO extends JpaSpecificationExecutor<Account>, JpaReposi
     Account getAccountByAccountNo(String accountNo);
 
     Account getAccountByAccountNoAndPassword(String accountNo, String password);
+
+    List<Account> getAccountsByIdentityCard(String identityCard);
+
+    List<Account> getAccountsByAccountNo(String accountNo);
 
 }

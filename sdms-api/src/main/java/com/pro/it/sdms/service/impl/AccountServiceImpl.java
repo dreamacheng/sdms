@@ -48,9 +48,7 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public void registerAccount(AccountVO vo) {
-        if (verifyAccountInfoValid(vo)) {
-            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "Account has exists");
-        }
+        verifyAccountInfoValid(vo);
         if ("ADMIN".equals(vo.getRole())) {
             if (StringUtils.isEmpty(vo.getRegisterCode())) {
                 throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "Register Code missing");
@@ -58,19 +56,23 @@ public class AccountServiceImpl implements AccountService {
             RegisterCode registerCode = registerCodeDAO.getRegisterCodeByCode(vo.getRegisterCode());
             if (registerCode == null || StringUtils.isEmpty(registerCode.getCode())
                 || registerCode.getAvailable().equals(Constants.REGISTER_CODE_INVALID)) {
-                throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "Register Code error or invalid");
+                throw new BadRequestException(Constants.Register.REGISTER_CODE_INVALID, "Register Code error or invalid");
             }
         }
         accountDAO.save(voToDTO(vo));
     }
 
     @Override
-    public boolean verifyAccountInfoValid(AccountVO vo) {
+    public void verifyAccountInfoValid(AccountVO vo) {
         if (vo == null) {
-           throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter error");
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter error");
         }
-        Account dto = voToDTO(vo);
-        return accountDAO.exists(Example.of(dto));
+        if (!accountDAO.getAccountsByAccountNo(vo.getAccountNo()).isEmpty()) {
+            throw new BadRequestException(Constants.Register.ACCOUNT_NO_EXIST, "account no has been exist");
+        }
+        if (!accountDAO.getAccountsByIdentityCard(vo.getIdentityCard()).isEmpty()) {
+            throw new BadRequestException(Constants.Register.IDENTITY_CARD_EXIST, "identity card has been exist");
+        }
     }
 
     /**

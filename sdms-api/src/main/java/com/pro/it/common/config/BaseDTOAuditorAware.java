@@ -13,6 +13,9 @@ public class BaseDTOAuditorAware implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            return Optional.of("system");
+        }
         return Optional.of(authentication.getPrincipal().toString());
     }
 }

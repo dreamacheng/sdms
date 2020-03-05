@@ -14,7 +14,7 @@ public interface AccountService {
 
     void registerAccount(AccountVO vo);
 
-    boolean verifyAccountInfoValid(AccountVO vo);
+    void verifyAccountInfoValid(AccountVO vo);
 
     void resetPwd(ResetPwdRequestEntity resetPwdRequestEntity);
 }

@@ -14,9 +14,20 @@ import { axios } from '@/utils/request'
  */
 export function login (parameter) {
   return axios({
-    url: '/auth/login',
+    url: '/api/login',
     method: 'post',
     data: parameter
+  })
+}
+
+export function registerAccount (parameter) {
+  return axios({
+    url: '/api/register',
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
   })
 }
 
@@ -47,22 +58,10 @@ export function getCurrentUserNav (token) {
 
 export function logout () {
   return axios({
-    url: '/auth/logout',
+    url: '/api/logout',
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
-  })
-}
-
-/**
- * get user 2step code open?
- * @param parameter {*}
- */
-export function get2step (parameter) {
-  return axios({
-    url: api.twoStepCode,
-    method: 'post',
-    data: parameter
   })
 }

@@ -11,10 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -26,6 +23,7 @@ import java.util.Date;
 public class BaseDTO extends BeanBase {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private BigDecimal id;
 
     @CreatedDate

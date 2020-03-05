@@ -2,6 +2,7 @@ package com.pro.it.common.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.pro.it.common.exceptions.SystemErrorException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class SDMSUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -48,7 +51,6 @@ public class SDMSUsernamePasswordAuthenticationFilter extends AbstractAuthentica
         if (password == null) {
             password = "";
         }
-
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(accountNo, password);
 
         return this.getAuthenticationManager().authenticate(authRequest);
