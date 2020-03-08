@@ -6,10 +6,12 @@ import com.pro.it.sdms.entity.APIResult;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
 @NoArgsConstructor
+@ToString
 public class InfoAPIResult<T> extends APIResult {
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)

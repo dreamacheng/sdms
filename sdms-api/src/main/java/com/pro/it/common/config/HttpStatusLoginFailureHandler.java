@@ -1,5 +1,6 @@
 package com.pro.it.common.config;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;

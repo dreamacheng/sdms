@@ -41,8 +41,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                     .withSubject(accountNo)
                     .build();
             verifier.verify(jwt.getToken());
-            jwt.getClaim("username").asString();
-            AuthenticationContextHolder.setUsername("username");
         } catch (Exception e) {
             throw new BadCredentialsException("JWT token verify fail", e);
         }

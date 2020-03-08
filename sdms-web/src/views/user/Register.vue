@@ -60,8 +60,8 @@
           </a-form-item>
           <a-form-item label="性别" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
             <a-radio-group name="gender"  v-decorator="['gender', {rules: [{ required: true, message: '请选择性别'}], validateTrigger: ['change', 'blur'] }]">
-              <a-radio :value="1" initialValue>男</a-radio>
-              <a-radio :value="2">女</a-radio>
+              <a-radio value="MALE" defaultChecked>男</a-radio>
+              <a-radio value="FEMALE">女</a-radio>
             </a-radio-group>
           </a-form-item>
           <a-form-item label="民族" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
@@ -76,17 +76,17 @@
             </a-form-item>
             <a-form-item label="政治面貌" :label-col="{ span: 6 }" :wrapper-col="{ span: 14 }">
               <a-radio-group name="politicsStatus" v-decorator="['politicsStatus', {rules: [{ required: true, message: '请选择政治面貌'}], validateTrigger: ['change', 'blur'] }]">
-                <a-radio :value="1" initialValue>团员</a-radio>
-                <a-radio :value="2">党员</a-radio>
-                <a-radio :value="3">群众</a-radio>
+                <a-radio value="LEAGUE_MEMBER" defaultChecked>团员</a-radio>
+                <a-radio value="PART_MEMBER">党员</a-radio>
+                <a-radio value="MASSES">群众</a-radio>
               </a-radio-group>
             </a-form-item>
             <a-form-item  label="注册类型" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
               <a-row>
                 <a-col span="12">
                   <a-radio-group name="role"  @change="typeChange" v-decorator="['role', {rules: [{ required: true, message: '请选择政治面貌'}], validateTrigger: ['change', 'blur'] }]">
-                    <a-radio :value="2" initialValue>学生</a-radio>
-                  <a-radio :value="1">教师</a-radio>
+                    <a-radio value="STUDENT" defaultChecked>学生</a-radio>
+                  <a-radio value="MANAGER">教师</a-radio>
                   </a-radio-group>
                 </a-col>
                 <a-col span="12" style="margin-bottom:-25px">
@@ -97,7 +97,7 @@
               </a-row>
             </a-form-item>
             <a-form-item label="出生日期" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-              <a-date-picker size="large" placeholder="出生日期" v-decorator="['birthday', {rules: [{ required: true, message: '请选择出生日期'}], validateTrigger: ['change', 'blur'] }]"/>
+              <a-date-picker size="large" placeholder="出生日期" v-decorator="['birthday', {rules: [{ required: true, message: '请选择出生日期'}] }]"/>
             </a-form-item>
             <a-form-item label="手机号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
               <a-input size="large" placeholder="11 位手机号" v-decorator="['tel', {rules: [{ required: true, message: '请输入正确的手机号', pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['blur'] }]"/>
@@ -126,7 +126,7 @@
 
 <script>
 import { mixinDevice } from '@/utils/mixin.js'
-import { getSmsCaptcha, registerAccount } from '@/api/login'
+import { registerAccount } from '@/api/login'
 import { nation } from './nation.js'
 import md5 from 'md5'
 
@@ -213,7 +213,7 @@ export default {
     },
 
     typeChange (e) {
-      e.target.value === 1 ? this.registerModalShow = true : this.registerModalShow = false
+      e.target.value === 'MANAGER' ? this.registerModalShow = true : this.registerModalShow = false
     },
 
     handlePasswordCheck (rule, value, callback) {
@@ -253,7 +253,6 @@ export default {
           userInfo.password = md5(values.password)
           registerAccount(userInfo)
             .then((res) => {
-              debugger
               if (res && res.code === 90101) {
                 this.$notification.open({
                   message: '身份证已存在',
@@ -282,43 +281,6 @@ export default {
       })
     },
 
-    getCaptcha (e) {
-      e.preventDefault()
-      const { form: { validateFields }, state, $message, $notification } = this
-
-      validateFields(['mobile'], { force: true },
-        (err, values) => {
-          if (!err) {
-            state.smsSendBtn = true
-
-            const interval = window.setInterval(() => {
-              if (state.time-- <= 0) {
-                state.time = 60
-                state.smsSendBtn = false
-                window.clearInterval(interval)
-              }
-            }, 1000)
-
-            const hide = $message.loading('验证码发送中..', 0)
-
-            getSmsCaptcha({ mobile: values.mobile }).then(res => {
-              setTimeout(hide, 2500)
-              $notification['success']({
-                message: '提示',
-                description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-                duration: 8
-              })
-            }).catch(err => {
-              setTimeout(hide, 1)
-              clearInterval(interval)
-              state.time = 60
-              state.smsSendBtn = false
-              this.requestFailed(err)
-            })
-          }
-        }
-      )
-    },
     requestFailed (err) {
       this.$notification['error']({
         message: '错误',
@@ -364,12 +326,6 @@ export default {
     & > h3 {
       font-size: 16px;
       margin-bottom: 20px;
-    }
-
-    .getCaptcha {
-      display: block;
-      width: 100%;
-      height: 40px;
     }
 
     .register-button {

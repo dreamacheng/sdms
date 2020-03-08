@@ -1,12 +1,12 @@
 package com.pro.it.common.utils;
 
-import com.pro.it.sdms.entity.vo.AccountVO;
+import com.pro.it.sdms.controller.request.CreateAccountRequestEntity;
 
 import java.lang.reflect.Field;
 
 public class VerifyUtil {
 
-    public static boolean verifyRegisterInfo(AccountVO vo) throws IllegalAccessException {
+    public static boolean verifyRegisterInfo(CreateAccountRequestEntity vo) throws IllegalAccessException {
         if (vo == null) {
             return false;
         }

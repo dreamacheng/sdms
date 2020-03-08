@@ -1,21 +1,35 @@
 package com.pro.it.sdms.service.impl;
 
 import com.pro.it.common.Constants;
+import com.pro.it.common.utils.PageInfo;
 import com.pro.it.common.exceptions.BadRequestException;
+import com.pro.it.common.utils.QueryResult;
+import com.pro.it.sdms.controller.request.QueryAccountRequestEntity;
 import com.pro.it.sdms.controller.request.ResetPwdRequestEntity;
 import com.pro.it.sdms.dao.AccountDAO;
 import com.pro.it.sdms.dao.RegisterCodeDAO;
 import com.pro.it.sdms.entity.dto.Account;
 import com.pro.it.sdms.entity.dto.RegisterCode;
+import com.pro.it.sdms.controller.request.CreateAccountRequestEntity;
 import com.pro.it.sdms.entity.vo.AccountVO;
+import com.pro.it.sdms.enums.BaseCodeEnum;
+import com.pro.it.sdms.enums.GenderEnum;
+import com.pro.it.sdms.enums.IdentityEnum;
+import com.pro.it.sdms.enums.PoliticsStatusEnum;
 import com.pro.it.sdms.service.AccountService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.security.core.parameters.P;
+import org.springframework.data.domain.*;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,45 +41,36 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private RegisterCodeDAO registerCodeDAO;
 
+    /**
+     * 注册用户
+     * @param createAccountRequestEntity
+     */
     @Override
-    public Account getUserByNo(String accountNo) {
-        return accountDAO.getAccountByAccountNo(accountNo);
-    }
-
-    @Override
-    public void persistUserInfo(Account loginAccount) {
-        accountDAO.save(loginAccount);
-    }
-
-    @Override
-    public Account getUserByLoginInfo(String username, String password) {
-        return accountDAO.getAccountByAccountNoAndPassword(username, password);
+    @Transactional
+    public void registerAccount(CreateAccountRequestEntity createAccountRequestEntity) {
+        verifyAccountInfoValid(createAccountRequestEntity);
+        if ("ADMIN".equals(createAccountRequestEntity.getRole())) {
+            if (StringUtils.isEmpty(createAccountRequestEntity.getRegisterCode())) {
+                throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "Register Code missing");
+            }
+            RegisterCode registerCode = registerCodeDAO.getRegisterCodeByCode(createAccountRequestEntity.getRegisterCode());
+            if (registerCode == null || StringUtils.isEmpty(registerCode.getCode())
+                || registerCode.getAvailable().equals(2)) {
+                throw new BadRequestException(Constants.Register.REGISTER_CODE_INVALID, "Register Code error or invalid");
+            }
+            registerCode.setAvailable((short) 1);
+            registerCodeDAO.save(registerCode);
+        }
+        accountDAO.save(voToDTO(createAccountRequestEntity));
     }
 
     /**
-     * 注册用户
+     * 验证用户信息是否有效
      * @param vo
      */
-    @Override
-    public void registerAccount(AccountVO vo) {
-        verifyAccountInfoValid(vo);
-        if ("ADMIN".equals(vo.getRole())) {
-            if (StringUtils.isEmpty(vo.getRegisterCode())) {
-                throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "Register Code missing");
-            }
-            RegisterCode registerCode = registerCodeDAO.getRegisterCodeByCode(vo.getRegisterCode());
-            if (registerCode == null || StringUtils.isEmpty(registerCode.getCode())
-                || registerCode.getAvailable().equals(Constants.REGISTER_CODE_INVALID)) {
-                throw new BadRequestException(Constants.Register.REGISTER_CODE_INVALID, "Register Code error or invalid");
-            }
-        }
-        accountDAO.save(voToDTO(vo));
-    }
-
-    @Override
-    public void verifyAccountInfoValid(AccountVO vo) {
+    public void verifyAccountInfoValid(CreateAccountRequestEntity vo) {
         if (vo == null) {
-            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter error");
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "register parameter not be null");
         }
         if (!accountDAO.getAccountsByAccountNo(vo.getAccountNo()).isEmpty()) {
             throw new BadRequestException(Constants.Register.ACCOUNT_NO_EXIST, "account no has been exist");
@@ -80,6 +85,7 @@ public class AccountServiceImpl implements AccountService {
      * @param resetPwdRequestEntity
      */
     @Override
+    @Transactional
     public void resetPwd(ResetPwdRequestEntity resetPwdRequestEntity) {
         Account dto = new Account();
         dto.setUsername(resetPwdRequestEntity.getUsername());
@@ -93,12 +99,99 @@ public class AccountServiceImpl implements AccountService {
         accountDAO.save(dto);
     }
 
+    /**
+     * 查询用户列表
+     * @param queryAccountRequestEntity
+     * @return
+     */
+    @Override
+    @Secured("ROLE_MANAGER")
+    public QueryResult<AccountVO> queryAccount(QueryAccountRequestEntity queryAccountRequestEntity) {
+        Pageable pageable = buildPageable(queryAccountRequestEntity.getPageInfo());
+        Page<Account> all = accountDAO.findAll((root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            if (!StringUtils.isEmpty(queryAccountRequestEntity.getAccountNo())) {
+                predicateList.add(criteriaBuilder.equal(root.get("accountNo"), queryAccountRequestEntity.getAccountNo()));
+            }
+            if (!StringUtils.isEmpty(queryAccountRequestEntity.getDepartment())) {
+                predicateList.add(criteriaBuilder.like(root.get("department"), queryAccountRequestEntity.getDepartment()));
+            }
+            if (!StringUtils.isEmpty(queryAccountRequestEntity.getLodgingHouse())) {
+                predicateList.add(criteriaBuilder.like(root.get("lodgingHouse"), queryAccountRequestEntity.getLodgingHouse()));
+            }
+            if (!StringUtils.isEmpty(queryAccountRequestEntity.getPoliticsStatus())) {
+                try {
+                    predicateList.add(criteriaBuilder.equal(root.get("politicsStatus"), PoliticsStatusEnum.valueOf(queryAccountRequestEntity.getPoliticsStatus())));
 
-    private Account voToDTO (AccountVO vo){
+                } catch (IllegalArgumentException e) {
+                    throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "politics status not exist in this system");
+                }
+            }
+            if (!StringUtils.isEmpty(queryAccountRequestEntity.getUsername())) {
+                predicateList.add(criteriaBuilder.like(root.get("username"), queryAccountRequestEntity.getUsername()));
+            }
+            if (!StringUtils.isEmpty(queryAccountRequestEntity.getRole())) {
+                predicateList.add(criteriaBuilder.equal(root.get("role"), queryAccountRequestEntity.getRole()));
+            }
+            Predicate[] predicates = new Predicate[predicateList.size()];
+            return criteriaBuilder.and(predicateList.toArray(predicates));
+        }, pageable);
+
+        QueryResult<AccountVO> queryResult = new QueryResult<>();
+        List<AccountVO> list = new ArrayList<>();
+        all.getContent().forEach(item -> {
+            list.add(dtoToVO(item));
+        });
+        queryResult.setResultlist(list);
+        queryResult.setTotalrecord(all.getTotalElements());
+
+        return queryResult;
+    }
+
+    @Override
+    public AccountVO currentAccount() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "token illegal");
+        }
+        Account account = accountDAO.getAccountByAccountNo(authentication.getName());
+
+        if (account == null) {
+            throw new BadRequestException(Constants.ACCOUNT_NOT_EXIST, "account not exist");
+        }
+        return dtoToVO(account);
+    }
+
+
+    /**
+     * 构建分页对象，并按更新时间与创建时间排序
+     * @param pageInfo
+     * @return
+     */
+    private Pageable buildPageable(PageInfo pageInfo) {
+        if (pageInfo == null){
+            //若分页对象为空，则不分页
+            return PageRequest.of( 0, Integer.MAX_VALUE);
+        }
+        if(pageInfo.getPageNum() < 1){
+            pageInfo.setPageNum(1);
+        }
+        if(pageInfo.getPageSize() < 1){
+            pageInfo.setPageSize(10);
+        }
+        Sort.Order createTime = new Sort.Order(Sort.Direction.DESC, "createDatetime");
+        List<Sort.Order> criteria = new ArrayList<>();
+        criteria.add(createTime);
+        Sort sort = Sort.by(criteria);
+        return PageRequest.of(pageInfo.getPageNum() - 1, pageInfo.getPageSize(), sort);
+    }
+
+
+    private Account voToDTO (CreateAccountRequestEntity vo){
         Account account = new Account();
         account.setUsername(vo.getUsername());
-        String BCriptPassword = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(vo.getPassword());
-        account.setPassword(BCriptPassword);
+        String encodePwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(vo.getPassword());
+        account.setPassword(encodePwd);
         account.setAccountNo(vo.getAccountNo());
         account.setAge(vo.getAge());
         account.setBirthday(vo.getBirthday());
@@ -106,10 +199,37 @@ public class AccountServiceImpl implements AccountService {
         account.setDepartment(vo.getDepartment());
         account.setLodgingHouse(vo.getLodgingHouse());
         account.setNation(vo.getNation());
-        account.setPoliticsStatus(vo.getPoliticsStatus());
-        account.setGender(vo.getGender());
+        try {
+            account.setPoliticsStatus(PoliticsStatusEnum.valueOf(vo.getPoliticsStatus()).getCode());
+            account.setGender(GenderEnum.valueOf(vo.getGender()).getCode());
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "gender or politics status not exist in this system");
+        }
         account.setTel(vo.getTel());
+        try {
+            IdentityEnum.valueOf(vo.getRole());
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException(Constants.Register.ROLE_NOT_EXIST, "role not exist in this system");
+        }
         account.setRole(vo.getRole());
         return account;
+    }
+
+    private AccountVO dtoToVO (Account account) {
+        AccountVO vo = new AccountVO();
+        vo.setUsername(account.getUsername());
+        vo.setAccountNo(account.getAccountNo());
+        vo.setAge(account.getAge());
+        vo.setBirthday(account.getBirthday());
+        vo.setIdentityCard(account.getIdentityCard());
+        vo.setDepartment(account.getDepartment());
+        vo.setLodgingHouse(account.getLodgingHouse());
+        vo.setNation(account.getNation());
+        vo.setPoliticsStatus(BaseCodeEnum.codeOf(PoliticsStatusEnum.class, account.getPoliticsStatus()).toString());
+        vo.setGender(BaseCodeEnum.codeOf(GenderEnum.class, account.getGender()).toString());
+        vo.setTel(account.getTel());
+        vo.setRole(account.getRole());
+        vo.setAvatar("/avatar2.jpg");
+        return vo;
     }
 }

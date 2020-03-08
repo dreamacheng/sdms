@@ -10,21 +10,18 @@ public enum IdentityEnum  implements BaseCodeEnum {
     /**
      * 管理员
      */
-    MANAGER( (short) 1, "MANAGER" ),
+    MANAGER( (short) 1 ),
 
     /**
      * 学生
      */
-    STUDENT( (short) 2, "STUDENT" );
+    STUDENT( (short) 2 );
 
     Short code;
 
-    @Getter
-    String identity;
 
-    IdentityEnum (Short code, String identity) {
+    IdentityEnum (Short code) {
         this.code = code;
-        this.identity = identity;
     }
 
     @Override

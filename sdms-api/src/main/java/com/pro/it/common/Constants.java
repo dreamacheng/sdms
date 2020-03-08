@@ -23,7 +23,10 @@ public final class Constants {
 	 */
 	public static final short VIOLATE_FILE_RESTRICT_EXTENSION = 1003;
 
-	public static final short REGISTER_CODE_INVALID = 2001;
+	/**
+	 * 用户不存在
+	 */
+	public static final int ACCOUNT_NOT_EXIST = 90201;
 
 	public static class Register {
 		private Register(){}
@@ -38,8 +41,15 @@ public final class Constants {
 		 */
 		public static final int ACCOUNT_NO_EXIST = 90102;
 
-
+		/**
+		 * 注册码错误或已失效
+		 */
 		public static final int REGISTER_CODE_INVALID = 90103;
+
+		/**
+		 * 系统不存在该角色
+		 */
+		public static final int ROLE_NOT_EXIST = 90104;
 	}
 
 	public static class Code {

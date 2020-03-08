@@ -1,4 +1,4 @@
-package com.pro.it.sdms.entity.vo;
+package com.pro.it.sdms.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,13 +16,16 @@ import java.util.TimeZone;
 @Getter
 @NoArgsConstructor
 @ToString
-public class AccountVO implements Serializable {
+public class CreateAccountRequestEntity implements Serializable {
 
     /** 姓名 */
     private String username;
 
     /** 用户编号（学号、职工号） */
     private String accountNo;
+
+    /** 密码 */
+    private String password;
 
     /** 性别 */
     private String gender;
@@ -55,7 +58,7 @@ public class AccountVO implements Serializable {
     /** 用户角色 */
     private String role;
 
-    /** 用户头像 **/
-    private String avatar;
+    /** 管理员注册码 */
+    private String registerCode;
 
 }

@@ -11,7 +11,6 @@
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
       >
         <a-tab-pane key="tab1" tab="学生入口">
-          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误" />
           <a-form-item>
             <a-input
               size="large"
@@ -42,7 +41,6 @@
           </a-form-item>
         </a-tab-pane>
         <a-tab-pane key="tab2" tab="教师入口">
-          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误" />
           <a-form-item>
             <a-input
               size="large"
@@ -107,7 +105,6 @@ export default {
   data () {
     return {
       loginBtn: false,
-      isLoginError: false,
       form: this.$form.createForm(this),
       state: {
         time: 60,
@@ -172,13 +169,11 @@ export default {
           description: `${timeFix()}，欢迎回来`
         })
       }, 1000)
-      this.isLoginError = false
     },
     requestFailed (err) {
-      this.isLoginError = true
       this.$notification['error']({
-        message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        message: '账户或密码错误',
+        description: ((err.response || {}).data || {}).message || '请检查学号或职工号与密码是否正确',
         duration: 4
       })
     }
