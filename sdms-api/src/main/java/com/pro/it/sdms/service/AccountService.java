@@ -16,4 +16,6 @@ public interface AccountService {
     QueryResult<AccountVO> queryAccount(QueryAccountRequestEntity queryAccountRequestEntity);
 
     AccountVO currentAccount();
+
+    String lockAccount(String accountNo);
 }

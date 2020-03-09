@@ -14,4 +14,6 @@ public class ResetPwdRequestEntity {
     private String accountNo;
 
     private String identityCard;
+
+    private String tel;
 }

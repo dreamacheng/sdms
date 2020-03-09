@@ -61,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
             registerCode.setAvailable((short) 1);
             registerCodeDAO.save(registerCode);
         }
-        accountDAO.save(voToDTO(createAccountRequestEntity));
+        accountDAO.save(createAccountRequestEntity.toDTO());
     }
 
     /**
@@ -140,7 +140,7 @@ public class AccountServiceImpl implements AccountService {
         QueryResult<AccountVO> queryResult = new QueryResult<>();
         List<AccountVO> list = new ArrayList<>();
         all.getContent().forEach(item -> {
-            list.add(dtoToVO(item));
+            list.add(item.toVO());
         });
         queryResult.setResultlist(list);
         queryResult.setTotalrecord(all.getTotalElements());
@@ -159,7 +159,23 @@ public class AccountServiceImpl implements AccountService {
         if (account == null) {
             throw new BadRequestException(Constants.ACCOUNT_NOT_EXIST, "account not exist");
         }
-        return dtoToVO(account);
+        return account.toVO();
+    }
+
+    @Override
+    @Secured("ROLE_MANAGER")
+    @Transactional
+    public String lockAccount(String accountNo) {
+        if (StringUtils.isEmpty(accountNo)) {
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "accountNo require");
+        }
+        Account accountByAccountNo = accountDAO.getAccountByAccountNo(accountNo);
+        if (accountByAccountNo == null) {
+            throw new BadRequestException(Constants.ACCOUNT_NOT_EXIST, "account not exist");
+        }
+        accountByAccountNo.setIsLock((short) 1);
+        accountDAO.save(accountByAccountNo);
+        return "success";
     }
 
 
@@ -186,50 +202,4 @@ public class AccountServiceImpl implements AccountService {
         return PageRequest.of(pageInfo.getPageNum() - 1, pageInfo.getPageSize(), sort);
     }
 
-
-    private Account voToDTO (CreateAccountRequestEntity vo){
-        Account account = new Account();
-        account.setUsername(vo.getUsername());
-        String encodePwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(vo.getPassword());
-        account.setPassword(encodePwd);
-        account.setAccountNo(vo.getAccountNo());
-        account.setAge(vo.getAge());
-        account.setBirthday(vo.getBirthday());
-        account.setIdentityCard(vo.getIdentityCard());
-        account.setDepartment(vo.getDepartment());
-        account.setLodgingHouse(vo.getLodgingHouse());
-        account.setNation(vo.getNation());
-        try {
-            account.setPoliticsStatus(PoliticsStatusEnum.valueOf(vo.getPoliticsStatus()).getCode());
-            account.setGender(GenderEnum.valueOf(vo.getGender()).getCode());
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "gender or politics status not exist in this system");
-        }
-        account.setTel(vo.getTel());
-        try {
-            IdentityEnum.valueOf(vo.getRole());
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException(Constants.Register.ROLE_NOT_EXIST, "role not exist in this system");
-        }
-        account.setRole(vo.getRole());
-        return account;
-    }
-
-    private AccountVO dtoToVO (Account account) {
-        AccountVO vo = new AccountVO();
-        vo.setUsername(account.getUsername());
-        vo.setAccountNo(account.getAccountNo());
-        vo.setAge(account.getAge());
-        vo.setBirthday(account.getBirthday());
-        vo.setIdentityCard(account.getIdentityCard());
-        vo.setDepartment(account.getDepartment());
-        vo.setLodgingHouse(account.getLodgingHouse());
-        vo.setNation(account.getNation());
-        vo.setPoliticsStatus(BaseCodeEnum.codeOf(PoliticsStatusEnum.class, account.getPoliticsStatus()).toString());
-        vo.setGender(BaseCodeEnum.codeOf(GenderEnum.class, account.getGender()).toString());
-        vo.setTel(account.getTel());
-        vo.setRole(account.getRole());
-        vo.setAvatar("/avatar2.jpg");
-        return vo;
-    }
 }

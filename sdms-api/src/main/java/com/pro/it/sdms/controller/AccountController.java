@@ -29,6 +29,7 @@ public class AccountController extends BaseController {
         private static final String RESET_PASSWORD = "/account/resetPwd";
         private static final String ACCOUNT_LIST = "/account/query";
         private static final String CURRENT_ACCOUNT = "/account/current";
+        private static final String LOCK_ACCOUNT = "/account/lock/{accountNo}";
     }
 
     @PostMapping(URL.REGISTER_URL)
@@ -72,9 +73,20 @@ public class AccountController extends BaseController {
     @GetMapping(URL.CURRENT_ACCOUNT)
     public InfoAPIResult<AccountVO> currentAccount() {
         InfoAPIResult<AccountVO> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.CURRENT_ACCOUNT);
+        log.info("===> request method : [ Get ], request path [ {} ]", URL.CURRENT_ACCOUNT);
         AccountVO vo = accountService.currentAccount();
         result.setInfo(vo);
+        log.info("===> response result {}", result);
+        return result;
+    }
+
+    @GetMapping(URL.LOCK_ACCOUNT)
+    public InfoAPIResult<String> lockAccount(@PathVariable("accountNo") String accountNo) {
+        InfoAPIResult<String> result = new InfoAPIResult<>();
+        log.info("===> request method : [ Get ], request path [ {} ]", URL.LOCK_ACCOUNT);
+        log.info("===> request parameter {} : {} ", "AccountNo", accountNo);
+        String ret = accountService.lockAccount(accountNo);
+        result.setInfo(ret);
         log.info("===> response result {}", result);
         return result;
     }
