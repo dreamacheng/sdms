@@ -7,9 +7,8 @@ import com.pro.it.common.utils.QueryResult;
 import com.pro.it.common.utils.VerifyUtil;
 import com.pro.it.sdms.controller.request.QueryAccountRequestEntity;
 import com.pro.it.sdms.controller.request.ResetPwdRequestEntity;
-import com.pro.it.sdms.entity.dto.Account;
 import com.pro.it.sdms.entity.result.InfoAPIResult;
-import com.pro.it.sdms.controller.request.CreateAccountRequestEntity;
+import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.entity.vo.AccountVO;
 import com.pro.it.sdms.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,13 +29,14 @@ public class AccountController extends BaseController {
         private static final String ACCOUNT_LIST = "/account/query";
         private static final String CURRENT_ACCOUNT = "/account/current";
         private static final String LOCK_ACCOUNT = "/account/lock/{accountNo}";
+        private static final String UPDATE_ACCOUNT = "/account/update";
     }
 
     @PostMapping(URL.REGISTER_URL)
-    public InfoAPIResult<String> register(@RequestBody CreateAccountRequestEntity createAccountRequestEntity) throws Exception {
+    public InfoAPIResult<String> register(@RequestBody PersistAccountRequestEntity createAccountRequestEntity) throws Exception {
         InfoAPIResult<String> result = new InfoAPIResult<>();
         log.info("===> request method : [ Post ], request path [ {} ]", URL.REGISTER_URL);
-        log.info("===> request parameter {} : {} ", CreateAccountRequestEntity.class.getSimpleName(), createAccountRequestEntity);
+        log.info("===> request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), createAccountRequestEntity);
         if (!VerifyUtil.verifyRegisterInfo(createAccountRequestEntity)) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter require");
         }
@@ -87,6 +87,16 @@ public class AccountController extends BaseController {
         log.info("===> request parameter {} : {} ", "AccountNo", accountNo);
         String ret = accountService.lockAccount(accountNo);
         result.setInfo(ret);
+        log.info("===> response result {}", result);
+        return result;
+    }
+
+    @PostMapping(URL.UPDATE_ACCOUNT)
+    public InfoAPIResult<String> updateAccount(@RequestBody PersistAccountRequestEntity param) {
+        InfoAPIResult<String> result = new InfoAPIResult<>();
+        log.info("===> request method : [ Post ], request path [ {} ]", URL.ACCOUNT_LIST);
+        log.info("===> request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), param);
+        accountService.updateAccount(param);
         log.info("===> response result {}", result);
         return result;
     }

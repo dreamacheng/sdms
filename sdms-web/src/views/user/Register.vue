@@ -86,7 +86,7 @@
                 <a-col span="12">
                   <a-radio-group name="role"  @change="typeChange" v-decorator="['role', {rules: [{ required: true, message: '请选择政治面貌'}], validateTrigger: ['change', 'blur'] }]">
                     <a-radio value="STUDENT" defaultChecked>学生</a-radio>
-                  <a-radio value="MANAGER">教师</a-radio>
+                    <a-radio value="MANAGER">教师</a-radio>
                   </a-radio-group>
                 </a-col>
                 <a-col span="12" style="margin-bottom:-25px">

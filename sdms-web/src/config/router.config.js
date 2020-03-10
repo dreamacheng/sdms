@@ -236,7 +236,7 @@ export const asyncRouterMap = [
             path: '/account/manager',
             name: 'manager',
             component: () => import('@/views/account/manager/Index'),
-            meta: { title: '系统用户管理', keepAlive: true, permission: [ 'admin' ] }
+            meta: { title: '系统用户管理', keepAlive: true, permission: [ 'user' ] }
           }
         ]
       },

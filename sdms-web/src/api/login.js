@@ -31,6 +31,17 @@ export function registerAccount (parameter) {
   })
 }
 
+export function updateAccountApi (parameter) {
+  return axios({
+    url: '/api/account/update',
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
 export function getSmsCaptcha (parameter) {
   return axios({
     url: api.SendSms,

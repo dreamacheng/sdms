@@ -15,6 +15,7 @@ import lombok.ToString;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -23,7 +24,9 @@ import java.util.TimeZone;
 @Getter
 @NoArgsConstructor
 @ToString
-public class CreateAccountRequestEntity implements Serializable {
+public class PersistAccountRequestEntity implements Serializable {
+
+    private BigDecimal id;
 
     /** 姓名 */
     private String username;

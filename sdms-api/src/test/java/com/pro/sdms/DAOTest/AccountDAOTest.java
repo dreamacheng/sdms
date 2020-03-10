@@ -2,8 +2,7 @@ package com.pro.sdms.DAOTest;
 
 import com.pro.it.SdmsApplication;
 import com.pro.it.common.service.JwtUserService;
-import com.pro.it.sdms.entity.dto.Account;
-import com.pro.it.sdms.controller.request.CreateAccountRequestEntity;
+import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.service.AccountService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +31,7 @@ public class AccountDAOTest {
 
     @Test
     public void addAccount() {
-        CreateAccountRequestEntity zc = new CreateAccountRequestEntity();
+        PersistAccountRequestEntity zc = new PersistAccountRequestEntity();
         zc.setAccountNo("201513070114");
         zc.setIdentityCard("511321199610073152");
         zc.setUsername("dreamacheng");

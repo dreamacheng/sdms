@@ -10,11 +10,9 @@ import com.pro.it.sdms.dao.AccountDAO;
 import com.pro.it.sdms.dao.RegisterCodeDAO;
 import com.pro.it.sdms.entity.dto.Account;
 import com.pro.it.sdms.entity.dto.RegisterCode;
-import com.pro.it.sdms.controller.request.CreateAccountRequestEntity;
+import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.entity.vo.AccountVO;
 import com.pro.it.sdms.enums.BaseCodeEnum;
-import com.pro.it.sdms.enums.GenderEnum;
-import com.pro.it.sdms.enums.IdentityEnum;
 import com.pro.it.sdms.enums.PoliticsStatusEnum;
 import com.pro.it.sdms.service.AccountService;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +21,6 @@ import org.springframework.data.domain.*;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +44,7 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     @Transactional
-    public void registerAccount(CreateAccountRequestEntity createAccountRequestEntity) {
+    public void registerAccount(PersistAccountRequestEntity createAccountRequestEntity) {
         verifyAccountInfoValid(createAccountRequestEntity);
         if ("ADMIN".equals(createAccountRequestEntity.getRole())) {
             if (StringUtils.isEmpty(createAccountRequestEntity.getRegisterCode())) {
@@ -68,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
      * 验证用户信息是否有效
      * @param vo
      */
-    public void verifyAccountInfoValid(CreateAccountRequestEntity vo) {
+    public void verifyAccountInfoValid(PersistAccountRequestEntity vo) {
         if (vo == null) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "register parameter not be null");
         }
@@ -91,12 +88,14 @@ public class AccountServiceImpl implements AccountService {
         dto.setUsername(resetPwdRequestEntity.getUsername());
         dto.setIdentityCard(resetPwdRequestEntity.getIdentityCard());
         dto.setAccountNo(resetPwdRequestEntity.getAccountNo());
+        dto.setTel(resetPwdRequestEntity.getTel());
         Optional<Account> optionalAccount = accountDAO.findOne(Example.of(dto));
-        if (optionalAccount.get() == null) {
+        Account account = optionalAccount.get();
+        if (account == null) {
             throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "user not exist");
         }
-        Account account = optionalAccount.get();
-        accountDAO.save(dto);
+        // todo 密码由前端md5加密再由后台encode
+        accountDAO.save(account);
     }
 
     /**
@@ -148,6 +147,10 @@ public class AccountServiceImpl implements AccountService {
         return queryResult;
     }
 
+    /**
+     * 获取当前用户信息
+     * @return
+     */
     @Override
     public AccountVO currentAccount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -162,6 +165,11 @@ public class AccountServiceImpl implements AccountService {
         return account.toVO();
     }
 
+    /**
+     * 锁定用户
+     * @param accountNo 用户编号
+     * @return
+     */
     @Override
     @Secured("ROLE_MANAGER")
     @Transactional
@@ -176,6 +184,27 @@ public class AccountServiceImpl implements AccountService {
         accountByAccountNo.setIsLock((short) 1);
         accountDAO.save(accountByAccountNo);
         return "success";
+    }
+
+    /**
+     * 更新用户信息
+     * @param param
+     */
+    @Override
+    @Transactional
+    public void updateAccount(PersistAccountRequestEntity param) {
+        if (param == null || param.getId() == null) {
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "invalid update parameter");
+        }
+        Account dto = accountDAO.getOne(param.getId());
+        if (dto == null) {
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "update account not exist");
+        }
+        dto.setPoliticsStatus(PoliticsStatusEnum.valueOf(param.getPoliticsStatus()).getCode());
+        dto.setUsername(param.getUsername());
+        dto.setLodgingHouse(param.getLodgingHouse());
+        dto.setDepartment(param.getDepartment());
+        accountDAO.save(dto);
     }
 
 

@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -17,6 +18,8 @@ import java.util.TimeZone;
 @NoArgsConstructor
 @ToString
 public class AccountVO implements Serializable {
+
+    private BigDecimal id;
 
     /** 姓名 */
     private String username;
@@ -57,5 +60,8 @@ public class AccountVO implements Serializable {
 
     /** 用户头像 **/
     private String avatar;
+
+    /** 用户是否锁定 **/
+    private Short isLock;
 
 }

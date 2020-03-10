@@ -2,51 +2,115 @@
   <div class="account-settings-info-view">
     <a-row :gutter="16">
       <a-col :md="24" :lg="16">
-
-        <a-form layout="vertical">
+        <a-form
+          :form="form"
+          @submit="handleSubmit"
+        >
           <a-form-item
-            label="昵称"
+            label="学号/职工号"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
           >
-            <a-input placeholder="给自己起个名字" />
+            {{ account.accountNo }}
           </a-form-item>
           <a-form-item
-            label="Bio"
+            label="姓名"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
           >
-            <a-textarea rows="4" placeholder="You are not alone."/>
-          </a-form-item>
-
-          <a-form-item
-            label="电子邮件"
-            :required="false"
-          >
-            <a-input placeholder="exp@admin.com"/>
-          </a-form-item>
-          <a-form-item
-            label="加密方式"
-            :required="false"
-          >
-            <a-select defaultValue="aes-256-cfb">
-              <a-select-option value="aes-256-cfb">aes-256-cfb</a-select-option>
-              <a-select-option value="aes-128-cfb">aes-128-cfb</a-select-option>
-              <a-select-option value="chacha20">chacha20</a-select-option>
-            </a-select>
+            <div v-show="!editShow.username">{{ account.username }}</div>
+            <div v-show="editShow.username">
+              <a-input style="width:250px" v-show="editShow.username" placeholder="姓名" v-decorator="['username', {rules: [{ required: true, message: '请输入姓名' }], validateTrigger: ['blur'] }]"/>
+            </div>
+            <a-icon type="edit" style="margin-top:-25px;float:right;" @click="editShow.username = !editShow.username"/>
           </a-form-item>
           <a-form-item
-            label="连接密码"
-            :required="false"
+            label="性别"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
           >
-            <a-input placeholder="h3gSbecd"/>
+            {{ account.gender | genderFileter }}
           </a-form-item>
           <a-form-item
-            label="登录密码"
-            :required="false"
+            label="政治面貌"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
           >
-            <a-input placeholder="密码"/>
+            <div v-show="!editShow.politicsStatus">{{ account.politicsStatus | politicsStatusFilter }}</div>
+            <div v-show="editShow.politicsStatus">
+              <a-radio-group style="width:250px" v-show="editShow.politicsStatus" v-decorator="['politicsStatus', {rules: [{ required: true, message: '请选择政治面貌'}], validateTrigger: ['blur'] }]">
+                <a-radio value="LEAGUE_MEMBER" defaultChecked>团员</a-radio>
+                <a-radio value="PART_MEMBER">党员</a-radio>
+                <a-radio value="MASSES">群众</a-radio>
+              </a-radio-group>
+            </div>
+            <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.politicsStatus = !editShow.politicsStatus"/>
           </a-form-item>
-
+          <a-form-item
+            label="身份证号"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
+          >
+            {{ account.identityCard }}
+          </a-form-item>
+          <a-form-item
+            label="联系电话"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
+          >
+            {{ account.tel }}
+          </a-form-item>
+          <a-form-item
+            label="在校公寓"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
+          >
+            <div v-show="!editShow.lodgingHouse">{{ account.lodgingHouse }}</div>
+            <div v-show="editShow.lodgingHouse">
+              <a-input style="width:250px" v-show="editShow.lodgingHouse" placeholder="在校公寓" v-decorator="['lodgingHouse', {rules: [{ required: true, message: '请输入在校公寓' }], validateTrigger: ['blur'] }]"/>
+            </div>
+            <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.lodgingHouse = !editShow.lodgingHouse"/>
+          </a-form-item>
+          <a-form-item
+            label="专业科系"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
+          >
+            <div v-show="!editShow.department">{{ account.department }}</div>
+            <div v-show="editShow.department">
+              <a-input style="width:250px" v-show="editShow.department" placeholder="专业科系" v-decorator="['department', {rules: [{ required: true, message: '请输入专业科系' }], validateTrigger: ['blur'] }]"/>
+            </div>
+            <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.department = !editShow.department"/>
+          </a-form-item>
+          <a-form-item
+            label="年龄"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
+          >
+            {{ account.age }}
+          </a-form-item>
+          <a-form-item
+            label="出生年月"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
+          >
+            {{ account.birthday }}
+          </a-form-item>
           <a-form-item>
-            <a-button type="primary">提交</a-button>
-            <a-button style="margin-left: 8px">保存</a-button>
+            <a-row>
+              <a-col span="4"></a-col>
+              <a-col span="12">
+                <a-button
+                  size="large"
+                  type="primary"
+                  htmlType="submit"
+                  class="register-button"
+                  :loading="submitBtn"
+                  @click.stop.prevent="handleSubmit"
+                  :disabled="submitBtn">保存
+                </a-button>
+              </a-col>
+            </a-row>
           </a-form-item>
         </a-form>
 
@@ -70,6 +134,7 @@
 
 <script>
 import AvatarModal from './AvatarModal'
+import { updateAccountApi } from '@/api/login'
 
 export default {
   components: {
@@ -78,9 +143,34 @@ export default {
   data () {
     return {
       // cropper
+      form: this.$form.createForm(this),
       preview: {},
+      account: {
+        id: '',
+        accountNo: '',
+        age: '',
+        gender: '',
+        username: '',
+        identityCard: '',
+        tel: '',
+        politicsStatus: '',
+        role: '',
+        birthday: '',
+        lodgingHouse: '',
+        department: '',
+        avatar: ''
+      },
+      submitBtn: false,
+      editShow: {
+        accountNo: false,
+        username: false,
+        lodgingHouse: false,
+        politicsStatus: false,
+        department: false,
+        birthday: false
+      },
       option: {
-        img: '/avatar2.jpg',
+        img: '',
         info: true,
         size: 1,
         outputType: 'jpeg',
@@ -96,9 +186,85 @@ export default {
       }
     }
   },
+  filters: {
+    statusFilter (status) {
+      const statusMap = {
+        0: '正常',
+        1: '锁定'
+      }
+      return statusMap[status]
+    },
+    roleFilter (role) {
+      const statusMap = {
+        'STUDENT': '学生',
+        'MANAGER': '管理员'
+      }
+      return statusMap[role]
+    },
+    politicsStatusFilter (status) {
+      const statusMap = {
+        'PART_MEMBER': '党员',
+        'LEAGUE_MEMBER': '团员',
+        'MASSES': '群众'
+      }
+      return statusMap[status]
+    },
+    genderFileter (gender) {
+      const statusMap = {
+        'MALE': '男',
+        'FEMALE': '女'
+      }
+      return statusMap[gender]
+    }
+  },
+  created () {
+    this.loadCurrent()
+  },
   methods: {
     setavatar (url) {
       this.option.img = url
+    },
+    loadCurrent () {
+      this.$http.get('/api/account/current')
+        .then(res => {
+          this.account.id = res.info.id
+          this.account.accountNo = res.info.accountNo
+          this.account.age = res.info.age
+          this.account.gender = res.info.gender
+          this.account.username = res.info.username
+          this.account.identityCard = res.info.identityCard
+          this.account.tel = res.info.tel
+          this.account.politicsStatus = res.info.politicsStatus
+          this.account.role = res.info.role
+          this.account.birthday = res.info.birthday
+          this.account.lodgingHouse = res.info.lodgingHouse
+          this.account.department = res.info.department
+          this.option.img = res.info.avatar
+          this.form.setFieldsValue({
+            username: this.account.username,
+            politicsStatus: this.account.politicsStatus,
+            lodgingHouse: this.account.lodgingHouse,
+            department: this.account.department
+          })
+        })
+    },
+    handleSubmit (e) {
+      e.preventDefault()
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          var updateAccount = values
+          updateAccount['id'] = this.account.id
+          updateAccountApi(updateAccount)
+            .then(res => {
+              if (res.code === 0) {
+                this.$message.info('更新个人资料成功')
+              } else {
+                this.$message.info('更新个人资料失败')
+              }
+              location.reload()
+            })
+        }
+      })
     }
   }
 }

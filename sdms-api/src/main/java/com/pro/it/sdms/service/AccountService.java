@@ -3,13 +3,12 @@ package com.pro.it.sdms.service;
 import com.pro.it.common.utils.QueryResult;
 import com.pro.it.sdms.controller.request.QueryAccountRequestEntity;
 import com.pro.it.sdms.controller.request.ResetPwdRequestEntity;
-import com.pro.it.sdms.entity.dto.Account;
-import com.pro.it.sdms.controller.request.CreateAccountRequestEntity;
+import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.entity.vo.AccountVO;
 
 public interface AccountService {
 
-    void registerAccount(CreateAccountRequestEntity vo);
+    void registerAccount(PersistAccountRequestEntity vo);
 
     void resetPwd(ResetPwdRequestEntity resetPwdRequestEntity);
 
@@ -18,4 +17,6 @@ public interface AccountService {
     AccountVO currentAccount();
 
     String lockAccount(String accountNo);
+
+    void updateAccount(PersistAccountRequestEntity param);
 }

@@ -88,19 +88,21 @@ public class Account extends BaseDTO{
 
     public AccountVO toVO () {
         AccountVO vo = new AccountVO();
-        vo.setUsername(this.getUsername());
-        vo.setAccountNo(this.getAccountNo());
-        vo.setAge(this.getAge());
-        vo.setBirthday(this.getBirthday());
-        vo.setIdentityCard(this.getIdentityCard());
-        vo.setDepartment(this.getDepartment());
-        vo.setLodgingHouse(this.getLodgingHouse());
-        vo.setNation(this.getNation());
-        vo.setPoliticsStatus(BaseCodeEnum.codeOf(PoliticsStatusEnum.class, this.getPoliticsStatus()).toString());
-        vo.setGender(BaseCodeEnum.codeOf(GenderEnum.class, this.getGender()).toString());
-        vo.setTel(this.getTel());
-        vo.setRole(this.getRole());
+        vo.setUsername(getUsername());
+        vo.setAccountNo(getAccountNo());
+        vo.setAge(getAge());
+        vo.setBirthday(getBirthday());
+        vo.setIdentityCard(getIdentityCard());
+        vo.setDepartment(getDepartment());
+        vo.setLodgingHouse(getLodgingHouse());
+        vo.setNation(getNation());
+        vo.setPoliticsStatus(BaseCodeEnum.codeOf(PoliticsStatusEnum.class, getPoliticsStatus()).toString());
+        vo.setGender(BaseCodeEnum.codeOf(GenderEnum.class, getGender()).toString());
+        vo.setTel(getTel());
+        vo.setRole(getRole());
         vo.setAvatar("/avatar2.jpg");
+        vo.setIsLock(getIsLock());
+        vo.setId(getId());
         return vo;
     }
 
