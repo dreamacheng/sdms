@@ -28,6 +28,11 @@ public final class Constants {
 	 */
 	public static final int ACCOUNT_NOT_EXIST = 90201;
 
+	/**
+	 * 密码错误
+	 */
+	public static final int PWD_ERROR = 91005;
+
 	public static class Register {
 		private Register(){}
 
@@ -50,6 +55,7 @@ public final class Constants {
 		 * 系统不存在该角色
 		 */
 		public static final int ROLE_NOT_EXIST = 90104;
+
 	}
 
 	public static class Code {

@@ -42,6 +42,24 @@ export function updateAccountApi (parameter) {
   })
 }
 
+export function updatePwdApi (parameter) {
+  return axios({
+    url: '/api/account/pwd',
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+export function currentUserInfo () {
+  return axios({
+    url: '/api/account/current',
+    method: 'get'
+  })
+}
+
 export function getSmsCaptcha (parameter) {
   return axios({
     url: api.SendSms,

@@ -136,6 +136,7 @@ export default {
           const loginParams = { ...values }
           loginParams['accountNo'] = values.accountNo
           loginParams.password = md5(values.password)
+          console.log(loginParams.password)
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))

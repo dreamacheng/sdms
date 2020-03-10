@@ -160,12 +160,9 @@ export default {
       registerModalShow: false,
       registerCode: '',
       state: {
-        time: 60,
-        smsSendBtn: false,
         passwordLevel: 0,
         passwordLevelChecked: false,
-        percent: 10,
-        progressColor: '#FF0000'
+        percent: 10
       },
       registerBtn: false
     }

@@ -134,7 +134,7 @@
 
 <script>
 import AvatarModal from './AvatarModal'
-import { updateAccountApi } from '@/api/login'
+import { updateAccountApi, currentUserInfo } from '@/api/login'
 
 export default {
   components: {
@@ -225,7 +225,7 @@ export default {
       this.option.img = url
     },
     loadCurrent () {
-      this.$http.get('/api/account/current')
+      currentUserInfo()
         .then(res => {
           this.account.id = res.info.id
           this.account.accountNo = res.info.accountNo

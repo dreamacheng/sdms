@@ -7,6 +7,7 @@ import com.pro.it.common.utils.QueryResult;
 import com.pro.it.common.utils.VerifyUtil;
 import com.pro.it.sdms.controller.request.QueryAccountRequestEntity;
 import com.pro.it.sdms.controller.request.ResetPwdRequestEntity;
+import com.pro.it.sdms.controller.request.UpdatePwdRequestEntity;
 import com.pro.it.sdms.entity.result.InfoAPIResult;
 import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.entity.vo.AccountVO;
@@ -30,6 +31,7 @@ public class AccountController extends BaseController {
         private static final String CURRENT_ACCOUNT = "/account/current";
         private static final String LOCK_ACCOUNT = "/account/lock/{accountNo}";
         private static final String UPDATE_ACCOUNT = "/account/update";
+        private static final String UPDATE_PWD = "/account/pwd";
     }
 
     @PostMapping(URL.REGISTER_URL)
@@ -94,9 +96,19 @@ public class AccountController extends BaseController {
     @PostMapping(URL.UPDATE_ACCOUNT)
     public InfoAPIResult<String> updateAccount(@RequestBody PersistAccountRequestEntity param) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.ACCOUNT_LIST);
+        log.info("===> request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
         log.info("===> request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), param);
         accountService.updateAccount(param);
+        log.info("===> response result {}", result);
+        return result;
+    }
+
+    @PostMapping(URL.UPDATE_PWD)
+    public InfoAPIResult<String> updatePwd(@RequestBody UpdatePwdRequestEntity param) {
+        InfoAPIResult<String> result = new InfoAPIResult<>();
+        log.info("===> request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
+        log.info("===> request parameter {} : {} ", UpdatePwdRequestEntity.class.getSimpleName(), param);
+        accountService.updatePwd(param);
         log.info("===> response result {}", result);
         return result;
     }

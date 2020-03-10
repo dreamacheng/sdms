@@ -6,6 +6,7 @@ import com.pro.it.common.exceptions.BadRequestException;
 import com.pro.it.common.utils.QueryResult;
 import com.pro.it.sdms.controller.request.QueryAccountRequestEntity;
 import com.pro.it.sdms.controller.request.ResetPwdRequestEntity;
+import com.pro.it.sdms.controller.request.UpdatePwdRequestEntity;
 import com.pro.it.sdms.dao.AccountDAO;
 import com.pro.it.sdms.dao.RegisterCodeDAO;
 import com.pro.it.sdms.entity.dto.Account;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.*;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -205,6 +208,25 @@ public class AccountServiceImpl implements AccountService {
         dto.setLodgingHouse(param.getLodgingHouse());
         dto.setDepartment(param.getDepartment());
         accountDAO.save(dto);
+    }
+
+    @Override
+    @Transactional
+    public void updatePwd(UpdatePwdRequestEntity param) {
+        if (param == null || StringUtils.isEmpty(param.getNewPwd()) || StringUtils.isEmpty(param.getOldPwd())) {
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "invalid update parameter");
+        }
+        String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account dto = accountDAO.getAccountByAccountNo(accountNo);
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        String oldPwd = encoder.encode(param.getOldPwd());
+        String newPwd = encoder.encode(param.getNewPwd());
+        if (dto.getPassword().equals(oldPwd)) {
+            dto.setPassword(newPwd);
+            accountDAO.save(dto);
+        } else {
+            throw new BadRequestException(Constants.PWD_ERROR, "old password error");
+        }
     }
 
 

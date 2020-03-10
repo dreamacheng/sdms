@@ -86,55 +86,55 @@
         v-model="visible"
         @ok="handleOk"
       >
-      <a-card :bordered="false">
-        <detail-list title="基本信息">
-          <detail-list-item term="学号/职工号">{{account.accountNo}}</detail-list-item>
-          <detail-list-item term="姓名">{{account.username}}</detail-list-item>
-          <detail-list-item term="年龄">{{account.age}}</detail-list-item>
-          <detail-list-item term="在校公寓">{{account.lodgingHouse}}</detail-list-item>
-          <detail-list-item term="专业科系">{{account.department}}</detail-list-item>
-          <detail-list-item term="民族">{{account.nation}}</detail-list-item>
-          <detail-list-item term="电话号码">{{account.tel}}</detail-list-item>
-          <detail-list-item term="身份证">{{account.identityCard}}</detail-list-item>
-          <detail-list-item term="政治面貌">{{ account.politicsStatus | politicsStatusFilter }}</detail-list-item>
-          <detail-list-item term="性别">{{ account.gender | genderFileter }}</detail-list-item>
-          <detail-list-item term="出生年月">{{account.birthday}}</detail-list-item>
-          <detail-list-item term="用户类型">{{ account.role | roleFilter }}</detail-list-item>
-        </detail-list>
-        <a-divider style="margin-bottom: 32px"/>
-        <detail-list title="获奖记录">
-          <detail-list-item term="用户姓名">付小小</detail-list-item>
-          <detail-list-item term="联系电话">18100000000</detail-list-item>
-          <detail-list-item term="常用快递">菜鸟仓储</detail-list-item>
-          <detail-list-item term="取货地址">浙江省杭州市西湖区万塘路18号</detail-list-item>
-          <detail-list-item term="备注">	无</detail-list-item>
-        </detail-list>
-        <a-divider style="margin-bottom: 32px"/>
+        <a-card :bordered="false">
+          <detail-list title="基本信息">
+            <detail-list-item term="学号/职工号">{{account.accountNo}}</detail-list-item>
+            <detail-list-item term="姓名">{{account.username}}</detail-list-item>
+            <detail-list-item term="年龄">{{account.age}}</detail-list-item>
+            <detail-list-item term="在校公寓">{{account.lodgingHouse}}</detail-list-item>
+            <detail-list-item term="专业科系">{{account.department}}</detail-list-item>
+            <detail-list-item term="民族">{{account.nation}}</detail-list-item>
+            <detail-list-item term="电话号码">{{account.tel}}</detail-list-item>
+            <detail-list-item term="身份证">{{account.identityCard}}</detail-list-item>
+            <detail-list-item term="政治面貌">{{ account.politicsStatus | politicsStatusFilter }}</detail-list-item>
+            <detail-list-item term="性别">{{ account.gender | genderFileter }}</detail-list-item>
+            <detail-list-item term="出生年月">{{account.birthday}}</detail-list-item>
+            <detail-list-item term="用户类型">{{ account.role | roleFilter }}</detail-list-item>
+          </detail-list>
+          <a-divider style="margin-bottom: 32px"/>
+          <detail-list title="获奖记录">
+            <detail-list-item term="用户姓名">付小小</detail-list-item>
+            <detail-list-item term="联系电话">18100000000</detail-list-item>
+            <detail-list-item term="常用快递">菜鸟仓储</detail-list-item>
+            <detail-list-item term="取货地址">浙江省杭州市西湖区万塘路18号</detail-list-item>
+            <detail-list-item term="备注">	无</detail-list-item>
+          </detail-list>
+          <a-divider style="margin-bottom: 32px"/>
 
-        <div class="title">社会实践</div>
-        <!-- <s-table
-          style="margin-bottom: 24px"
-          row-key="id"
-          :columns="goodsColumns"
-          :data="loadGoodsData">
+          <div class="title">社会实践</div>
+          <!-- <s-table
+            style="margin-bottom: 24px"
+            row-key="id"
+            :columns="goodsColumns"
+            :data="loadGoodsData">
 
-        </s-table> -->
+          </s-table> -->
 
-        <div class="title">退货进度</div>
-        <!-- <s-table
-          style="margin-bottom: 24px"
-          row-key="key"
-          :columns="scheduleColumns"
-          :data="loadScheduleData">
+          <div class="title">退货进度</div>
+          <!-- <s-table
+            style="margin-bottom: 24px"
+            row-key="key"
+            :columns="scheduleColumns"
+            :data="loadScheduleData">
 
-          <template
-            slot="status"
-            slot-scope="status">
-            <a-badge :status="status" :text="status | statusFilter"/>
-          </template>
+            <template
+              slot="status"
+              slot-scope="status">
+              <a-badge :status="status" :text="status | statusFilter"/>
+            </template>
 
-        </s-table> -->
-      </a-card>
+          </s-table> -->
+        </a-card>
       </a-modal>
     </a-card>
   </div>
