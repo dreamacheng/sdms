@@ -45,19 +45,62 @@ export const asyncRouterMap = [
           }
         ]
       },
-
+      // 成长档案管理
+      {
+        path: '/studentDoc',
+        name: 'studentDoc',
+        redirect: '/studentDoc/study',
+        component: RouteView,
+        meta: { title: '成长档案管理', keepAlive: true, icon: bxAnaalyse, permission: [ 'profile' ] },
+        children: [
+          {
+            path: '/studentDoc/study',
+            name: 'study',
+            component: () => import('@/views/studentDoc/study/Index'),
+            meta: { title: '学习概况', hideHeader: true, permission: [ 'user' ] },
+            redirect: '/studentDoc/study/termStudy',
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/studentDoc/study/termStudy',
+                name: 'termStudy',
+                component: () => import('@/views//studentDoc/study/termStudy'),
+                meta: { title: '学期记录', permission: [ 'user' ] }
+              },
+              {
+                path: '/studentDoc/study/evaluate',
+                name: 'evaluate',
+                component: () => import('@/views/studentDoc/study/evaluate'),
+                meta: { title: '学习评价', keepAlive: true, permission: [ 'user' ] }
+              }
+            ]
+          },
+          {
+            path: '/studentDoc/practice',
+            name: 'practice',
+            component: () => import('@/views/studentDoc/practice'),
+            meta: { title: '社会实践', keepAlive: true, permission: [ 'profile' ] }
+          },
+          {
+            path: '/studentDoc/person',
+            name: 'person',
+            component: () => import('@/views/studentDoc/person'),
+            meta: { title: '奖惩查询', keepAlive: true, permission: [ 'profile' ] }
+          }
+        ]
+      },
       // forms
       {
         path: '/form',
         redirect: '/form/base-form',
         component: PageView,
-        meta: { title: '表单页', icon: 'form', permission: [ 'form' ] },
+        meta: { title: '入团入党', icon: 'profile', permission: [ 'form' ] },
         children: [
           {
             path: '/form/base-form',
             name: 'BaseForm',
             component: () => import('@/views/form/BasicForm'),
-            meta: { title: '基础表单', keepAlive: true, permission: [ 'form' ] }
+            meta: { title: '入团申请', keepAlive: true, permission: [ 'form' ] }
           },
           {
             path: '/form/step-form',

@@ -219,9 +219,8 @@ public class AccountServiceImpl implements AccountService {
         String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
         Account dto = accountDAO.getAccountByAccountNo(accountNo);
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        String oldPwd = encoder.encode(param.getOldPwd());
         String newPwd = encoder.encode(param.getNewPwd());
-        if (dto.getPassword().equals(oldPwd)) {
+        if (encoder.matches(param.getOldPwd(), dto.getPassword())) {
             dto.setPassword(newPwd);
             accountDAO.save(dto);
         } else {
