@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "sdms_account", uniqueConstraints = {
@@ -53,10 +54,6 @@ public class Account extends BaseDTO{
     @Column(name = "age", nullable = false, columnDefinition = "int")
     private Integer age;
 
-    /** 在校公寓 */
-    @Column(name = "lodging_house", nullable = false, columnDefinition = "varchar(30)")
-    private String lodgingHouse;
-
     /** 联系电话 */
     @Column(name = "tel", nullable = false, columnDefinition = "varchar(30)")
     private String tel;
@@ -65,13 +62,25 @@ public class Account extends BaseDTO{
     @Column(name = "identity_card", nullable = false, columnDefinition = "varchar(30)")
     private String identityCard;
 
+    /** 学院 **/
+    @Column(name = "college", columnDefinition = "varchar(30)")
+    private String college;
+
     /** 专业科系 */
-    @Column(name = "department", nullable = false, columnDefinition = "varchar(30)")
-    private String department;
+    @Column(name = "major", columnDefinition = "varchar(30)")
+    private String major;
 
     /** 政治面貌 */
     @Column(name = "politics_status", nullable = false, columnDefinition = "int")
     private Short politicsStatus;
+
+    /** 在校公寓 */
+    @Column(name = "lodging_house", columnDefinition = "varchar(30)")
+    private String lodgingHouse;
+
+    /** 入学时间 */
+    @Column(name = "enrollment", columnDefinition = "datetime")
+    private Date enrollment;
 
     /** 用户是否锁定 **/
     @Column(name = "isLock", nullable = false, columnDefinition = "int")
@@ -84,6 +93,17 @@ public class Account extends BaseDTO{
     @Column(name = "role",columnDefinition = "varchar(10)")
     private String role;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "tb_account_organizationApply", joinColumns = {
+            @JoinColumn(name = "organizationApply_id") }, inverseJoinColumns = { @JoinColumn(name = "account_id") })
+    private List<OrganizationApply> organizationApplyList;
+
+
+
+//    @OneToOne(targetEntity = AccountInfo.class)
+//    @PrimaryKeyJoinColumn(name = "account_no", referencedColumnName = "id")
+//    private  AccountInfo accouuntInfo;
+
     public AccountVO toVO () {
         AccountVO vo = new AccountVO();
         vo.setUsername(getUsername());
@@ -91,7 +111,6 @@ public class Account extends BaseDTO{
         vo.setAge(getAge());
         vo.setBirthday(getBirthday());
         vo.setIdentityCard(getIdentityCard());
-        vo.setDepartment(getDepartment());
         vo.setLodgingHouse(getLodgingHouse());
         vo.setNation(getNation());
         vo.setPoliticsStatus(BaseCodeEnum.codeOf(PoliticsStatusEnum.class, getPoliticsStatus()).toString());
