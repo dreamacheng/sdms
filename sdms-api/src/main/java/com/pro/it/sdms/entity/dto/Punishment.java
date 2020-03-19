@@ -18,7 +18,8 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @ToString
-@Builder
+@Builder(toBuilder=true)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Punishment extends BaseDTO {
 
     /** 处分类型 */
@@ -34,23 +35,29 @@ public class Punishment extends BaseDTO {
     private Date cancelTime;
 
     /** 是否取消 */
-    @Column(name = "apply_text", nullable = false, columnDefinition = "int")
-    private Short isCance;
+    @Column(name = "is_cancel", nullable = false, columnDefinition = "int")
+    private Short isCancel;
 
     /** 受处分人 */
-    @Column(name = "account_no", nullable = false, columnDefinition = "varchar(30)")
-    private String accountNo;
+    @Column(name = "student_no", nullable = false, columnDefinition = "varchar(30)")
+    private String studentNo;
+
+    /** 受处分人姓名 */
+    @Column(name = "student_name", nullable = false, columnDefinition = "varchar(30)")
+    private String studentName;
 
     /** 处分原因及描述 */
-    @Column(name = "apply_text", columnDefinition = "varchar(1000)")
+    @Column(name = "description", columnDefinition = "varchar(255)")
     private String desc;
 
     public PunishmentVO toVO() {
-        return PunishmentVO.builder().punishmentNo(getAccountNo())
+        return PunishmentVO.builder()
+                .punishmentNo(getStudentNo())
+                .punishmentName(getStudentName())
                 .cancelTime(getCancelTime())
                 .desc(getDesc())
                 .punishmentTime(getPunishmentTime())
-                .isCance(getIsCance())
+                .isCancel(getIsCancel())
                 .type(getType()).build();
     }
 

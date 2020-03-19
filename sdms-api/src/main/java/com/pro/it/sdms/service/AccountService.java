@@ -7,6 +7,8 @@ import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.controller.request.UpdatePwdRequestEntity;
 import com.pro.it.sdms.entity.vo.AccountVO;
 
+import java.util.List;
+
 public interface AccountService {
 
     void registerAccount(PersistAccountRequestEntity vo);
@@ -22,4 +24,6 @@ public interface AccountService {
     void updateAccount(PersistAccountRequestEntity param);
 
     void updatePwd(UpdatePwdRequestEntity param);
+
+    List<AccountVO> queryTeacher();
 }

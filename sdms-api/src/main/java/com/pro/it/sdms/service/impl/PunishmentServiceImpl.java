@@ -44,7 +44,7 @@ public class PunishmentServiceImpl implements PunishmentService {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "punishment id required");
         }
         Punishment one = punishmentDAO.getOne(punishmentId);
-        one.setIsCance((short) 1);
+        one.setIsCancel((short) 1);
         one.setCancelTime(new Date());
         punishmentDAO.save(one);
         return one.getAccountNo();

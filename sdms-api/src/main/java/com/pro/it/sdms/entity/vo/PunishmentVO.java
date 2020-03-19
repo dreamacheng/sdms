@@ -13,7 +13,7 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder=true)
 public class PunishmentVO {
 
     /** 处分类型 */
@@ -26,7 +26,7 @@ public class PunishmentVO {
     private Date cancelTime;
 
     /** 是否取消 */
-    private Short isCance;
+    private Short isCancel;
 
     /** 受处分人学号 */
     private String punishmentNo;
@@ -39,11 +39,13 @@ public class PunishmentVO {
 
 
     public Punishment toDTO() {
-        return Punishment.builder().accountNo(getPunishmentNo())
+        return Punishment.builder()
+                .studentNo(getPunishmentNo())
+                .studentName(getPunishmentName())
                 .cancelTime(getCancelTime())
                 .punishmentTime(getPunishmentTime())
                 .desc(getDesc())
-                .isCance((short) 0)
+                .isCancel((short) 0)
                 .type(getType()).build();
     }
 

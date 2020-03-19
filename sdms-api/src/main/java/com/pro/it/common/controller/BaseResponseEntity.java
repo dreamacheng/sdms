@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder=true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BaseResponseEntity<T> {
 

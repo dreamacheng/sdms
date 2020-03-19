@@ -7,7 +7,7 @@
           @submit="handleSubmit"
         >
           <a-form-item
-            label="学号/职工号"
+            label="学号"
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 12, offset:3 }"
           >
@@ -18,83 +18,28 @@
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 12, offset:3 }"
           >
-            <div v-show="!editShow.username">{{ account.username }}</div>
-            <div v-show="editShow.username">
-              <a-input style="width:250px" v-show="editShow.username" placeholder="姓名" v-decorator="['username', {rules: [{ required: true, message: '请输入姓名' }], validateTrigger: ['blur'] }]"/>
-            </div>
-            <a-icon type="edit" style="margin-top:-25px;float:right;" @click="editShow.username = !editShow.username"/>
+            {{ account.username }}
           </a-form-item>
           <a-form-item
-            label="性别"
+            label="入学时间"
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 12, offset:3 }"
           >
-            {{ account.gender | genderFileter }}
+            {{ account.enrollment }}
           </a-form-item>
           <a-form-item
-            label="政治面貌"
+            label="当前学年"
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 12, offset:3 }"
           >
-            <div v-show="!editShow.politicsStatus">{{ account.politicsStatus | politicsStatusFilter }}</div>
-            <div v-show="editShow.politicsStatus">
-              <a-radio-group style="width:250px" v-show="editShow.politicsStatus" v-decorator="['politicsStatus', {rules: [{ required: true, message: '请选择政治面貌'}], validateTrigger: ['blur'] }]">
-                <a-radio value="LEAGUE_MEMBER" defaultChecked>团员</a-radio>
-                <a-radio value="PART_MEMBER">党员</a-radio>
-                <a-radio value="MASSES">群众</a-radio>
-              </a-radio-group>
-            </div>
-            <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.politicsStatus = !editShow.politicsStatus"/>
-          </a-form-item>
-          <a-form-item
-            label="身份证号"
-            :label-col="{ span: 4 }"
-            :wrapper-col="{ span: 12, offset:3 }"
-          >
-            {{ account.identityCard }}
-          </a-form-item>
-          <a-form-item
-            label="联系电话"
-            :label-col="{ span: 4 }"
-            :wrapper-col="{ span: 12, offset:3 }"
-          >
-            {{ account.tel }}
-          </a-form-item>
-          <a-form-item
-            label="在校公寓"
-            :label-col="{ span: 4 }"
-            :wrapper-col="{ span: 12, offset:3 }"
-          >
-            <div v-show="!editShow.lodgingHouse">{{ account.lodgingHouse }}</div>
-            <div v-show="editShow.lodgingHouse">
-              <a-input style="width:250px" v-show="editShow.lodgingHouse" placeholder="在校公寓" v-decorator="['lodgingHouse', {rules: [{ required: true, message: '请输入在校公寓' }], validateTrigger: ['blur'] }]"/>
-            </div>
-            <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.lodgingHouse = !editShow.lodgingHouse"/>
+            {{ account.enrollment }}
           </a-form-item>
           <a-form-item
             label="专业科系"
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 12, offset:3 }"
           >
-            <div v-show="!editShow.department">{{ account.department }}</div>
-            <div v-show="editShow.department">
-              <a-input style="width:250px" v-show="editShow.department" placeholder="专业科系" v-decorator="['department', {rules: [{ required: true, message: '请输入专业科系' }], validateTrigger: ['blur'] }]"/>
-            </div>
-            <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.department = !editShow.department"/>
-          </a-form-item>
-          <a-form-item
-            label="年龄"
-            :label-col="{ span: 4 }"
-            :wrapper-col="{ span: 12, offset:3 }"
-          >
-            {{ account.age }}
-          </a-form-item>
-          <a-form-item
-            label="出生年月"
-            :label-col="{ span: 4 }"
-            :wrapper-col="{ span: 12, offset:3 }"
-          >
-            {{ account.birthday }}
+            {{ account.department }}
           </a-form-item>
           <a-form-item>
             <a-row>
@@ -144,15 +89,8 @@ export default {
       account: {
         id: '',
         accountNo: '',
-        age: '',
-        gender: '',
         username: '',
-        identityCard: '',
-        tel: '',
-        politicsStatus: '',
         role: '',
-        birthday: '',
-        lodgingHouse: '',
         department: '',
         avatar: ''
       },

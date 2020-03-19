@@ -36,7 +36,6 @@ public class AccountDAOTest {
         zc.setIdentityCard("511321199610073152");
         zc.setUsername("dreamacheng");
         zc.setAge(22);
-        zc.setDepartment("通信工程");
         zc.setGender("MALE");
         zc.setLodgingHouse("松林二127");
         zc.setNation("汉族");

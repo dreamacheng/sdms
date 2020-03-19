@@ -8,14 +8,18 @@ import com.pro.it.common.utils.VerifyUtil;
 import com.pro.it.sdms.controller.request.QueryAccountRequestEntity;
 import com.pro.it.sdms.controller.request.ResetPwdRequestEntity;
 import com.pro.it.sdms.controller.request.UpdatePwdRequestEntity;
+import com.pro.it.sdms.entity.dto.Account;
 import com.pro.it.sdms.entity.result.InfoAPIResult;
 import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
+import com.pro.it.sdms.entity.result.ListAPIResult;
 import com.pro.it.sdms.entity.vo.AccountVO;
 import com.pro.it.sdms.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -32,6 +36,7 @@ public class AccountController extends BaseController {
         private static final String LOCK_ACCOUNT = "/account/lock/{accountNo}";
         private static final String UPDATE_ACCOUNT = "/account/update";
         private static final String UPDATE_PWD = "/account/pwd";
+        private static final String TEACHER_QUERY = "/account/teacher";
     }
 
     @PostMapping(URL.REGISTER_URL)
@@ -109,6 +114,16 @@ public class AccountController extends BaseController {
         log.info("===> request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
         log.info("===> request parameter {} : {} ", UpdatePwdRequestEntity.class.getSimpleName(), param);
         accountService.updatePwd(param);
+        log.info("===> response result {}", result);
+        return result;
+    }
+
+    @GetMapping(URL.TEACHER_QUERY)
+    public ListAPIResult<AccountVO> teacherList() {
+        ListAPIResult<AccountVO> result = new ListAPIResult<>();
+        log.info("===> request method : [ Get ]", URL.TEACHER_QUERY);
+        List<AccountVO> teacherList = accountService.queryTeacher();
+        result.setList(teacherList);
         log.info("===> response result {}", result);
         return result;
     }

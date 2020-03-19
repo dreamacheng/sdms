@@ -1,5 +1,6 @@
 package com.pro.it.sdms.controller;
 
+import com.pro.it.common.controller.BaseController;
 import com.pro.it.sdms.entity.dto.SchoolClub;
 import com.pro.it.sdms.entity.result.InfoAPIResult;
 import com.pro.it.sdms.entity.vo.PunishmentVO;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-public class SchoolClubController {
+public class SchoolClubController extends BaseController {
 
     @Autowired
     private SchoolClubService schoolClubService;

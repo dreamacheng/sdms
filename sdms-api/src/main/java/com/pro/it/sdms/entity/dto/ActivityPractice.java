@@ -1,9 +1,8 @@
 package com.pro.it.sdms.entity.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.pro.it.sdms.entity.BaseDTO;
+import com.pro.it.sdms.entity.vo.ActivityPracticeVO;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
@@ -22,7 +21,9 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @ToString
-public class ActivityPractice {
+@Builder
+@AllArgsConstructor
+public class ActivityPractice extends BaseDTO {
 
     /** 发起组织 */
     @Column(name = "organization", columnDefinition = "varchar(100)")
@@ -43,5 +44,14 @@ public class ActivityPractice {
     /** 结束时间 */
     @Column(name = "end_time", columnDefinition = "datetime")
     private Date endTime;
+
+    public ActivityPracticeVO toVO() {
+        return ActivityPracticeVO.builder()
+                .organization(getOrganization())
+                .title(getTitle())
+                .content(getContent())
+                .startTime(getStartTime())
+                .endTime(getEndTime()).build();
+    }
 
 }

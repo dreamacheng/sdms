@@ -1,28 +1,6 @@
 <template>
   <div class="page-header-index-wide page-header-wrapper-grid-content-main">
     <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
-        <a-form layout="inline">
-          <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="起始日期">
-                <a-datePicker v-model="queryParam.startTime"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="结束日期">
-                <a-datePicker v-model="queryParam.endTime"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <span class="table-page-search-submitButtons" >
-                <a-button type="primary" @click="loadAccountList">查询</a-button>
-                <a-button style="margin-left: 8px">重置</a-button>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form>
-      </div>
 
       <a-table :columns="columns" :dataSource="accountdata">
         <span slot="action" slot-scope="text, record">
@@ -119,21 +97,25 @@ export default {
       // 表头
       columns: [
         {
-          title: '学号/职工号',
+          title: '学号',
           dataIndex: 'accountNo',
           key: 'id'
         },
         {
-          title: '用户姓名',
+          title: '学生姓名',
           dataIndex: 'username'
         },
         {
           title: '专业科系',
-          dataIndex: 'accountNo'
+          dataIndex: 'department'
+        },
+        {
+          title: '学年',
+          dataIndex: 'termNo'
         },
         {
           title: '学期总评价',
-          dataIndex: 'tel'
+          dataIndex: 'evaluate'
         },
         {
           title: '操作',
@@ -149,32 +131,16 @@ export default {
   filters: {
     statusFilter (status) {
       const statusMap = {
-        0: '正常',
-        1: '锁定'
+        0: '大一第一学年',
+        1: '大一第二学年',
+        2: '大二第一学年',
+        3: '大二第二学年',
+        4: '大三第一学年',
+        5: '大三第二学年',
+        6: '大四第一学年',
+        7: '大四第二学年'
       }
       return statusMap[status]
-    },
-    roleFilter (role) {
-      const statusMap = {
-        'STUDENT': '学生',
-        'MANAGER': '管理员'
-      }
-      return statusMap[role]
-    },
-    politicsStatusFilter (status) {
-      const statusMap = {
-        'PART_MEMBER': '党员',
-        'LEAGUE_MEMBER': '团员',
-        'MASSES': '群众'
-      }
-      return statusMap[status]
-    },
-    genderFileter (gender) {
-      const statusMap = {
-        'MALE': '男',
-        'FEMALE': '女'
-      }
-      return statusMap[gender]
     }
   },
   created () {

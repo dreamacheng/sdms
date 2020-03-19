@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder=true)
 public class OrganizationApplyVO {
 
     /** 申请类型 */

@@ -14,6 +14,7 @@ import com.pro.it.sdms.entity.dto.RegisterCode;
 import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.entity.vo.AccountVO;
 import com.pro.it.sdms.enums.BaseCodeEnum;
+import com.pro.it.sdms.enums.IdentityEnum;
 import com.pro.it.sdms.enums.PoliticsStatusEnum;
 import com.pro.it.sdms.service.AccountService;
 import org.apache.commons.lang3.StringUtils;
@@ -227,6 +228,20 @@ public class AccountServiceImpl implements AccountService {
         } else {
             throw new BadRequestException(Constants.PWD_ERROR, "old password error");
         }
+    }
+
+    /**
+     * 查询教师
+     * @return
+     */
+    @Override
+    public List<AccountVO> queryTeacher() {
+        List<Account> allByRole = accountDAO.findAllByRole(IdentityEnum.MANAGER.toString());
+        List<AccountVO> ret = new ArrayList<>();
+        allByRole.forEach(item -> {
+            ret.add(item.toVO());
+        });
+        return ret;
     }
 
 

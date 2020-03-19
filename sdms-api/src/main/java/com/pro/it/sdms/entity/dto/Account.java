@@ -93,11 +93,6 @@ public class Account extends BaseDTO {
     @Column(name = "role",columnDefinition = "varchar(10)")
     private String role;
 
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinTable(name = "tb_account_organizationApply", joinColumns = {
-//            @JoinColumn(name = "organizationApply_id") }, inverseJoinColumns = { @JoinColumn(name = "account_id") })
-//    private List<OrganizationApply> organizationApplyList;
-
 
     public AccountVO toVO () {
         AccountVO vo = new AccountVO();

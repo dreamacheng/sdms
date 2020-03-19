@@ -14,10 +14,10 @@ public interface AccountDAO extends JpaSpecificationExecutor<Account>, JpaReposi
 
     Account getAccountByAccountNo(String accountNo);
 
-    Account getAccountByAccountNoAndPassword(String accountNo, String password);
-
     List<Account> getAccountsByIdentityCard(String identityCard);
 
     List<Account> getAccountsByAccountNo(String accountNo);
+
+    List<Account> findAllByRole(String role);
 
 }

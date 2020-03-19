@@ -19,7 +19,8 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @ToString
-@Builder
+@Builder(toBuilder=true)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class OrganizationApply extends BaseDTO {
 
     /** 申请类型 */

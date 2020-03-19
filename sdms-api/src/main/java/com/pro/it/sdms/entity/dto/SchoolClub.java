@@ -15,7 +15,8 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @ToString
-@Builder
+@Builder(toBuilder=true)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 /**
  * 社团表
  */

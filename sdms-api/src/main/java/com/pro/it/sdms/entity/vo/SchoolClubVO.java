@@ -10,7 +10,7 @@ import javax.persistence.Column;
 import java.util.Date;
 
 @ToString
-@Builder
+@Builder(toBuilder=true)
 @Getter
 @Setter
 public class SchoolClubVO {

@@ -1,6 +1,7 @@
 package com.pro.it.sdms.controller;
 
 
+import com.pro.it.common.controller.BaseController;
 import com.pro.it.sdms.entity.dto.Punishment;
 import com.pro.it.sdms.entity.result.InfoAPIResult;
 import com.pro.it.sdms.entity.vo.PunishmentVO;
@@ -19,7 +20,7 @@ import java.math.BigDecimal;
  */
 @RestController
 @Slf4j
-public class PunishmentController {
+public class PunishmentController extends BaseController {
 
     @Autowired
     private PunishmentService punishmentService;
