@@ -22,7 +22,7 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @ToString
-public class SocialPractice {
+public class ActivityPractice {
 
     /** 发起组织 */
     @Column(name = "organization", columnDefinition = "varchar(100)")

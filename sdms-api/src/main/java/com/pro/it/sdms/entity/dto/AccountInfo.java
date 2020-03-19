@@ -1,5 +1,6 @@
 package com.pro.it.sdms.entity.dto;
 
+import com.pro.it.sdms.entity.BaseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

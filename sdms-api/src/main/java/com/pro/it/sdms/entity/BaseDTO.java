@@ -1,4 +1,4 @@
-package com.pro.it.sdms.entity.dto;
+package com.pro.it.sdms.entity;
 
 import com.pro.it.sdms.entity.BeanBase;
 import lombok.Getter;

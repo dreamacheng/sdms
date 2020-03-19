@@ -1,5 +1,6 @@
 package com.pro.it.sdms.entity.dto;
 
+import com.pro.it.sdms.entity.BaseDTO;
 import com.pro.it.sdms.entity.vo.AccountVO;
 import com.pro.it.sdms.enums.BaseCodeEnum;
 import com.pro.it.sdms.enums.GenderEnum;
@@ -12,7 +13,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "sdms_account", uniqueConstraints = {
@@ -24,7 +24,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @ToString
-public class Account extends BaseDTO{
+public class Account extends BaseDTO {
 
     /** 姓名 */
     @Column(name = "username", nullable = false, columnDefinition = "varchar(30)")
@@ -93,16 +93,11 @@ public class Account extends BaseDTO{
     @Column(name = "role",columnDefinition = "varchar(10)")
     private String role;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "tb_account_organizationApply", joinColumns = {
-            @JoinColumn(name = "organizationApply_id") }, inverseJoinColumns = { @JoinColumn(name = "account_id") })
-    private List<OrganizationApply> organizationApplyList;
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinTable(name = "tb_account_organizationApply", joinColumns = {
+//            @JoinColumn(name = "organizationApply_id") }, inverseJoinColumns = { @JoinColumn(name = "account_id") })
+//    private List<OrganizationApply> organizationApplyList;
 
-
-
-//    @OneToOne(targetEntity = AccountInfo.class)
-//    @PrimaryKeyJoinColumn(name = "account_no", referencedColumnName = "id")
-//    private  AccountInfo accouuntInfo;
 
     public AccountVO toVO () {
         AccountVO vo = new AccountVO();
@@ -113,6 +108,8 @@ public class Account extends BaseDTO{
         vo.setIdentityCard(getIdentityCard());
         vo.setLodgingHouse(getLodgingHouse());
         vo.setNation(getNation());
+        vo.setMajor(getMajor());
+        vo.setCollege(getCollege());
         vo.setPoliticsStatus(BaseCodeEnum.codeOf(PoliticsStatusEnum.class, getPoliticsStatus()).toString());
         vo.setGender(BaseCodeEnum.codeOf(GenderEnum.class, getGender()).toString());
         vo.setTel(getTel());

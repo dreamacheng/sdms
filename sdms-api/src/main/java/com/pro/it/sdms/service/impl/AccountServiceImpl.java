@@ -206,7 +206,8 @@ public class AccountServiceImpl implements AccountService {
         dto.setPoliticsStatus(PoliticsStatusEnum.valueOf(param.getPoliticsStatus()).getCode());
         dto.setUsername(param.getUsername());
         dto.setLodgingHouse(param.getLodgingHouse());
-        dto.setDepartment(param.getDepartment());
+        dto.setCollege(param.getCollege());
+        dto.setMajor(param.getMajor());
         accountDAO.save(dto);
     }
 

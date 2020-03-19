@@ -10,27 +10,23 @@ public enum ApprovalResult implements BaseCodeEnum {
 	/**
 	 * 待审核
 	 */
-	WaitForApproval( (short) 0, "rejected" ),
+	WaitForApproval( (short) 0),
 
 	/**
 	 * 拒绝
 	 */
-	Rejected( (short) 1, "rejected" ),
+	Rejected( (short) 1),
 
 	/**
 	 * 批准
 	 */
-	Approved( (short) 2, "approved" );
+	Approved( (short) 2);
 
 	private short code;
 
-	ApprovalResult(final short code,final String result){
+	ApprovalResult(final short code){
 		this.code = code;
-		this.result = result;
 	}
-
-	@Getter
-	private String result;
 
 	@Override
 	public short getCode() {

@@ -59,8 +59,11 @@ public class PersistAccountRequestEntity implements Serializable {
     /** 身份证号码 */
     private String identityCard;
 
+    /** 学院 */
+    private String college;
+
     /** 专业科系 */
-    private String department;
+    private String major;
 
     /** 政治面貌 */
     private String politicsStatus;
@@ -81,7 +84,8 @@ public class PersistAccountRequestEntity implements Serializable {
         account.setAge(this.getAge());
         account.setBirthday(this.getBirthday());
         account.setIdentityCard(this.getIdentityCard());
-        account.setDepartment(this.getDepartment());
+        account.setCollege(getCollege());
+        account.setMajor(getMajor());
         account.setLodgingHouse(this.getLodgingHouse());
         account.setNation(this.getNation());
         try {

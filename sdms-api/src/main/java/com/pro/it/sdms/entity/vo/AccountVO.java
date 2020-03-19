@@ -50,7 +50,10 @@ public class AccountVO implements Serializable {
     private String identityCard;
 
     /** 专业科系 */
-    private String department;
+    private String major;
+
+    /** 学院 */
+    private String college;
 
     /** 政治面貌 */
     private String politicsStatus;

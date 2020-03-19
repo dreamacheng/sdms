@@ -1,10 +1,13 @@
 package com.pro.it.sdms.entity.dto;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.pro.it.sdms.entity.BaseDTO;
+import com.pro.it.sdms.entity.vo.OrganizationApplyVO;
+import com.pro.it.sdms.enums.ApplyTypeEnum;
+import com.pro.it.sdms.enums.ApprovalResult;
+import com.pro.it.sdms.enums.BaseCodeEnum;
+import com.pro.it.sdms.enums.SemesterEnum;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -16,6 +19,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @ToString
+@Builder
 public class OrganizationApply extends BaseDTO {
 
     /** 申请类型 */
@@ -34,6 +38,10 @@ public class OrganizationApply extends BaseDTO {
     @Column(name = "semester", nullable = false, columnDefinition = "int")
     private Short semester;
 
+    /** 审核人 */
+    @Column(name = "approver_no", nullable = false, columnDefinition = "int")
+    private String approver;
+
     /** 审批状态 */
     @Column(name = "apply_status", nullable = false, columnDefinition = "int")
     private Short applyStatus;
@@ -41,5 +49,17 @@ public class OrganizationApply extends BaseDTO {
     /** 审批意见 */
     @Column(name = "apply_comment", nullable = false, columnDefinition = "varchar(300)")
     private String applyComment;
+
+    public OrganizationApplyVO toVO() {
+        return OrganizationApplyVO.builder()
+                .type( BaseCodeEnum.codeOf( ApplyTypeEnum.class, getType()).toString() )
+                .applyComment( getApplyComment() )
+                .applyStatus( BaseCodeEnum.codeOf( ApprovalResult.class, getApplyStatus()).toString() )
+                .applyText(getApplyText())
+                .applyAccessory(getApplyAccessory())
+                .approver(getApprover())
+                .semester( BaseCodeEnum.codeOf(SemesterEnum.class, getSemester()).toString() )
+                .build();
+    }
 
 }

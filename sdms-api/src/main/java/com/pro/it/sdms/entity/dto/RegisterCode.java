@@ -1,10 +1,10 @@
 package com.pro.it.sdms.entity.dto;
 
+import com.pro.it.sdms.entity.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
