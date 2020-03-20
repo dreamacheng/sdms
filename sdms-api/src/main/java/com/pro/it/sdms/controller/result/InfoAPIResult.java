@@ -1,8 +1,7 @@
-package com.pro.it.sdms.entity.result;
+package com.pro.it.sdms.controller.result;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import com.pro.it.sdms.entity.APIResult;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

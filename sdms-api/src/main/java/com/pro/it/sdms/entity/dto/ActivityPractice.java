@@ -11,9 +11,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 import java.util.Date;
 
-/**
- * 社会实践表
- */
+
 @Entity
 @Table(name = "sdms_activity_practice")
 @EntityListeners(AuditingEntityListener.class)
@@ -23,6 +21,9 @@ import java.util.Date;
 @ToString
 @Builder
 @AllArgsConstructor
+/**
+ * 社会实践表
+ */
 public class ActivityPractice extends BaseDTO {
 
     /** 发起组织 */

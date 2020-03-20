@@ -9,11 +9,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 @ToString
 @Getter
 @Setter
 @Builder(toBuilder=true)
 public class OrganizationApplyVO {
+
+    private BigDecimal id;
 
     /** 申请类型 */
     private String type;

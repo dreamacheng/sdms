@@ -22,6 +22,9 @@ import java.util.Date;
 @ToString
 @Builder(toBuilder=true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
+/**
+ * 比赛表
+ */
 public class Competition extends BaseDTO {
 
     /** 比赛名称 */

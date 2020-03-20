@@ -1,7 +1,7 @@
 package com.pro.it.sdms.controller;
 
 import com.pro.it.common.controller.BaseController;
-import com.pro.it.sdms.entity.result.InfoAPIResult;
+import com.pro.it.sdms.controller.result.InfoAPIResult;
 import com.pro.it.sdms.entity.vo.CompetitionVO;
 import com.pro.it.sdms.service.CompetitionService;
 import lombok.extern.slf4j.Slf4j;

@@ -1,5 +1,6 @@
-package com.pro.it.sdms.entity;
+package com.pro.it.sdms.controller.result;
 
+import com.pro.it.sdms.entity.BeanBase;
 import lombok.*;
 
 

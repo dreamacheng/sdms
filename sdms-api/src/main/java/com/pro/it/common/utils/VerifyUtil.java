@@ -1,8 +1,11 @@
 package com.pro.it.common.utils;
 
 import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 public class VerifyUtil {
 
@@ -23,5 +26,14 @@ public class VerifyUtil {
             }
         }
         return true;
+    }
+
+    public static String getCurrentRole() {
+        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        String result = "";
+        for (GrantedAuthority authority : authorities) {
+            result = authority.getAuthority();
+        }
+        return result;
     }
 }

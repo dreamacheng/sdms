@@ -2,10 +2,8 @@ package com.pro.it.sdms.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.pro.it.sdms.entity.dto.Account;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,6 +15,7 @@ import java.util.TimeZone;
 @Getter
 @NoArgsConstructor
 @ToString
+@Builder
 public class AccountVO implements Serializable {
 
     private BigDecimal id;

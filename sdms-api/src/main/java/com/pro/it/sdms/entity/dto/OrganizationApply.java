@@ -21,6 +21,9 @@ import javax.persistence.*;
 @ToString
 @Builder(toBuilder=true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
+/**
+ * 入团、入党申请表
+ */
 public class OrganizationApply extends BaseDTO {
 
     /** 申请类型 */
@@ -53,6 +56,7 @@ public class OrganizationApply extends BaseDTO {
 
     public OrganizationApplyVO toVO() {
         return OrganizationApplyVO.builder()
+                .id(getId())
                 .type( BaseCodeEnum.codeOf( ApplyTypeEnum.class, getType()).toString() )
                 .applyComment( getApplyComment() )
                 .applyStatus( BaseCodeEnum.codeOf( ApprovalResult.class, getApplyStatus()).toString() )

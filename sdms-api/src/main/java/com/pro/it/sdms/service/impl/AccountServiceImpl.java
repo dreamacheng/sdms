@@ -145,8 +145,8 @@ public class AccountServiceImpl implements AccountService {
         all.getContent().forEach(item -> {
             list.add(item.toVO());
         });
-        queryResult.setResultlist(list);
-        queryResult.setTotalrecord(all.getTotalElements());
+        queryResult.setResultList(list);
+        queryResult.setTotalRecord(all.getTotalElements());
 
         return queryResult;
     }

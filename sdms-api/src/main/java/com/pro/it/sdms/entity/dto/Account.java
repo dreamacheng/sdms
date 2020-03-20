@@ -5,10 +5,7 @@ import com.pro.it.sdms.entity.vo.AccountVO;
 import com.pro.it.sdms.enums.BaseCodeEnum;
 import com.pro.it.sdms.enums.GenderEnum;
 import com.pro.it.sdms.enums.PoliticsStatusEnum;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -24,6 +21,10 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @ToString
+@Builder
+/**
+ * 用户表 （学生、教师）
+ */
 public class Account extends BaseDTO {
 
     /** 姓名 */
@@ -95,24 +96,23 @@ public class Account extends BaseDTO {
 
 
     public AccountVO toVO () {
-        AccountVO vo = new AccountVO();
-        vo.setUsername(getUsername());
-        vo.setAccountNo(getAccountNo());
-        vo.setAge(getAge());
-        vo.setBirthday(getBirthday());
-        vo.setIdentityCard(getIdentityCard());
-        vo.setLodgingHouse(getLodgingHouse());
-        vo.setNation(getNation());
-        vo.setMajor(getMajor());
-        vo.setCollege(getCollege());
-        vo.setPoliticsStatus(BaseCodeEnum.codeOf(PoliticsStatusEnum.class, getPoliticsStatus()).toString());
-        vo.setGender(BaseCodeEnum.codeOf(GenderEnum.class, getGender()).toString());
-        vo.setTel(getTel());
-        vo.setRole(getRole());
-        vo.setAvatar("/avatar2.jpg");
-        vo.setIsLock(getIsLock());
-        vo.setId(getId());
-        return vo;
+        return AccountVO.builder()
+                .username(getUsername())
+                .accountNo(getAccountNo())
+                .age(getAge())
+                .birthday(getBirthday())
+                .identityCard(getIdentityCard())
+                .lodgingHouse(getLodgingHouse())
+                .nation(getNation())
+                .major(getMajor())
+                .college(getCollege())
+                .politicsStatus(BaseCodeEnum.codeOf(PoliticsStatusEnum.class, getPoliticsStatus()).toString())
+                .gender(BaseCodeEnum.codeOf(GenderEnum.class, getGender()).toString())
+                .tel(getTel())
+                .role(getRole())
+                .avatar("/avatar2.jpg")
+                .isLock(getIsLock())
+                .id(getId()).build();
     }
 
 }
