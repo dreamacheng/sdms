@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "sdms_school_club")
@@ -33,6 +34,9 @@ public class SchoolClub extends BaseDTO {
     /** 社团简介 */
     @Column(name = "apply_accessory", columnDefinition = "varchar(100)")
     private String introduction;
+
+    @ManyToMany(mappedBy = "schoolClubList")
+    private List<AccountInfo> schoolClubList;
 
     public SchoolClubVO toVO() {
         return SchoolClubVO.builder()

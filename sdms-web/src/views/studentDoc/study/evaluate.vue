@@ -1,11 +1,8 @@
 <template>
   <div class="account-settings-info-view">
-    <a-row :gutter="16">
+    <a-row :gutter="24">
       <a-col :md="24" :lg="16">
-        <a-form
-          :form="form"
-          @submit="handleSubmit"
-        >
+        <a-form>
           <a-form-item
             label="学号"
             :label-col="{ span: 4 }"
@@ -32,14 +29,60 @@
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 12, offset:3 }"
           >
-            {{ account.enrollment }}
+            {{ account.currentTerm | termFilter }}
+          </a-form-item>
+          <a-form-item
+            label="学院"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 12, offset:3 }"
+          >
+            {{ account.college }}
           </a-form-item>
           <a-form-item
             label="专业科系"
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 12, offset:3 }"
           >
-            {{ account.department }}
+            {{ account.major }}
+          </a-form-item>
+          <a-form-item
+            label="学生自评"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 17, offset:3 }"
+          >
+            <div v-show="!editShow.selfEval">{{ evaluation.selfEval | nullFilter }}</div>
+            <div v-show="editShow.selfEval">
+              <a-textarea v-model="evaluation.selfEval" style="width:500px" :rows="10" v-show="editShow.selfEval" placeholder="学生自评"/>
+            </div>
+            <a-icon type="edit" v-show="account.role === 'STUDENT'" style="margin-top:-25px;float:right" @click="editShow.selfEval = !editShow.selfEval"/>
+          </a-form-item>
+          <a-form-item
+            label="老师评价"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 17, offset:3 }"
+          >
+            <div v-show="!editShow.teacherEval">{{ evaluation.teacherEval | nullFilter }}</div>
+            <div v-show="editShow.teacherEval">
+              <a-textarea v-model="evaluation.teacherEval" style="width:500px" :rows="10" v-show="editShow.teacherEval" placeholder="老师评价"/>
+            </div>
+            <a-icon type="edit" v-show="account.role === 'MANAGER'" style="margin-top:-25px;float:right" @click="editShow.teacherEval = !editShow.teacherEval"/>
+          </a-form-item>
+          <a-form-item
+            label="评定等级"
+            :label-col="{ span: 4 }"
+            :wrapper-col="{ span: 17, offset:3 }"
+          >
+            <div v-show="!editShow.grade">{{ evaluation.grade | nullFilter }}</div>
+            <div v-show="editShow.grade">
+              <a-select v-model="evaluation.grade" style="width: 200px">
+                <a-select-option value="A">A</a-select-option>
+                <a-select-option value="B">B</a-select-option>
+                <a-select-option value="C">C</a-select-option>
+                <a-select-option value="D">D</a-select-option>
+                <a-select-option value="E">E</a-select-option>
+              </a-select>
+            </div>
+            <a-icon type="edit" v-show="account.role === 'MANAGER'" style="margin-top:-25px;float:right" @click="editShow.grade = !editShow.grade"/>
           </a-form-item>
           <a-form-item>
             <a-row>
@@ -48,37 +91,21 @@
                 <a-button
                   size="large"
                   type="primary"
-                  htmlType="submit"
                   class="register-button"
-                  :loading="submitBtn"
-                  @click.stop.prevent="handleSubmit"
-                  :disabled="submitBtn">保存
+                  @click="handleSubmit">保存
                 </a-button>
               </a-col>
             </a-row>
           </a-form-item>
         </a-form>
-
       </a-col>
-      <a-col :md="24" :lg="8" :style="{ minHeight: '180px' }">
-        <div class="ant-upload-preview" @click="$refs.modal.edit(1)" >
-          <a-icon type="cloud-upload-o" class="upload-icon"/>
-          <div class="mask">
-            <a-icon type="plus" />
-          </div>
-          <img :src="option.img"/>
-        </div>
-      </a-col>
-
     </a-row>
-
-    <avatar-modal ref="modal" @ok="setavatar"/>
-
   </div>
 </template>
 
 <script>
-import { updateAccountApi, currentUserInfo } from '@/api/login'
+import { currentUserInfo } from '@/api/login'
+import { evaluateAPI, evaluateCurAPI } from '@/api/evaluate'
 
 export default {
   data () {
@@ -86,41 +113,40 @@ export default {
       // cropper
       form: this.$form.createForm(this),
       preview: {},
-      account: {
-        id: '',
-        accountNo: '',
-        username: '',
-        role: '',
-        department: '',
-        avatar: ''
-      },
-      submitBtn: false,
       editShow: {
-        accountNo: false,
-        username: false,
-        lodgingHouse: false,
-        politicsStatus: false,
-        department: false,
-        birthday: false
+        selfEval: false,
+        teacherEval: false,
+        grade: false
       },
-      option: {
-        img: '',
-        info: true,
-        size: 1,
-        outputType: 'jpeg',
-        canScale: false,
-        autoCrop: true,
-        // 只有自动截图开启 宽度高度才生效
-        autoCropWidth: 180,
-        autoCropHeight: 180,
-        fixedBox: true,
-        // 开启宽度和高度比例
-        fixed: true,
-        fixedNumber: [1, 1]
+      account: {},
+      evaluation: {
+        id: '',
+        selfEval: '',
+        teacherEval: '',
+        grade: ''
       }
     }
   },
   filters: {
+    nullFilter (value) {
+      if (!value) {
+        return '暂未录入'
+      }
+      return value
+    },
+    termFilter (status) {
+      const statusMap = {
+        'CLASS_1': '大一第一学年',
+        'CLASS_2': '大一第二学年',
+        'CLASS_3': '大二第一学年',
+        'CLASS_4': '大二第二学年',
+        'CLASS_5': '大三第一学年',
+        'CLASS_6': '大三第二学年',
+        'CLASS_7': '大四第一学年',
+        'CLASS_8': '大四第二学年'
+      }
+      return statusMap[status]
+    },
     statusFilter (status) {
       const statusMap = {
         0: '正常',
@@ -155,50 +181,68 @@ export default {
     this.loadCurrent()
   },
   methods: {
-    setavatar (url) {
-      this.option.img = url
-    },
     loadCurrent () {
       currentUserInfo()
         .then(res => {
-          this.account.id = res.info.id
-          this.account.accountNo = res.info.accountNo
-          this.account.age = res.info.age
-          this.account.gender = res.info.gender
-          this.account.username = res.info.username
-          this.account.identityCard = res.info.identityCard
-          this.account.tel = res.info.tel
-          this.account.politicsStatus = res.info.politicsStatus
-          this.account.role = res.info.role
-          this.account.birthday = res.info.birthday
-          this.account.lodgingHouse = res.info.lodgingHouse
-          this.account.department = res.info.department
-          this.option.img = res.info.avatar
-          this.form.setFieldsValue({
-            username: this.account.username,
-            politicsStatus: this.account.politicsStatus,
-            lodgingHouse: this.account.lodgingHouse,
-            department: this.account.department
-          })
+          this.account = res.info
+          if (this.account.currentTerm) {
+            evaluateCurAPI(this.account.currentTerm)
+              .then(res => {
+                if (res.code === 0) {
+                  if (res.info) {
+                    this.evaluation.id = res.info.id
+                    this.evaluation.selfEval = res.info.selfEval
+                    this.evaluation.teacherEval = res.info.teacherEval
+                    this.evaluation.grade = res.info.grade
+                  } else {
+                    const param = {
+                      studentNo: this.account.accountNo,
+                      studentName: this.account.username,
+                      semester: this.account.currentTerm
+                    }
+                    evaluateAPI(param)
+                      .then(res => {
+                        if (res.code === 0) {
+                          this.evaluation.id = res.info.id
+                          this.evaluation.selfEval = res.info.selfEval
+                          this.evaluation.teacherEval = res.info.teacherEval
+                          this.evaluation.grade = res.info.grade
+                        }
+                      })
+                  }
+                }
+              })
+          }
         })
     },
-    handleSubmit (e) {
-      e.preventDefault()
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          var updateAccount = values
-          updateAccount['id'] = this.account.id
-          updateAccountApi(updateAccount)
-            .then(res => {
-              if (res.code === 0) {
-                this.$message.info('更新个人资料成功')
-              } else {
-                this.$message.info('更新个人资料失败')
-              }
-              location.reload()
-            })
+    handleSubmit () {
+      var param = {}
+      if (this.account.role === 'STUDENT') {
+        param = {
+          id: this.evaluation.id,
+          selfEval: this.evaluation.selfEval
         }
-      })
+      } else {
+        param = {
+          id: this.evaluation.id,
+          teacherEval: this.evaluation.teacherEval,
+          grade: this.evaluation.grade
+        }
+      }
+      evaluateAPI(param)
+        .then(res => {
+          if (res.code === 0) {
+            this.$message.info('评定成功')
+            this.loadCurrent()
+            this.editShow = {
+              selfEval: false,
+              teacherEval: false,
+              grade: false
+            }
+          } else {
+            this.$message.info('系统错误，评定失败')
+          }
+        })
     }
   }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pro.it.common.Constants;
 import com.pro.it.common.exceptions.BadRequestException;
 import com.pro.it.sdms.entity.dto.Account;
+import com.pro.it.sdms.entity.dto.AccountInfo;
 import com.pro.it.sdms.enums.GenderEnum;
 import com.pro.it.sdms.enums.IdentityEnum;
 import com.pro.it.sdms.enums.PoliticsStatusEnum;
@@ -47,6 +48,10 @@ public class PersistAccountRequestEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT")
     private Date birthday;
 
+    /** 入学时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT")
+    private Date enrollment;
+
     /** 年龄 */
     private Integer age;
 
@@ -77,30 +82,33 @@ public class PersistAccountRequestEntity implements Serializable {
 
     public Account toDTO (){
         Account account = new Account();
-        account.setUsername(this.getUsername());
+        AccountInfo accountInfo = new AccountInfo();
+        account.setUsername(getUsername());
         String encodePwd = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(this.getPassword());
         account.setPassword(encodePwd);
-        account.setAccountNo(this.getAccountNo());
-        account.setAge(this.getAge());
-        account.setBirthday(this.getBirthday());
-        account.setIdentityCard(this.getIdentityCard());
-        account.setCollege(getCollege());
-        account.setMajor(getMajor());
-        account.setLodgingHouse(this.getLodgingHouse());
-        account.setNation(this.getNation());
+        account.setAccountNo(getAccountNo());
+        account.setBirthday(getBirthday());
+        account.setIdentityCard(getIdentityCard());
+        accountInfo.setCollege(getCollege());
+        accountInfo.setMajor(getMajor());
+        accountInfo.setLodgingHouse(getLodgingHouse());
+        accountInfo.setEnrollment(getEnrollment());
+        account.setNation(getNation());
         try {
-            account.setPoliticsStatus(PoliticsStatusEnum.valueOf(this.getPoliticsStatus()).getCode());
-            account.setGender(GenderEnum.valueOf(this.getGender()).getCode());
+            account.setPoliticsStatus(PoliticsStatusEnum.valueOf(getPoliticsStatus()).getCode());
+            account.setGender(GenderEnum.valueOf(getGender()).getCode());
         } catch (IllegalArgumentException e) {
             throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "gender or politics status not exist in this system");
         }
-        account.setTel(this.getTel());
+        account.setTel(getTel());
         try {
-            IdentityEnum.valueOf(this.getRole());
+            IdentityEnum.valueOf(getRole());
         } catch (IllegalArgumentException e) {
             throw new BadRequestException(Constants.Register.ROLE_NOT_EXIST, "role not exist in this system");
         }
-        account.setRole(this.getRole());
+        account.setRole(getRole());
+        account.setIsLock((short) 0);
+        account.setAccountInfo(accountInfo);
         return account;
     }
 

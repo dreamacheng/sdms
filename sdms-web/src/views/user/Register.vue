@@ -4,7 +4,7 @@
       <a-row>
         <a-col :span="6">&nbsp;</a-col>
         <a-col :span="6">
-          <a-form-item label="学号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+          <a-form-item label="学号/职工号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
             <a-input size="large" placeholder="学号" v-decorator="['accountNo', {rules: [{ required: true, message: '请输入正确的学号', pattern: /^\d{7,}$/ }], validateTrigger: ['change', 'blur'] }]"/>
           </a-form-item>
           <a-form-item label="姓名" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
@@ -44,20 +44,14 @@
               v-decorator="['password2', {rules: [{ required: true, message: '至少6位密码，区分大小写' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
             ></a-input>
           </a-form-item>
-          <a-form-item label="在校公寓" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-input size="large" placeholder="在校公寓" v-decorator="['lodgingHouse', {rules: [{ required: true, message: '请输入在校公寓' }], validateTrigger: ['blur'] }]"/>
-          </a-form-item>
           <a-form-item label="身份证号码" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
             <a-input size="large" placeholder="身份证号码" v-decorator="['identityCard', {rules: [{ required: true, message: '请输入正确的身份证号码', pattern: /^\d{17}(\w?\d?)$/ }], validateTrigger: ['blur'] }]"/>
           </a-form-item >
-          <a-form-item label="专业科系" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-input size="large" placeholder="专业科系" v-decorator="['department', {rules: [{ required: true, message: '请输入专业科系' }], validateTrigger: ['blur'] }]"/>
+          <a-form-item label="入校时间" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+            <a-date-picker size="large" placeholder="入校时间" v-decorator="['enrollment', {rules: [{ required: true, message: '请输入入校时间' }] }]"/>
           </a-form-item>
         </a-col>
         <a-col :span="6">
-          <a-form-item label="年龄" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-input size="large" placeholder="年龄" v-decorator="['age', {rules: [{ required: true, message: '请输入正确的年龄', pattern: /^\d{1,2}$/ }], validateTrigger: ['blur'] }]"/>
-          </a-form-item>
           <a-form-item label="性别" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
             <a-radio-group name="gender"  v-decorator="['gender', {rules: [{ required: true, message: '请选择性别'}], validateTrigger: ['change', 'blur'] }]">
               <a-radio value="MALE" defaultChecked>男</a-radio>
@@ -84,7 +78,7 @@
             <a-form-item  label="注册类型" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
               <a-row>
                 <a-col span="12">
-                  <a-radio-group name="role"  @change="typeChange" v-decorator="['role', {rules: [{ required: true, message: '请选择政治面貌'}], validateTrigger: ['change', 'blur'] }]">
+                  <a-radio-group name="role"  @change="typeChange" v-decorator="['role', {rules: [{ required: true, message: '请选择注册类型'}], validateTrigger: ['change', 'blur'] }]">
                     <a-radio value="STUDENT" defaultChecked>学生</a-radio>
                     <a-radio value="MANAGER">教师</a-radio>
                   </a-radio-group>

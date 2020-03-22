@@ -141,6 +141,7 @@
 </template>
 <script>
 import DetailList from '@/components/tools/DetailList'
+import { queryAccountAPI, lockUser } from '@/api/manage'
 const DetailListItem = DetailList.Item
 
 export default {
@@ -164,7 +165,7 @@ export default {
       },
       form: null,
       account: {},
-      accountdata: {},
+      accountdata: [],
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
@@ -193,7 +194,7 @@ export default {
         },
         {
           title: '专业科系',
-          dataIndex: 'accountNo'
+          dataIndex: 'major'
         },
         {
           title: '电话',
@@ -256,9 +257,9 @@ export default {
   },
   methods: {
     loadAccountList () {
-      this.$http.post('/api/account/query', this.queryParam)
+      queryAccountAPI(this.queryParam)
         .then(res => {
-          const result = res.info.resultlist
+          const result = res.info.resultList
           this.accountdata = result
         })
     },
@@ -270,39 +271,41 @@ export default {
       this.visible = false
     },
     lockAccountConfirm (accountNo) {
+      const self = this
       this.$confirm({
         title: '确认',
         content: '确认锁定 ' + accountNo + ' 用户吗？',
         onOk () {
-          this.confirmOpt = false
-          this.$http.get('/api/account/lock', {
-            accountNo: this.account.accountNo
-          }).then(res => {
-            if (res.info === 0) {
-              this.$message.info('锁定该用户成功！')
-            } else {
-              this.$message.error('锁定该用户失败！')
-            }
-          })
+          self.confirmOpt = false
+          lockUser(accountNo)
+            .then(res => {
+              if (res.code === 0) {
+                self.$message.info('锁定该用户成功！')
+                self.loadAccountList()
+              } else {
+                self.$message.error('锁定该用户失败！')
+              }
+            })
         },
         onCancel () {}
       })
     },
     unLockAccountConfirm (accountNo) {
+      const self = this
       this.$confirm({
         title: '确认',
         content: '确认解锁 ' + accountNo + ' 用户吗？',
         onOk () {
-          this.confirmOpt = false
-          this.$http.get('/api/account/lock', {
-            accountNo: this.account.accountNo
-          }).then(res => {
-            if (res.info === 0) {
-              this.$message.info('解锁该用户成功！')
-            } else {
-              this.$message.error('解锁该用户失败！')
-            }
-          })
+          self.confirmOpt = false
+          lockUser(accountNo)
+            .then(res => {
+              if (res.code === 0) {
+                self.$message.info('解锁该用户成功！')
+                self.loadAccountList()
+              } else {
+                self.$message.error('解锁该用户失败！')
+              }
+            })
         },
         onCancel () {}
       })

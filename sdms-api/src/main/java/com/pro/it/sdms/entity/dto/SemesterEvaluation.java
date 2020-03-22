@@ -7,10 +7,7 @@ import com.pro.it.sdms.enums.SemesterEnum;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "sdms_semester_evaluation")
@@ -54,6 +51,10 @@ public class SemesterEvaluation extends BaseDTO {
     /** 评价等级 */
     @Column(name = "grade", columnDefinition = "varchar(10)")
     private String grade;
+
+    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
+    @JoinColumn(name="student_id")
+    private AccountInfo studentInfo;
 
     public SemesterEvaluationVO toVO() {
         return SemesterEvaluationVO.builder()

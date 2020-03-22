@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface SemesterEvaluationService {
 
-    BigDecimal SemesterEval(SemesterEvaluationVO vo);
+    SemesterEvaluationVO SemesterEval(SemesterEvaluationVO vo);
 
     List<SemesterEvaluationVO> queryByAccountNo(String accountNo);
 
     List<SemesterEvaluationVO> query();
+
+    SemesterEvaluationVO queryCurrent(String curTerm);
 }

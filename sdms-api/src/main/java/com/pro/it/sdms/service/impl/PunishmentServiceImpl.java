@@ -30,7 +30,7 @@ public class PunishmentServiceImpl implements PunishmentService {
     public String addPunishment(PunishmentVO vo) {
         Punishment punishment = vo.toDTO();
         Punishment save = punishmentDAO.save(punishment);
-        return save.getAccountNo();
+        return save.getStudentNo();
     }
 
     /**
@@ -47,7 +47,7 @@ public class PunishmentServiceImpl implements PunishmentService {
         one.setIsCancel((short) 1);
         one.setCancelTime(new Date());
         punishmentDAO.save(one);
-        return one.getAccountNo();
+        return one.getStudentNo();
     }
 
     /**
@@ -59,7 +59,7 @@ public class PunishmentServiceImpl implements PunishmentService {
         if (StringUtils.isEmpty(accountNo)) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "account no required");
         }
-        List<Punishment> result = punishmentDAO.findAllByAccountNo(accountNo);
+        List<Punishment> result = punishmentDAO.findAllByStudentNo(accountNo);
         List<PunishmentVO> ret = new ArrayList<>();
         result.forEach(item -> {
             ret.add(item.toVO());

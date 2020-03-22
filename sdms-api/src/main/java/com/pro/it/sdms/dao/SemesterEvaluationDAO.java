@@ -12,4 +12,6 @@ import java.util.List;
 public interface SemesterEvaluationDAO extends JpaSpecificationExecutor<SemesterEvaluation>, JpaRepository<SemesterEvaluation, BigDecimal> {
 
     List<SemesterEvaluation> findAllByStudentNo(String studentNo);
+
+    SemesterEvaluation findByStudentNoAndSemester(String studentNo, short semester);
 }

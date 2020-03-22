@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface PunishmentDAO extends JpaSpecificationExecutor<Punishment>, JpaRepository<Punishment, BigDecimal>{
 
-    List<Punishment> findAllByAccountNo(String accountNo);
+    List<Punishment> findAllByStudentNo(String accountNo);
 
 }

@@ -43,7 +43,8 @@ public class AccountController extends BaseController {
         InfoAPIResult<String> result = new InfoAPIResult<>();
         log.info("===> request method : [ Post ], request path [ {} ]", URL.REGISTER_URL);
         log.info("===> request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), createAccountRequestEntity);
-        if (!VerifyUtil.verifyRegisterInfo(createAccountRequestEntity)) {
+        if (StringUtils.isEmpty(createAccountRequestEntity.getAccountNo())
+                || StringUtils.isEmpty(createAccountRequestEntity.getUsername()) ) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter require");
         }
         accountService.registerAccount(createAccountRequestEntity);

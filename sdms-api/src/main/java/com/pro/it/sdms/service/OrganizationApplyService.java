@@ -2,6 +2,8 @@ package com.pro.it.sdms.service;
 
 import com.pro.it.sdms.entity.vo.OrganizationApplyVO;
 
+import java.math.BigDecimal;
+
 public interface OrganizationApplyService {
 
     /**
@@ -9,7 +11,7 @@ public interface OrganizationApplyService {
      * @param vo
      * @return
      */
-    String addApply(OrganizationApplyVO vo);
+    BigDecimal addApply(OrganizationApplyVO vo);
 
     /**
      * 审核入团/入党申请
@@ -17,4 +19,11 @@ public interface OrganizationApplyService {
      * @return
      */
     String approvalApply(OrganizationApplyVO vo);
+
+    /**
+     * 查询当前用户指定类型申请
+     * @param type
+     * @return
+     */
+    OrganizationApplyVO queryCurAccount(String type);
 }

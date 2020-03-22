@@ -98,7 +98,7 @@ public class AccountServiceImpl implements AccountService {
         if (account == null) {
             throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "user not exist");
         }
-        // todo 密码由前端md5加密再由后台encode
+        // todo 密码重置为---
         accountDAO.save(account);
     }
 
@@ -185,7 +185,11 @@ public class AccountServiceImpl implements AccountService {
         if (accountByAccountNo == null) {
             throw new BadRequestException(Constants.ACCOUNT_NOT_EXIST, "account not exist");
         }
-        accountByAccountNo.setIsLock((short) 1);
+        if (accountByAccountNo.getIsLock() == 0) {
+            accountByAccountNo.setIsLock((short) 1);
+        } else {
+            accountByAccountNo.setIsLock((short) 0);
+        }
         accountDAO.save(accountByAccountNo);
         return "success";
     }
@@ -206,9 +210,9 @@ public class AccountServiceImpl implements AccountService {
         }
         dto.setPoliticsStatus(PoliticsStatusEnum.valueOf(param.getPoliticsStatus()).getCode());
         dto.setUsername(param.getUsername());
-        dto.setLodgingHouse(param.getLodgingHouse());
-        dto.setCollege(param.getCollege());
-        dto.setMajor(param.getMajor());
+        dto.getAccountInfo().setLodgingHouse(param.getLodgingHouse());
+        dto.getAccountInfo().setCollege(param.getCollege());
+        dto.getAccountInfo().setMajor(param.getMajor());
         accountDAO.save(dto);
     }
 

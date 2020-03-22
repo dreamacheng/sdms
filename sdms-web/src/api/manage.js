@@ -11,6 +11,22 @@ const api = {
 
 export default api
 
+export function queryAccountAPI (parameter) {
+  return axios({
+    url: '/api/account/query',
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function lockUser (parameter) {
+  return axios({
+    url: `/api/account/lock/${parameter}`,
+    method: 'get',
+    data: parameter
+  })
+}
+
 export function getUserList (parameter) {
   return axios({
     url: api.user,

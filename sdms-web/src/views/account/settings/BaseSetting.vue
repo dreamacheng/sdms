@@ -46,6 +46,15 @@
             </div>
             <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.politicsStatus = !editShow.politicsStatus"/>
           </a-form-item>
+          <div v-show="account.role == 'STUDENT'">
+            <a-form-item
+              label="入学时间"
+              :label-col="{ span: 4 }"
+              :wrapper-col="{ span: 12, offset:3 }"
+            >
+              {{ account.enrollment }}
+            </a-form-item>
+          </div>
           <a-form-item
             label="身份证号"
             :label-col="{ span: 4 }"
@@ -60,28 +69,43 @@
           >
             {{ account.tel }}
           </a-form-item>
+          <div v-show="account.role == 'STUDENT'">
+            <a-form-item
+              label="在校公寓"
+              :label-col="{ span: 4 }"
+              :wrapper-col="{ span: 12, offset:3 }"
+            >
+              <div v-show="!editShow.lodgingHouse">{{ account.lodgingHouse | nullFilter }}</div>
+              <div v-show="editShow.lodgingHouse">
+                <a-input style="width:250px" v-show="editShow.lodgingHouse" placeholder="在校公寓" v-decorator="['lodgingHouse', {rules: [{ required: false, message: '请输入在校公寓' }], validateTrigger: ['blur'] }]"/>
+              </div>
+              <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.lodgingHouse = !editShow.lodgingHouse"/>
+            </a-form-item>
+          </div>
           <a-form-item
-            label="在校公寓"
+            label="学院"
             :label-col="{ span: 4 }"
             :wrapper-col="{ span: 12, offset:3 }"
           >
-            <div v-show="!editShow.lodgingHouse">{{ account.lodgingHouse }}</div>
-            <div v-show="editShow.lodgingHouse">
-              <a-input style="width:250px" v-show="editShow.lodgingHouse" placeholder="在校公寓" v-decorator="['lodgingHouse', {rules: [{ required: true, message: '请输入在校公寓' }], validateTrigger: ['blur'] }]"/>
+            <div v-show="!editShow.college">{{ account.college | nullFilter }}</div>
+            <div v-show="editShow.college">
+              <a-input style="width:250px" v-show="editShow.college" placeholder="学院" v-decorator="['college', {rules: [{ required: true, message: '请输入学院' }], validateTrigger: ['blur'] }]"/>
             </div>
-            <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.lodgingHouse = !editShow.lodgingHouse"/>
+            <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.college = !editShow.college"/>
           </a-form-item>
-          <a-form-item
-            label="专业科系"
-            :label-col="{ span: 4 }"
-            :wrapper-col="{ span: 12, offset:3 }"
-          >
-            <div v-show="!editShow.department">{{ account.department }}</div>
-            <div v-show="editShow.department">
-              <a-input style="width:250px" v-show="editShow.department" placeholder="专业科系" v-decorator="['department', {rules: [{ required: true, message: '请输入专业科系' }], validateTrigger: ['blur'] }]"/>
-            </div>
-            <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.department = !editShow.department"/>
-          </a-form-item>
+          <div v-show="account.role == 'STUDENT'">
+            <a-form-item
+              label="专业科系"
+              :label-col="{ span: 4 }"
+              :wrapper-col="{ span: 12, offset:3 }"
+            >
+              <div v-show="!editShow.major">{{ account.major | nullFilter }}</div>
+              <div v-show="editShow.major">
+                <a-input style="width:250px" v-show="editShow.major" placeholder="专业科系" v-decorator="['major', {rules: [{ required: true, message: '请输入专业科系' }], validateTrigger: ['blur'] }]"/>
+              </div>
+              <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.major = !editShow.major"/>
+            </a-form-item>
+          </div>
           <a-form-item
             label="年龄"
             :label-col="{ span: 4 }"
@@ -157,7 +181,9 @@ export default {
         role: '',
         birthday: '',
         lodgingHouse: '',
-        department: '',
+        major: '',
+        college: '',
+        enrollment: '',
         avatar: ''
       },
       submitBtn: false,
@@ -166,8 +192,9 @@ export default {
         username: false,
         lodgingHouse: false,
         politicsStatus: false,
-        department: false,
-        birthday: false
+        major: false,
+        birthday: false,
+        college: false
       },
       option: {
         img: '',
@@ -187,6 +214,12 @@ export default {
     }
   },
   filters: {
+    nullFilter (value) {
+      if (!value) {
+        return '暂未录入'
+      }
+      return value
+    },
     statusFilter (status) {
       const statusMap = {
         0: '正常',
@@ -238,13 +271,16 @@ export default {
           this.account.role = res.info.role
           this.account.birthday = res.info.birthday
           this.account.lodgingHouse = res.info.lodgingHouse
-          this.account.department = res.info.department
+          this.account.major = res.info.major
+          this.account.college = res.info.college
+          this.account.enrollment = res.info.enrollment
           this.option.img = res.info.avatar
           this.form.setFieldsValue({
             username: this.account.username,
             politicsStatus: this.account.politicsStatus,
             lodgingHouse: this.account.lodgingHouse,
-            department: this.account.department
+            major: this.account.major,
+            college: this.account.college
           })
         })
     },

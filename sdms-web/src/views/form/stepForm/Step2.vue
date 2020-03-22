@@ -1,110 +1,115 @@
 <template>
   <div>
-    <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
-      <a-alert
-        :closable="true"
-        message="确认转账后，资金将直接打入对方账户，无法退回。"
-        style="margin-bottom: 24px;"
-      />
-      <a-form-item
-        label="付款账户"
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        class="stepFormText"
-      >
-        ant-design@alipay.com
-      </a-form-item>
-      <a-form-item
-        label="收款账户"
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        class="stepFormText"
-      >
-        test@example.com
-      </a-form-item>
-      <a-form-item
-        label="收款人姓名"
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        class="stepFormText"
-      >
-        Alex
-      </a-form-item>
-      <a-form-item
-        label="转账金额"
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        class="stepFormText"
-      >
-        ￥ 5,000.00
-      </a-form-item>
-      <a-divider />
-      <a-form-item
-        label="支付密码"
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-        class="stepFormText"
-      >
-        <a-input
-          type="password"
-          style="width: 80%;"
-          v-decorator="['paymentPassword', { initialValue: '123456', rules: [{required: true, message: '请输入支付密码'}] }]" />
-      </a-form-item>
-      <a-form-item :wrapperCol="{span: 19, offset: 5}">
-        <a-button :loading="loading" type="primary" @click="nextStep">提交</a-button>
-        <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
-      </a-form-item>
+    <a-form style="margin: 40px auto 0;">
+      <result title="申请成功" :is-success="true" :description="applyResult" style="max-width: 560px;">
+        <div class="information">
+          <a-row>
+            <a-col :sm="8" :xs="24">申请人学号：</a-col>
+            <a-col :sm="16" :xs="24">{{organizationDetail.proposer}}</a-col>
+          </a-row>
+          <a-row>
+            <a-col :sm="8" :xs="24">申请人姓名：</a-col>
+            <a-col :sm="16" :xs="24">{{organizationDetail.proposerName}}</a-col>
+          </a-row>
+          <a-row>
+            <a-col :sm="8" :xs="24">审核人：</a-col>
+            <a-col :sm="16" :xs="24">{{organizationDetail.approverName}}</a-col>
+          </a-row>
+          <a-row>
+            <a-col :sm="8" :xs="24">申请日期：</a-col>
+            <a-col :sm="16" :xs="24">{{organizationDetail.applyTime}}</a-col>
+          </a-row>
+          <a-row>
+            <a-col :sm="8" :xs="24">申请状态：</a-col>
+            <a-col :sm="16" :xs="24">{{organizationDetail.applyStatus | statusFilter}}</a-col>
+          </a-row>
+          <a-row>
+            <a-col :sm="8" :xs="24">审批意见：</a-col>
+            <a-col :sm="16" :xs="24">{{organizationDetail.applyComment | nullFilter}}</a-col>
+          </a-row>
+        </div>
+        <div slot="action">
+          <a-button style="margin-left: 8px" @click="applyDetailHandler">查看入党申请书</a-button>
+        </div>
+      </result>
     </a-form>
+    <a-modal
+        title="入党申请书"
+        :width="800"
+        v-model="visible"
+        @ok="handleOk"
+      >
+        <a-card :bordered="false">
+          <detail-list title="入党申请书">
+            {{organizationDetail.applyText}}
+          </detail-list>
+        </a-card>
+      </a-modal>
   </div>
 </template>
 
 <script>
+import { Result } from '@/components'
+import { getCurAccountApply } from '@/api/organization'
+
 export default {
   name: 'Step2',
+  components: {
+    Result
+  },
   data () {
     return {
-      labelCol: { lg: { span: 5 }, sm: { span: 5 } },
-      wrapperCol: { lg: { span: 19 }, sm: { span: 19 } },
-      form: this.$form.createForm(this),
-      loading: false,
-      timer: 0
+      applyResult: '请等待审核人审批',
+      organizationDetail: {},
+      visible: false
     }
   },
-  methods: {
-    nextStep () {
-      const that = this
-      const { form: { validateFields } } = this
-      that.loading = true
-      validateFields((err, values) => {
-        if (!err) {
-          console.log('表单 values', values)
-          that.timer = setTimeout(function () {
-            that.loading = false
-            that.$emit('nextStep')
-          }, 1500)
-        } else {
-          that.loading = false
+  filters: {
+    statusFilter (status) {
+      const statusMap = {
+        'WaitForApproval': '待审核',
+        'Rejected': '拒绝',
+        'Approved': '通过'
+      }
+      return statusMap[status]
+    },
+    nullFilter (value) {
+      if (!value) {
+        return '暂未录入'
+      }
+      return value
+    }
+  },
+  created () {
+    getCurAccountApply('PART_APPLY')
+      .then(res => {
+        if (res.code === 0) {
+          this.organizationDetail = res.info
         }
       })
-    },
-    prevStep () {
-      this.$emit('prevStep')
-    }
   },
-  beforeDestroy () {
-    clearTimeout(this.timer)
+  methods: {
+    applyDetailHandler () {
+      this.visible = true
+    },
+    handleOk () {
+      this.visible = false
+    }
   }
 }
 </script>
-
 <style lang="less" scoped>
-  .stepFormText {
-    margin-bottom: 24px;
+  .information {
+    line-height: 22px;
 
-    .ant-form-item-label,
-    .ant-form-item-control {
-      line-height: 22px;
+    .ant-row:not(:last-child) {
+      margin-bottom: 24px;
     }
   }
-
+  .money {
+    font-family: "Helvetica Neue",sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 14px;
+  }
 </style>

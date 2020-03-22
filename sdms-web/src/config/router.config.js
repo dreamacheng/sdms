@@ -106,7 +106,7 @@ export const asyncRouterMap = [
             path: '/form/step-form',
             name: 'StepForm',
             component: () => import('@/views/form/stepForm/StepForm'),
-            meta: { title: '分步表单', keepAlive: true, permission: [ 'form' ] }
+            meta: { title: '入党申请', keepAlive: true, permission: [ 'form' ] }
           },
           {
             path: '/form/advanced-form',

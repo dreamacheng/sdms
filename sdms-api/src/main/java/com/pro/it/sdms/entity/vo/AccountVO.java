@@ -3,11 +3,19 @@ package com.pro.it.sdms.entity.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pro.it.sdms.entity.dto.Account;
+import com.pro.it.sdms.entity.dto.AccountInfo;
+import com.pro.it.sdms.enums.BaseCodeEnum;
+import com.pro.it.sdms.enums.SemesterEnum;
 import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 
@@ -16,9 +24,12 @@ import java.util.TimeZone;
 @NoArgsConstructor
 @ToString
 @Builder
+@AllArgsConstructor
 public class AccountVO implements Serializable {
 
     private BigDecimal id;
+
+    private BigDecimal infoId;
 
     /** 姓名 */
     private String username;
@@ -57,6 +68,10 @@ public class AccountVO implements Serializable {
     /** 政治面貌 */
     private String politicsStatus;
 
+    /** 入学时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT")
+    private Date enrollment;
+
     /** 用户角色 */
     private String role;
 
@@ -65,5 +80,16 @@ public class AccountVO implements Serializable {
 
     /** 用户是否锁定 **/
     private Short isLock;
+
+    /** 用户参加的社团 */
+    private List<SchoolClubVO> schoolClubList;
+
+    /** 用户当前学期 */
+    private String currentTerm;
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+
+    }
 
 }

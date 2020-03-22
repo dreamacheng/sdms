@@ -1,6 +1,7 @@
 package com.pro.it.sdms.entity.vo;
 
 import com.pro.it.sdms.entity.BaseDTO;
+import com.pro.it.sdms.entity.dto.AccountInfo;
 import com.pro.it.sdms.entity.dto.SemesterEvaluation;
 import com.pro.it.sdms.enums.BaseCodeEnum;
 import com.pro.it.sdms.enums.SemesterEnum;
@@ -47,7 +48,7 @@ public class SemesterEvaluationVO {
     public SemesterEvaluation toDTO() {
         return SemesterEvaluation.builder()
                 .studentNo(getStudentNo())
-                .teacherNo(getStudentNo())
+                .teacherNo(getTeacherNo())
                 .studentName(getStudentName())
                 .teacherName(getTeacherName())
                 .grade(getGrade())

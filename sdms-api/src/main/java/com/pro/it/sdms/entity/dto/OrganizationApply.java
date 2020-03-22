@@ -11,6 +11,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "sdms_organization_apply")
@@ -38,12 +39,16 @@ public class OrganizationApply extends BaseDTO {
     @Column(name = "apply_accessory", columnDefinition = "varchar(100)")
     private String applyAccessory;
 
-    /** 申请学期 */
-    @Column(name = "semester", nullable = false, columnDefinition = "int")
-    private Short semester;
+    /** 申请时间 */
+    @Column(name = "apply_time", nullable = false, columnDefinition = "date")
+    private Date applyTime;
+
+    /** 申请人 */
+    @Column(name = "proposer", nullable = false, columnDefinition = "varchar(30)")
+    private String proposer;
 
     /** 审核人 */
-    @Column(name = "approver_no", nullable = false, columnDefinition = "int")
+    @Column(name = "approver_no", nullable = false, columnDefinition = "varchar(30)")
     private String approver;
 
     /** 审批状态 */
@@ -51,7 +56,7 @@ public class OrganizationApply extends BaseDTO {
     private Short applyStatus;
 
     /** 审批意见 */
-    @Column(name = "apply_comment", nullable = false, columnDefinition = "varchar(300)")
+    @Column(name = "apply_comment", columnDefinition = "varchar(300)")
     private String applyComment;
 
     public OrganizationApplyVO toVO() {
@@ -63,7 +68,8 @@ public class OrganizationApply extends BaseDTO {
                 .applyText(getApplyText())
                 .applyAccessory(getApplyAccessory())
                 .approver(getApprover())
-                .semester( BaseCodeEnum.codeOf(SemesterEnum.class, getSemester()).toString() )
+                .applyTime(getApplyTime())
+                .proposer(getProposer())
                 .build();
     }
 

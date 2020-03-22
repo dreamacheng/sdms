@@ -5,10 +5,15 @@ import com.pro.it.sdms.entity.vo.AccountVO;
 import com.pro.it.sdms.enums.BaseCodeEnum;
 import com.pro.it.sdms.enums.GenderEnum;
 import com.pro.it.sdms.enums.PoliticsStatusEnum;
+import com.pro.it.sdms.enums.SemesterEnum;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Entity
@@ -22,6 +27,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Builder
+@AllArgsConstructor
 /**
  * 用户表 （学生、教师）
  */
@@ -39,6 +45,10 @@ public class Account extends BaseDTO {
     @Column(name = "password", nullable = false, columnDefinition = "varchar(300)")
     private String password;
 
+    /** 头像URL */
+    @Column(name = "avatar", columnDefinition = "varchar(200)")
+    private String avatar;
+
     /** 性别 */
     @Column(name = "gender", nullable = false, columnDefinition = "int")
     private Short gender;
@@ -48,12 +58,8 @@ public class Account extends BaseDTO {
     private String nation;
 
     /** 出生年月 */
-    @Column(name = "birthday", nullable = false, columnDefinition = "datetime")
+    @Column(name = "birthday", nullable = false, columnDefinition = "date")
     private Date birthday;
-
-    /** 年龄 */
-    @Column(name = "age", nullable = false, columnDefinition = "int")
-    private Integer age;
 
     /** 联系电话 */
     @Column(name = "tel", nullable = false, columnDefinition = "varchar(30)")
@@ -63,25 +69,9 @@ public class Account extends BaseDTO {
     @Column(name = "identity_card", nullable = false, columnDefinition = "varchar(30)")
     private String identityCard;
 
-    /** 学院 **/
-    @Column(name = "college", columnDefinition = "varchar(30)")
-    private String college;
-
-    /** 专业科系 */
-    @Column(name = "major", columnDefinition = "varchar(30)")
-    private String major;
-
     /** 政治面貌 */
     @Column(name = "politics_status", nullable = false, columnDefinition = "int")
     private Short politicsStatus;
-
-    /** 在校公寓 */
-    @Column(name = "lodging_house", columnDefinition = "varchar(30)")
-    private String lodgingHouse;
-
-    /** 入学时间 */
-    @Column(name = "enrollment", columnDefinition = "datetime")
-    private Date enrollment;
 
     /** 用户是否锁定 **/
     @Column(name = "isLock", nullable = false, columnDefinition = "int")
@@ -94,24 +84,38 @@ public class Account extends BaseDTO {
     @Column(name = "role",columnDefinition = "varchar(10)")
     private String role;
 
+    @OneToOne(cascade=CascadeType.ALL)//Account是关系的维护端，当删除 Account，会级联删除 AccountInfo
+    @JoinColumn(name = "accountInfo_id", referencedColumnName = "id")//Account 中的 accountInfo_id 字段参考 AccountInfo 表中的id字段
+    private AccountInfo accountInfo;
+
 
     public AccountVO toVO () {
+        LocalDate localDate = LocalDate.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate previous = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(accountInfo.getEnrollment()), dateTimeFormatter);
+        Period period = Period.between(previous, localDate);
+        short currentTerm = (short) ((period.getYears()* 12 + period.getMonths())/6 + 1);
+        LocalDate previousAge = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(getBirthday()), dateTimeFormatter);
+        Period periodAge = Period.between(previousAge, localDate);
         return AccountVO.builder()
                 .username(getUsername())
                 .accountNo(getAccountNo())
-                .age(getAge())
                 .birthday(getBirthday())
                 .identityCard(getIdentityCard())
-                .lodgingHouse(getLodgingHouse())
                 .nation(getNation())
-                .major(getMajor())
-                .college(getCollege())
+                .currentTerm(BaseCodeEnum.codeOf(SemesterEnum.class, currentTerm).toString())
+                .age(periodAge.getYears())
                 .politicsStatus(BaseCodeEnum.codeOf(PoliticsStatusEnum.class, getPoliticsStatus()).toString())
                 .gender(BaseCodeEnum.codeOf(GenderEnum.class, getGender()).toString())
                 .tel(getTel())
                 .role(getRole())
                 .avatar("/avatar2.jpg")
                 .isLock(getIsLock())
+                .lodgingHouse(accountInfo.getLodgingHouse())
+                .enrollment(accountInfo.getEnrollment())
+                .major(accountInfo.getMajor())
+                .college(accountInfo.getCollege())
+                .infoId(accountInfo.getId())
                 .id(getId()).build();
     }
 
