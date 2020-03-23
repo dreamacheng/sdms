@@ -31,3 +31,21 @@ export function queryCurAPI () {
     method: 'get'
   })
 }
+
+export function queryCurAll () {
+  return axios({
+    url: '/api/apply/curAll',
+    method: 'get'
+  })
+}
+
+export function applyApproval (parameter) {
+  return axios({
+    url: '/api/apply/approval',
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}

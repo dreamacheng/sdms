@@ -1,8 +1,10 @@
 package com.pro.it.sdms.service;
 
+import com.pro.it.sdms.controller.request.ApplyResultRequestEntity;
 import com.pro.it.sdms.entity.vo.OrganizationApplyVO;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface OrganizationApplyService {
 
@@ -18,7 +20,7 @@ public interface OrganizationApplyService {
      * @param vo
      * @return
      */
-    String approvalApply(OrganizationApplyVO vo);
+    BigDecimal approvalApply(ApplyResultRequestEntity vo);
 
     /**
      * 查询当前用户指定类型申请
@@ -26,4 +28,6 @@ public interface OrganizationApplyService {
      * @return
      */
     OrganizationApplyVO queryCurAccount(String type);
+
+    List<OrganizationApplyVO> queryCurAll();
 }

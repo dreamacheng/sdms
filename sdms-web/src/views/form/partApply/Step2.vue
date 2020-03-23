@@ -85,6 +85,9 @@ export default {
       .then(res => {
         if (res.code === 0) {
           this.organizationDetail = res.info
+          if (res.info.applyStatus === 'Approved') {
+            this.applyResult = '你已通过初次审批，请准备后续材料等待党组织通知'
+          }
         }
       })
   },

@@ -55,6 +55,9 @@ public class OrganizationApply extends BaseDTO {
     @Column(name = "apply_status", nullable = false, columnDefinition = "int")
     private Short applyStatus;
 
+    @Column(name = "approval_time", columnDefinition = "date")
+    private Date approvalTime;
+
     /** 审批意见 */
     @Column(name = "apply_comment", columnDefinition = "varchar(300)")
     private String applyComment;

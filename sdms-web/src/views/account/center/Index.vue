@@ -8,7 +8,7 @@
               <img :src="avatar()">
             </div>
             <div class="username">{{ nickname() }}</div>
-            <div class="bio">海纳百川，有容乃大</div>
+            <div class="bio">我爱编程，编程使我快乐</div>
           </div>
           <div class="account-center-detail">
             <p>

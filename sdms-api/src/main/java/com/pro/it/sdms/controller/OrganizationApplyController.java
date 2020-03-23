@@ -1,7 +1,9 @@
 package com.pro.it.sdms.controller;
 
 import com.pro.it.common.controller.BaseController;
+import com.pro.it.sdms.controller.request.ApplyResultRequestEntity;
 import com.pro.it.sdms.controller.result.InfoAPIResult;
+import com.pro.it.sdms.controller.result.ListAPIResult;
 import com.pro.it.sdms.entity.vo.OrganizationApplyVO;
 import com.pro.it.sdms.service.OrganizationApplyService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -24,6 +27,7 @@ public class OrganizationApplyController extends BaseController {
         private static final String APPLY_MENTION = "/apply/add";
         private static final String APPLY_APPROVAL = "/apply/approval";
         private static final String APPLY_CURRENT_ACCOUNT = "/apply/curAccount";
+        private static final String APPLY_CURRENT_ALL = "/apply/curAll";
     }
 
     /**
@@ -44,16 +48,16 @@ public class OrganizationApplyController extends BaseController {
 
     /**
      * 审核入团或入党申请
-     * @param vo
+     * @param requestEntity
      * @return
      */
     @PostMapping(URL.APPLY_APPROVAL)
-    public InfoAPIResult<String> approval(OrganizationApplyVO vo) {
-        InfoAPIResult<String> result = new InfoAPIResult<>();
+    public InfoAPIResult<BigDecimal> approval(@RequestBody ApplyResultRequestEntity requestEntity) {
+        InfoAPIResult<BigDecimal> result = new InfoAPIResult<>();
         log.info("===> request method : [ Post ], request path [ {} ]", URL.APPLY_APPROVAL);
-        log.info("===> request parameter {} : {} ", OrganizationApplyVO.class.getSimpleName(), vo);
-        String s = organizationApplyService.approvalApply(vo);
-        result.setInfo(s);
+        log.info("===> request parameter {} : {} ", ApplyResultRequestEntity.class.getSimpleName(), requestEntity);
+        BigDecimal id = organizationApplyService.approvalApply(requestEntity);
+        result.setInfo(id);
         log.info("===> response result {}", result);
         return result;
     }
@@ -65,6 +69,16 @@ public class OrganizationApplyController extends BaseController {
         log.info("===> request parameter type : {} ", type);
         OrganizationApplyVO vo = organizationApplyService.queryCurAccount(type);
         result.setInfo(vo);
+        log.info("===> response result {}", result);
+        return result;
+    }
+
+    @GetMapping(URL.APPLY_CURRENT_ALL)
+    public ListAPIResult<OrganizationApplyVO> getCurAccountAll() {
+        ListAPIResult<OrganizationApplyVO> result = new ListAPIResult<>();
+        log.info("===> request method : [ GET ], request path [ {} ]", URL.APPLY_CURRENT_ALL);
+        List<OrganizationApplyVO> list = organizationApplyService.queryCurAll();
+        result.setList(list);
         log.info("===> response result {}", result);
         return result;
     }
