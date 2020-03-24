@@ -32,6 +32,7 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -141,10 +142,7 @@ public class AccountServiceImpl implements AccountService {
         }, pageable);
 
         QueryResult<AccountVO> queryResult = new QueryResult<>();
-        List<AccountVO> list = new ArrayList<>();
-        all.getContent().forEach(item -> {
-            list.add(item.toVO());
-        });
+        List<AccountVO> list = all.getContent().stream().map(Account::toVO).collect(Collectors.toList());
         queryResult.setResultList(list);
         queryResult.setTotalRecord(all.getTotalElements());
 
@@ -240,12 +238,7 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public List<AccountVO> queryTeacher() {
-        List<Account> allByRole = accountDAO.findAllByRole(IdentityEnum.MANAGER.toString());
-        List<AccountVO> ret = new ArrayList<>();
-        allByRole.forEach(item -> {
-            ret.add(item.toVO());
-        });
-        return ret;
+        return accountDAO.findAllByRole(IdentityEnum.MANAGER.toString()).stream().map(Account::toVO).collect(Collectors.toList());
     }
 
 

@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SemesterEvaluationServiceImpl implements SemesterEvaluationService {
@@ -74,12 +75,7 @@ public class SemesterEvaluationServiceImpl implements SemesterEvaluationService 
         if (StringUtils.isEmpty(accountNo)) {
             accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
         }
-        List<SemesterEvaluation> allByStudentNo = semesterEvaluationDAO.findAllByStudentNo(accountNo);
-        List<SemesterEvaluationVO> resultList = new ArrayList<>();
-        allByStudentNo.forEach(item -> {
-            resultList.add(item.toVO());
-        });
-        return resultList;
+        return semesterEvaluationDAO.findAllByStudentNo(accountNo).stream().map(SemesterEvaluation::toVO).collect(Collectors.toList());
     }
 
     /**
@@ -89,12 +85,7 @@ public class SemesterEvaluationServiceImpl implements SemesterEvaluationService 
     @Override
     @Secured("ROLE_MANAGER")
     public List<SemesterEvaluationVO> query() {
-        List<SemesterEvaluation> all = semesterEvaluationDAO.findAll();
-        List<SemesterEvaluationVO> resultList = new ArrayList<>();
-        all.forEach(item -> {
-            resultList.add(item.toVO());
-        });
-        return resultList;
+        return semesterEvaluationDAO.findAll().stream().map(SemesterEvaluation::toVO).collect(Collectors.toList());
     }
 
     /**

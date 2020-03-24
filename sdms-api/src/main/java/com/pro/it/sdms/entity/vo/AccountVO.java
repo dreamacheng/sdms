@@ -87,9 +87,4 @@ public class AccountVO implements Serializable {
     /** 用户当前学期 */
     private String currentTerm;
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-
-    }
-
 }

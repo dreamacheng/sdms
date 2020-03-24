@@ -32,7 +32,7 @@ public class OrganizationApply extends BaseDTO {
     private Short type;
 
     /** 申请文 */
-    @Column(name = "apply_text", nullable = false, columnDefinition = "varchar(1000)")
+    @Column(name = "apply_text", nullable = false, columnDefinition = "text")
     private String applyText;
 
     /** 申请附件 */

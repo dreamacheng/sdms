@@ -31,6 +31,10 @@ public class SchoolClub extends BaseDTO {
     @Column(name = "leader_no", columnDefinition = "varchar(30)")
     private String leader;
 
+    /** 社团类型 */
+    @Column(name = "type", columnDefinition = "varchar(30)")
+    private String type;
+
     /** 社团简介 */
     @Column(name = "apply_accessory", columnDefinition = "varchar(100)")
     private String introduction;
@@ -43,6 +47,7 @@ public class SchoolClub extends BaseDTO {
                 .introduction(getIntroduction())
                 .createTime(getCreateDatetime())
                 .leader(getLeader())
+                .type(getType())
                 .name(getName()).build();
     }
 

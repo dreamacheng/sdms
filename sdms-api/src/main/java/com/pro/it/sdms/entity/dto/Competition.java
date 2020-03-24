@@ -28,34 +28,42 @@ import java.util.Date;
 public class Competition extends BaseDTO {
 
     /** 比赛名称 */
-    @Column(name = "name", columnDefinition = "varchar(100)")
+    @Column(name = "name", nullable = false, columnDefinition = "varchar(100)")
     private String name;
 
     /** 比赛级别 */
-    @Column(name = "level", columnDefinition = "int")
+    @Column(name = "level", nullable = false, columnDefinition = "int")
     private Short level;
 
     /** 比赛时间 */
-    @Column(name = "competition_time", columnDefinition = "datetime")
+    @Column(name = "competition_time", nullable = false, columnDefinition = "datetime")
     private Date competitionTime;
 
     /** 报名开始时间 */
-    @Column(name = "registration_start_time", columnDefinition = "datetime")
+    @Column(name = "registration_start_time", nullable = false, columnDefinition = "datetime")
     private Date registrationStartTime;
 
     /** 报名截止时间 */
-    @Column(name = "registration_end_time", columnDefinition = "datetime")
+    @Column(name = "registration_end_time", nullable = false, columnDefinition = "datetime")
     private Date registrationEndTime;
 
     /** 比赛描述 */
-    @Column(name = "description", columnDefinition = "varchar(1000)")
+    @Column(name = "description", nullable = false, columnDefinition = "text")
     private String desc;
 
     public CompetitionVO toVO() {
+        String type;
+        if(competitionTime.before(new Date())) {
+            type = "已结束";
+        } else {
+            type = "尚未开始";
+        }
         return CompetitionVO.builder()
+                .id(getId())
                 .competitionTime(getCompetitionTime())
                 .level(BaseCodeEnum.codeOf(CompetitionLevelEnum.class, getLevel()).toString())
                 .name(getName())
+                .type(type)
                 .registrationEndTime(getRegistrationEndTime())
                 .registrationStartTime(getRegistrationStartTime())
                 .desc(getDesc()).build();

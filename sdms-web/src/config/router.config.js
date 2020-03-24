@@ -57,14 +57,14 @@ export const asyncRouterMap = [
             path: '/studentDoc/study',
             name: 'study',
             component: () => import('@/views/studentDoc/study/Index'),
-            meta: { title: '学习概况', hideHeader: true, permission: [ 'user' ] },
+            meta: { title: '考核与成绩', hideHeader: true, permission: [ 'user' ] },
             redirect: '/studentDoc/study/termStudy',
             hideChildrenInMenu: true,
             children: [
               {
                 path: '/studentDoc/study/termStudy',
                 name: 'termStudy',
-                component: () => import('@/views//studentDoc/study/termStudy'),
+                component: () => import('@/views/studentDoc/study/termStudy'),
                 meta: { title: '学期记录', permission: [ 'user' ] }
               },
               {
@@ -170,6 +170,45 @@ export const asyncRouterMap = [
                 meta: { title: '搜索列表（应用）', permission: [ 'table' ] }
               }
             ]
+          }
+        ]
+      },
+
+      // competition
+      {
+        path: '/competition',
+        name: 'competition',
+        component: PageView,
+        redirect: '/competition/game',
+        meta: { title: '办事指南', icon: 'profile', permission: [ 'user' ] },
+        children: [
+          {
+            path: '/competition/game',
+            name: 'competitionGame',
+            component: RouteView,
+            meta: { title: '学科竞赛', permission: [ 'user' ] },
+            hideChildrenInMenu: true,
+            redirect: '/competition/game/Index',
+            children: [
+              {
+                path: '/competition/game/Index',
+                name: 'competitionGame',
+                component: () => import('@/views/competition/game/Index'),
+                meta: { title: '学科竞赛', permission: [ 'user' ] }
+              },
+              {
+                path: '/competition/game/detail',
+                name: 'competitionDetail',
+                component: () => import('@/views/competition/game/detail'),
+                meta: { title: '竞赛详细', permission: [ 'user' ] }
+              }
+            ]
+          },
+          {
+            path: '/competition/club',
+            name: 'club',
+            component: () => import('@/views/competition/club/Index'),
+            meta: { title: '社团中心', hiddenHeaderContent: true, permission: [ 'user' ] }
           }
         ]
       },

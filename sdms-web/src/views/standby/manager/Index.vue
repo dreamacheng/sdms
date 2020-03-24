@@ -1,6 +1,8 @@
 <template>
   <div class="page-header-index-wide page-header-wrapper-grid-content-main">
     <a-card :bordered="false">
+      <P style="font-size: 20px"><a-icon type="form"/>&nbsp;用户管理</p>
+      <a-divider/>
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">

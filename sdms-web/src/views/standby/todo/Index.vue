@@ -23,6 +23,7 @@
           </a-row>
         </a-form> -->
         <P style="font-size: 20px"><a-icon type="form"/>&nbsp;审批列表</p>
+        <a-divider/>
       </div>
 
       <a-table :columns="columns" :dataSource="accountdata">

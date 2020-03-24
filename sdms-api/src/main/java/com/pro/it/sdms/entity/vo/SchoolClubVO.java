@@ -24,6 +24,9 @@ public class SchoolClubVO {
     /** 社团简介 */
     private String introduction;
 
+    /** 社团类型 */
+    private String type;
+
     /** 创建时间 */
     private Date createTime;
 
@@ -31,6 +34,7 @@ public class SchoolClubVO {
         return SchoolClub.builder()
                 .introduction(getIntroduction())
                 .leader(getLeader())
+                .type(getType())
                 .name(getName()).build();
     }
 }

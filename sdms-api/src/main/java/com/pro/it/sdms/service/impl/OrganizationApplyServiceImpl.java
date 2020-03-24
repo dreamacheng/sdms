@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrganizationApplyServiceImpl implements OrganizationApplyService {
@@ -78,14 +79,12 @@ public class OrganizationApplyServiceImpl implements OrganizationApplyService {
     public List<OrganizationApplyVO> queryCurAll() {
         String approverNo = SecurityContextHolder.getContext().getAuthentication().getName();
         List<OrganizationApply> byApprover = organizationApplyDAO.findByApproverAndApplyStatus(approverNo, ApprovalResult.WaitForApproval.getCode());
-        List<OrganizationApplyVO> voList = new ArrayList<>();
-        byApprover.forEach(item -> {
+        return byApprover.stream().map(item -> {
             OrganizationApplyVO vo = item.toVO();
             Account proposer = accountDAO.getAccountByAccountNo(vo.getProposer());
             vo.setProposerName(proposer.getUsername());
-            voList.add(vo);
-        });
-        return voList;
+            return vo;
+        }).collect(Collectors.toList());
     }
 
 }
