@@ -1,5 +1,6 @@
 package com.pro.it.sdms.service;
 
+import com.pro.it.sdms.controller.request.CompetitionResultRequestEntity;
 import com.pro.it.sdms.entity.vo.CompetitionVO;
 import com.pro.it.sdms.enums.BaseCodeEnum;
 
@@ -13,4 +14,8 @@ public interface CompetitionService {
     List<CompetitionVO> queryAll();
 
     CompetitionVO query(BigDecimal id);
+
+    String winnerAdd(CompetitionResultRequestEntity vo);
+
+    String join(String accountNo, BigDecimal competitionId);
 }

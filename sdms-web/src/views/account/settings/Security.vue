@@ -85,18 +85,16 @@ export default {
       if (!this.handlePasswordCheck()) {
         return
       }
-      console.log(this.pwdEdit.oldPwd)
-      console.log(this.pwdEdit.newPwd)
       const param = {
         oldPwd: md5(this.pwdEdit.oldPwd),
         newPwd: md5(this.pwdEdit.newPwd)
       }
-      console.log(param.oldPwd)
+      const self = this
       updatePwdApi(param)
         .then(res => {
           if (res.code === 0) {
             this.$message.info('密码修改成功')
-            this.updatePwdShow = false
+            self.updatePwdShow = false
           }
           if (res.code === 91005) {
             this.$message.error('密码错误，更新失败')

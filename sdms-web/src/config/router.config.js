@@ -208,7 +208,7 @@ export const asyncRouterMap = [
             path: '/competition/club',
             name: 'club',
             component: () => import('@/views/competition/club/Index'),
-            meta: { title: '社团中心', hiddenHeaderContent: true, permission: [ 'user' ] }
+            meta: { title: '学生天地', hiddenHeaderContent: true, permission: [ 'user' ] }
           }
         ]
       },

@@ -14,6 +14,17 @@ export function getCompetition (id) {
   })
 }
 
+export function addWinner (parameter) {
+  return axios({
+    url: '/api/competition/winner/add',
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
 export function applyCompetition (parameter) {
   return axios({
     url: '/api/competition/add',

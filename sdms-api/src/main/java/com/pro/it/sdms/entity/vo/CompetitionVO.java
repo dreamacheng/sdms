@@ -1,17 +1,17 @@
 package com.pro.it.sdms.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pro.it.sdms.entity.dto.Account;
 import com.pro.it.sdms.entity.dto.Competition;
-import com.pro.it.sdms.enums.BaseCodeEnum;
+import com.pro.it.sdms.entity.dto.CompetitionResult;
 import com.pro.it.sdms.enums.CompetitionLevelEnum;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
-
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -44,6 +44,12 @@ public class CompetitionVO {
 
     /** 比赛状态 （未开始、结束）*/
     private String type;
+
+    /** 参赛人员 */
+    private List<AccountVO> attendeeList;
+
+    /** 获奖选手 */
+    private List<CompetitionResult> prizewinnerList;
 
     public Competition toDTO() {
         return Competition.builder()

@@ -7,11 +7,12 @@ import com.pro.it.sdms.enums.CompetitionLevelEnum;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "sdms_competition")
@@ -51,6 +52,18 @@ public class Competition extends BaseDTO {
     @Column(name = "description", nullable = false, columnDefinition = "text")
     private String desc;
 
+    /** 参赛人员 */
+    @ManyToMany
+    @JoinTable(name = "competition_account",joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "competition_id"))
+    private List<Account> attendeeList;
+
+    /** 获奖选手 */
+    @ManyToMany
+    @JoinTable(name = "competition_prizewinner",joinColumns = @JoinColumn(name = "result_id"),
+            inverseJoinColumns = @JoinColumn(name = "competition_id"))
+    private List<CompetitionResult> prizewinnerList;
+
     public CompetitionVO toVO() {
         String type;
         if(competitionTime.before(new Date())) {
@@ -58,12 +71,17 @@ public class Competition extends BaseDTO {
         } else {
             type = "尚未开始";
         }
+        if (attendeeList == null) {
+            attendeeList = Collections.EMPTY_LIST;
+        }
         return CompetitionVO.builder()
                 .id(getId())
                 .competitionTime(getCompetitionTime())
                 .level(BaseCodeEnum.codeOf(CompetitionLevelEnum.class, getLevel()).toString())
                 .name(getName())
                 .type(type)
+                .prizewinnerList(getPrizewinnerList())
+                .attendeeList(getAttendeeList().stream().map(Account::toVO).collect(Collectors.toList()))
                 .registrationEndTime(getRegistrationEndTime())
                 .registrationStartTime(getRegistrationStartTime())
                 .desc(getDesc()).build();

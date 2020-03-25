@@ -7,20 +7,15 @@
             <div class="avatar">
               <img :src="avatar()">
             </div>
-            <div class="username">{{ nickname() }}</div>
+            <div class="username">{{ accountInfo.username }}</div>
             <div class="bio">我爱编程，编程使我快乐</div>
           </div>
           <div class="account-center-detail">
             <p>
-              <i class="title"></i>交互专家
+              <i class="title"></i>{{ accountInfo.college }}
             </p>
-            <p>
-              <i class="group"></i>蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED
-            </p>
-            <p>
-              <i class="address"></i>
-              <span>浙江省</span>
-              <span>杭州市</span>
+            <p v-show="accountInfo.role == 'STUDENT'">
+              <i class="group"></i>{{ accountInfo.major }}
             </p>
           </div>
           <a-divider/>
@@ -62,7 +57,7 @@
           <a-divider :dashed="true"/>
 
           <div class="account-center-team">
-            <div class="teamTitle">团队</div>
+            <div class="teamTitle">社团</div>
             <a-spin :spinning="teamSpinning">
               <div class="members">
                 <a-row>
@@ -98,6 +93,7 @@
 <script>
 import { PageView, RouteView } from '@/layouts'
 import { AppPage, ArticlePage, ProjectPage } from './page'
+import { currentUserInfo } from '@/api/login'
 
 import { mapGetters } from 'vuex'
 
@@ -111,8 +107,8 @@ export default {
   },
   data () {
     return {
-      tags: ['很有想法的', '专注设计', '辣~', '大长腿', '川妹子', '海纳百川'],
-
+      tags: ['很有想法的', '注重细节', '海纳百川'],
+      accountInfo: {},
       tagInputVisible: false,
       tagInputValue: '',
 
@@ -136,12 +132,23 @@ export default {
       noTitleKey: 'app'
     }
   },
+  created () {
+    this.loadCurrent()
+  },
   mounted () {
     this.getTeams()
   },
   methods: {
     ...mapGetters(['nickname', 'avatar']),
-
+    loadCurrent () {
+      const self = this
+      currentUserInfo()
+        .then(res => {
+          if (res.code === 0) {
+            self.accountInfo = res.info
+          }
+        })
+    },
     getTeams () {
       this.$http.get('/workplace/teams').then(res => {
         this.teams = res.result

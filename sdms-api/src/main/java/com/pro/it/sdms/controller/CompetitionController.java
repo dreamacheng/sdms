@@ -3,6 +3,7 @@ package com.pro.it.sdms.controller;
 import com.pro.it.common.controller.BaseController;
 import com.pro.it.sdms.controller.result.InfoAPIResult;
 import com.pro.it.sdms.controller.result.ListAPIResult;
+import com.pro.it.sdms.controller.request.CompetitionResultRequestEntity;
 import com.pro.it.sdms.entity.vo.CompetitionVO;
 import com.pro.it.sdms.service.CompetitionService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,8 @@ public class CompetitionController extends BaseController {
         private static final String COMPETITION_ADD = "/competition/add";
         private static final String COMPETITION_List = "/competition/list";
         private static final String OMPETITION_GET = "/competition/{id}";
+        private static final String COMPETITION_WINNER_ADD = "/competition/winner/add";
+        private static final String COMPETITION_JOIN = "/competition/join";
     }
 
     /**
@@ -58,6 +61,34 @@ public class CompetitionController extends BaseController {
         log.info("===> request parameter id : {} ", id);
         CompetitionVO vo = competitionService.query(id);
         result.setInfo(vo);
+        log.info("===> response result {}", result);
+        return result;
+    }
+
+    @PostMapping(URL.COMPETITION_JOIN)
+    public InfoAPIResult<String> join(@RequestParam("accountNo") String accountNo,
+                                      @RequestParam("competitionId") BigDecimal competitionId) {
+        InfoAPIResult<String> result = new InfoAPIResult<>();
+        log.info("===> request method : [ POST ], request path [ {} ]", URL.COMPETITION_JOIN);
+        log.info("===> request parameter accountNo : {}, competitionId : {} ", accountNo, competitionId);
+        String s = competitionService.join(accountNo, competitionId);
+        result.setInfo(s);
+        log.info("===> response result {}", result);
+        return result;
+    }
+
+    /**
+     * 添加比赛获奖者
+     * @param vo
+     * @return
+     */
+    @PostMapping(URL.COMPETITION_WINNER_ADD)
+    public InfoAPIResult<String> winnerAdd(@RequestBody CompetitionResultRequestEntity vo) {
+        InfoAPIResult<String> result = new InfoAPIResult<>();
+        log.info("===> request method : [ Post ], request path [ {} ]", URL.COMPETITION_ADD);
+        log.info("===> request parameter {} : {} ", CompetitionResultRequestEntity.class.getSimpleName(), vo);
+        String s = competitionService.winnerAdd(vo);
+        result.setInfo(s);
         log.info("===> response result {}", result);
         return result;
     }

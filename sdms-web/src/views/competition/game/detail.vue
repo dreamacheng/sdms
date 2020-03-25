@@ -1,76 +1,76 @@
 <template>
   <div class="page-header-index-wide page-header-wrapper-grid-content-main">
     <a-card :bordered="false">
+      <h1 style="text-align:center">{{competitionDetail.name}}</h1>
+      <a-divider style="margin-bottom: 32px"/>
       <detail-list>
-        <detail-list-item term="竞赛名称">{{competitionDetail.name}}</detail-list-item>
-        <detail-list-item term="竞赛级别" style="margin-left: 100px">{{competitionDetail.level | levelFilter}}</detail-list-item>
+        <detail-list-item term="比赛时间"><p style="font-size:18px">{{competitionDetail.competitionTime}}</p></detail-list-item>
+        <detail-list-item term="竞赛级别" style="margin-left: 100px"><p style="font-size:18px">{{competitionDetail.level | levelFilter}}</p></detail-list-item>
       </detail-list>
       <detail-list style="margin-top:30px">
-        <detail-list-item term="报名起始时间">{{competitionDetail.registrationStartTime}}</detail-list-item>
-        <detail-list-item term="报名结束时间" style="margin-left: 100px">{{competitionDetail.registrationEndTime}}</detail-list-item>
-      </detail-list>
-        <detail-list style="margin-top:30px">
-        <detail-list-item term="竞赛时间">{{competitionDetail.competitionTime}}</detail-list-item>
+        <detail-list-item term="报名起始时间"><p style="font-size:18px">{{competitionDetail.registrationStartTime}}</p></detail-list-item>
+        <detail-list-item term="报名结束时间" style="margin-left: 100px"><p style="font-size:18px">{{competitionDetail.registrationEndTime}}</p></detail-list-item>
       </detail-list>
       <a-divider style="margin-bottom: 32px"/>
       <detail-list title="比赛描述">
         {{competitionDetail.desc}}
       </detail-list>
       <a-divider style="margin-bottom: 32px"/>
-      <detail-list title="退款申请">
-        <detail-list-item term="取货单号">1000000000</detail-list-item>
-        <detail-list-item term="状态">已取货</detail-list-item>
-        <detail-list-item term="销售单号">1234123421</detail-list-item>
-        <detail-list-item term="子订单">3214321432</detail-list-item>
-      </detail-list>
+
+      <div class="title">参赛学生列表</div>
+      <a-table :columns="attendeeColumns" :dataSource="attendeeList"/>
       <a-divider style="margin-bottom: 32px"/>
-      <detail-list title="用户信息">
-        <detail-list-item term="用户姓名">付小小</detail-list-item>
-        <detail-list-item term="联系电话">18100000000</detail-list-item>
-        <detail-list-item term="常用快递">菜鸟仓储</detail-list-item>
-        <detail-list-item term="取货地址">浙江省杭州市西湖区万塘路18号</detail-list-item>
-        <detail-list-item term="备注">	无</detail-list-item>
-      </detail-list>
-      <a-divider style="margin-bottom: 32px"/>
+      <div class="title">获奖学生列表 <a-button style="float:right" @click="enterHandler">录入获奖学生</a-button></div>
+      <a-table :columns="winnerColumns" :dataSource="prizewinnerList"/>
 
-      <div class="title">退货商品</div>
-      <s-table
-        style="margin-bottom: 24px"
-        row-key="id"
-        :columns="goodsColumns"
-        :data="loadGoodsData">
+      <a-modal
+        title="获奖信息录入"
+        :width="500"
+        v-model="visible"
+        @ok="handleOk"
+        okText="录入"
+      >
+        <a-form-item
+            label="获奖学生学号"
+            :label-col="{ span: 6 }"
+            :wrapper-col="{ span: 10, offset:1 }"
+          >
+          <a-input v-model="winnerInfo.accountNo"/>
+        </a-form-item>
+        <a-form-item
+            label="获奖学生姓名"
+            :label-col="{ span: 6 }"
+            :wrapper-col="{ span: 10, offset:1  }"
+          >
+          <a-input v-model="winnerInfo.accountName"/>
+        </a-form-item>
+        <a-form-item
+            label="成绩"
+            :label-col="{ span: 6 }"
+            :wrapper-col="{ span: 10, offset:1 }"
+          >
+          <a-select v-model="winnerInfo.grade" style="width: 180px">
+                <a-select-option value="特等奖">特等奖</a-select-option>
+                <a-select-option value="一等奖">一等奖</a-select-option>
+                <a-select-option value="二等奖">二等奖</a-select-option>
+                <a-select-option value="三等奖">三等奖</a-select-option>
+              </a-select>
+        </a-form-item>
+      </a-modal>
 
-      </s-table>
-
-      <div class="title">退货进度</div>
-      <s-table
-        style="margin-bottom: 24px"
-        row-key="key"
-        :columns="scheduleColumns"
-        :data="loadScheduleData">
-
-        <template
-          slot="status"
-          slot-scope="status">
-          <a-badge :status="status" :text="status | statusFilter"/>
-        </template>
-
-      </s-table>
     </a-card>
   </div>
 </template>
 
 <script>
-import { STable } from '@/components'
 import DetailList from '@/components/tools/DetailList'
-import { getCompetition } from '@/api/competition'
+import { getCompetition, addWinner } from '@/api/competition'
 const DetailListItem = DetailList.Item
 
 export default {
   components: {
     DetailList,
-    DetailListItem,
-    STable
+    DetailListItem
   },
   name: 'competitionDetail',
   created () {
@@ -78,172 +78,49 @@ export default {
   },
   data () {
     return {
+      visible: false,
       competitionDetail: {},
-      goodsColumns: [
-        {
-          title: '商品编号',
-          dataIndex: 'id',
-          key: 'id'
-        },
-        {
-          title: '商品名称',
-          dataIndex: 'name',
-          key: 'name'
-        },
-        {
-          title: '商品条码',
-          dataIndex: 'barcode',
-          key: 'barcode'
-        },
-        {
-          title: '单价',
-          dataIndex: 'price',
-          key: 'price',
-          align: 'right'
-        },
-        {
-          title: '数量（件）',
-          dataIndex: 'num',
-          key: 'num',
-          align: 'right'
-        },
-        {
-          title: '金额',
-          dataIndex: 'amount',
-          key: 'amount',
-          align: 'right'
-        }
-      ],
-      // 加载数据方法 必须为 Promise 对象
-      loadGoodsData: () => {
-        return new Promise(resolve => {
-          resolve({
-            data: [
-              {
-                id: '1234561',
-                name: '矿泉水 550ml',
-                barcode: '12421432143214321',
-                price: '2.00',
-                num: '1',
-                amount: '2.00'
-              },
-              {
-                id: '1234562',
-                name: '凉茶 300ml',
-                barcode: '12421432143214322',
-                price: '3.00',
-                num: '2',
-                amount: '6.00'
-              },
-              {
-                id: '1234563',
-                name: '好吃的薯片',
-                barcode: '12421432143214323',
-                price: '7.00',
-                num: '4',
-                amount: '28.00'
-              },
-              {
-                id: '1234564',
-                name: '特别好吃的蛋卷',
-                barcode: '12421432143214324',
-                price: '8.50',
-                num: '3',
-                amount: '25.50'
-              }
-            ],
-            pageSize: 10,
-            pageNo: 1,
-            totalPage: 1,
-            totalCount: 10
-          })
-        }).then(res => {
-          return res
-        })
+      attendeeList: [],
+      prizewinnerList: [],
+      winnerInfo: {
+        competitionId: '',
+        accountNo: '',
+        accountName: '',
+        grade: '',
+        competitionName: ''
       },
-
-      scheduleColumns: [
+      attendeeColumns: [
         {
-          title: '时间',
-          dataIndex: 'time',
-          key: 'time'
+          title: '参赛者学号',
+          dataIndex: 'accountNo'
         },
         {
-          title: '当前进度',
-          dataIndex: 'rate',
-          key: 'rate'
+          title: '参赛者姓名',
+          dataIndex: 'accountName'
         },
         {
-          title: '状态',
-          dataIndex: 'status',
-          key: 'status',
-          scopedSlots: { customRender: 'status' }
+          title: '学院',
+          dataIndex: 'college'
         },
         {
-          title: '操作员ID',
-          dataIndex: 'operator',
-          key: 'operator'
-        },
-        {
-          title: '耗时',
-          dataIndex: 'cost',
-          key: 'cost'
+          title: '科系',
+          dataIndex: 'major'
         }
       ],
-      loadScheduleData: () => {
-        return new Promise(resolve => {
-          resolve({
-            data: [
-              {
-                key: '1',
-                time: '2017-10-01 14:10',
-                rate: '联系客户',
-                status: 'processing',
-                operator: '取货员 ID1234',
-                cost: '5mins'
-              },
-              {
-                key: '2',
-                time: '2017-10-01 14:05',
-                rate: '取货员出发',
-                status: 'success',
-                operator: '取货员 ID1234',
-                cost: '1h'
-              },
-              {
-                key: '3',
-                time: '2017-10-01 13:05',
-                rate: '取货员接单',
-                status: 'success',
-                operator: '取货员 ID1234',
-                cost: '5mins'
-              },
-              {
-                key: '4',
-                time: '2017-10-01 13:00',
-                rate: '申请审批通过',
-                status: 'success',
-                operator: '系统',
-                cost: '1h'
-              },
-              {
-                key: '5',
-                time: '2017-10-01 12:00',
-                rate: '发起退货申请',
-                status: 'success',
-                operator: '用户',
-                cost: '5mins'
-              }
-            ],
-            pageSize: 10,
-            pageNo: 1,
-            totalPage: 1,
-            totalCount: 10
-          })
-        }).then(res => {
-          return res
-        })
-      }
+      winnerColumns: [
+        {
+          title: '获奖者学号',
+          dataIndex: 'accountNo'
+        },
+        {
+          title: '获奖者姓名',
+          dataIndex: 'accountName'
+        },
+        {
+          title: '成绩',
+          dataIndex: 'grade'
+        }
+      ]
     }
   },
   filters: {
@@ -256,14 +133,6 @@ export default {
         'COLLEGE': '院级'
       }
       return statusMap[status]
-    },
-    statusFilter (status) {
-      const statusMap = {
-        'processing': '进行中',
-        'success': '完成',
-        'failed': '失败'
-      }
-      return statusMap[status]
     }
   },
   methods: {
@@ -272,6 +141,35 @@ export default {
         .then(res => {
           if (res.code === 0) {
             this.competitionDetail = res.info
+            this.attendeeList = res.info.attendeeList
+            this.prizewinnerList = res.info.prizewinnerList
+          }
+        })
+    },
+    enterHandler () {
+      this.visible = true
+    },
+    handleOk () {
+      if (this.winnerInfo.accountNo === '') {
+        this.$message.info('请键入获奖者学号')
+      }
+      if (this.winnerInfo.accountName === '') {
+        this.$message.info('请键入获奖者姓名')
+      }
+      if (this.winnerInfo.grade === '') {
+        this.$message.info('请选择获奖级别')
+      }
+      this.winnerInfo.competitionId = this.competitionDetail.id
+      this.winnerInfo.competitionName = this.competitionDetail.name
+      const self = this
+      addWinner(this.winnerInfo)
+        .then(res => {
+          if (res.code === 0) {
+            this.$message.info('录入成功')
+            self.loadCurrent(self.competitionDetail.id)
+            self.visible = false
+          } else {
+            self.$message.error('录入失败')
           }
         })
     }
