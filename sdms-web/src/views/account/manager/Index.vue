@@ -153,7 +153,6 @@ export default {
   data () {
     return {
       description: '用户管理',
-      confirmOpt: false,
       visible: false,
       labelCol: {
         xs: { span: 24 },
@@ -276,7 +275,6 @@ export default {
         title: '确认',
         content: '确认锁定 ' + accountNo + ' 用户吗？',
         onOk () {
-          self.confirmOpt = false
           lockUser(accountNo)
             .then(res => {
               if (res.code === 0) {
@@ -296,7 +294,6 @@ export default {
         title: '确认',
         content: '确认解锁 ' + accountNo + ' 用户吗？',
         onOk () {
-          self.confirmOpt = false
           lockUser(accountNo)
             .then(res => {
               if (res.code === 0) {
@@ -315,7 +312,6 @@ export default {
         title: '确认',
         content: '确认删除 ' + accountNo + ' 用户吗？',
         onOk () {
-          this.confirmOpt = false
           this.$http.get('/api/account/delete', {
             accountNo: this.account.accountNo
           }).then(res => {

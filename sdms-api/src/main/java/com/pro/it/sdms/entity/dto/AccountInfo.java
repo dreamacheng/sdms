@@ -37,10 +37,10 @@ public class AccountInfo extends BaseDTO {
     @Column(name = "enrollment", columnDefinition = "date")
     private Date enrollment;
 
-    @ManyToMany
-    @JoinTable(name = "accountInfo_schoolClub",joinColumns = @JoinColumn(name = "accountInfo_id"),
-            inverseJoinColumns = @JoinColumn(name = "schoolClub_id"))
-    private List<SchoolClub> schoolClubList;
+//    @ManyToMany
+//    @JoinTable(name = "accountInfo_schoolClub",joinColumns = @JoinColumn(name = "accountInfo_id"),
+//            inverseJoinColumns = @JoinColumn(name = "schoolClub_id"))
+//    private List<SchoolClub> schoolClubList;
 
 //    @OneToMany
 //    private List<SemesterEvaluation> evaluationList;

@@ -159,8 +159,6 @@ export default {
       validateFields({ force: true }, (err, values) => {
         if (!err) {
           const addInfo = { ...values }
-          console.log('---info:')
-          console.log(addInfo)
           applyCompetition(addInfo)
             .then((res) => {
               if (res.code === 0) {

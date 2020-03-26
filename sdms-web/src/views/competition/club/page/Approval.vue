@@ -25,7 +25,7 @@
 import { getClubList, joinClub } from '@/api/club'
 
 export default {
-  name: 'Project',
+  name: 'Approval',
   components: {},
   data () {
     return {
