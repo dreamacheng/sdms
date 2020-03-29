@@ -4,28 +4,30 @@
       <a-list-item slot="renderItem" slot-scope="item" key="item.title">
         <div slot="footer"></div>
         <template slot="actions" >
-          <a-button type="primary" @click="joinClub(item.id)">加入社团</a-button>
+          <p>活跃度：{{ item.liveness | livenessFilter }}</p>
+          <p>社团规模：{{ item.club.number }} 人</p>
+          <p>职位：{{ item.position | positionFilter }} </p>
         </template>
         <img
           slot="extra"
           width="272"
           alt="logo"
-          :src="item.logoUrl"
+          :src="item.club.logoUrl"
         />
         <a-list-item-meta :description="item.type">
-          <a slot="title" :href="item.href">{{item.name}}</a>
+          <a slot="title" :href="item.href">{{item.club.name}}</a>
         </a-list-item-meta>
-         {{item.introduction}}
+         {{item.club.introduction}}
       </a-list-item>
     </a-list>
   </div>
 </template>
 
 <script>
-import { getClubList, joinClub } from '@/api/club'
+import { getClubListByType, joinClub } from '@/api/club'
 
 export default {
-  name: 'Project',
+  name: 'Member',
   components: {},
   data () {
     return {
@@ -35,17 +37,37 @@ export default {
       clubList: []
     }
   },
+  filters: {
+    livenessFilter (status) {
+      const statusMap = {
+        'LEVEL_1': '不活跃',
+        'LEVEL_2': '一般活跃',
+        'LEVEL_3': '较活跃'
+      }
+      return statusMap[status]
+    },
+    positionFilter (status) {
+      const statusMap = {
+        'BOSS': '社长',
+        'NORMAL_BOSS': '副社长',
+        'NORMAL_MEMBER': '社员'
+      }
+      return statusMap[status]
+    }
+  },
   created () {
     this.loadClubList()
   },
   methods: {
     loadClubList () {
-      getClubList()
-        .then(res => {
-          if (res.code === 0) {
-            this.clubList = res.list
-          }
-        })
+      getClubListByType({
+        type: 'Approved',
+        club: ''
+      }).then(res => {
+        if (res.code === 0) {
+          this.clubList = res.list
+        }
+      })
     },
     joinClub (id) {
       const self = this

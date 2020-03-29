@@ -1,8 +1,8 @@
 import { axios } from '@/utils/request'
 
-export function clubAdd (parameter) {
+export function scholarshipAdd (parameter) {
   return axios({
-    url: '/api/club/add',
+    url: '/api/scholarship/add',
     method: 'post',
     data: parameter,
     headers: {
@@ -11,16 +11,16 @@ export function clubAdd (parameter) {
   })
 }
 
-export function getClubList () {
+export function getScholarshipList () {
   return axios({
-    url: '/api/club/query',
+    url: '/api/scholarship/query',
     method: 'get'
   })
 }
 
-export function getClubListByType (parameter) {
+export function getCurTerm (curTerm) {
   return axios({
-    url: `/api/club/queryDetail?type=${parameter.type}&clubId=${parameter.club}`,
+    url: `/api/scholarship/query/${curTerm}`,
     method: 'get'
   })
 }

@@ -17,6 +17,7 @@ import com.pro.it.sdms.enums.MemBerIdentityEnum;
 import com.pro.it.sdms.service.SchoolClubService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,9 +55,17 @@ public class SchoolClubServiceImpl implements SchoolClubService {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter required");
         }
         String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account lead = accountDAO.getAccountByAccountNo(accountNo);
         vo.setLeader(accountNo);
         vo.setCreateTime(new Date());
-        SchoolClub save = schoolClubDAO.save(vo.toDTO());
+        SchoolClub save = schoolClubDAO.save(vo.toDTO().toBuilder().number(1).logoUrl("https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png").build());
+        ClubMember dto = new ClubMember();
+        dto.setMember(lead);
+        dto.setClub(save);
+        dto.setLiveness(ClubLivenessEnum.LEVEL_1.getCode());
+        dto.setPosition(MemBerIdentityEnum.BOSS.toString());
+        dto.setMemberStatus(ApprovalResult.Approved.getCode());
+        clubMemberDAO.save(dto);
         return save.getName();
     }
 
@@ -65,7 +75,13 @@ public class SchoolClubServiceImpl implements SchoolClubService {
      */
     @Override
     public List<SchoolClubVO> queryAll() {
-        return schoolClubDAO.findAll().stream().map(SchoolClub::toVO).collect(Collectors.toList());
+        String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountDAO.getAccountByAccountNo(accountNo);
+        List<ClubMember> all = clubMemberDAO.getAllByMember(account);
+        Set<BigDecimal> ids = all.stream().map(item -> item.getClub().getId()).collect(Collectors.toSet());
+        return schoolClubDAO.findAll().stream()
+                .filter(item -> !ids.contains(item.getId()))
+                .map(SchoolClub::toVO).collect(Collectors.toList());
     }
 
     /**
@@ -96,28 +112,23 @@ public class SchoolClubServiceImpl implements SchoolClubService {
     /**
      * 查询某学生的社团列表
      * or 查询某社团的社员列表
-     * @param accountNo
      * @param clubId
+     * @param type
      * @return
      */
     @Override
-    public List<ClubMemberVO> queryDetail(String accountNo, BigDecimal clubId, String type) {
-        List<ClubMember> all = clubMemberDAO.findAll((root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> predicateList = new ArrayList<>();
-            if (!StringUtils.isEmpty(accountNo)) {
-                Join<ClubMember, Account> join = root.join("member", JoinType.INNER);
-                predicateList.add(criteriaBuilder.equal(join.get("accountNo"), accountNo));
-            }
-            if (clubId != null) {
-                Join<ClubMember, SchoolClub> join = root.join("club", JoinType.INNER);
-                predicateList.add(criteriaBuilder.equal(join.get("id"), clubId));
-            }
-            if (!StringUtils.isEmpty(type)) {
-                predicateList.add(criteriaBuilder.equal(root.get("memberStatus"), ApprovalResult.valueOf(type).getCode()));
-            }
-            Predicate[] predicates = new Predicate[predicateList.size()];
-            return criteriaBuilder.and(predicateList.toArray(predicates));
-        });
+    public List<ClubMemberVO> queryDetail(BigDecimal clubId, String type) {
+        String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountDAO.getAccountByAccountNo(accountNo);
+        if ("Manager".equals(type)) {
+            return clubMemberDAO.getAllByPositionIsNotAndMember(MemBerIdentityEnum.NORMAL_MEMBER.toString(), account)
+                    .stream().map(ClubMember::toVO).collect(Collectors.toList());
+        }
+        List<ClubMember> all = clubMemberDAO.getAllByMemberStatusAndMember(ApprovalResult.valueOf(type).getCode(), account);
+        if (clubId != null) {
+            SchoolClub club = schoolClubDAO.getOne(clubId);
+            all = clubMemberDAO.getAllByMemberStatusAndClub(ApprovalResult.valueOf(type).getCode(), club);
+        }
         return all.stream().map(ClubMember::toVO).collect(Collectors.toList());
     }
 
@@ -139,6 +150,10 @@ public class SchoolClubServiceImpl implements SchoolClubService {
         if (ApprovalResult.Rejected.equals(operation)) {
             clubMemberDAO.delete(clubMember);
             return ApprovalResult.Rejected.toString();
+        }
+        if (ApprovalResult.Approved.toString().equals(operation)) {
+            clubMember.getClub().setNumber(clubMember.getClub().getNumber() + 1);
+            schoolClubDAO.save(clubMember.getClub());
         }
         clubMember.setMemberStatus(ApprovalResult.valueOf(operation).getCode());
         return BaseCodeEnum.codeOf(ApprovalResult.class, clubMemberDAO.save(clubMember).getMemberStatus()).toString();

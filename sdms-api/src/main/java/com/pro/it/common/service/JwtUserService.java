@@ -26,20 +26,22 @@ public class JwtUserService implements UserDetailsService {
 
     private PasswordEncoder passwordEncoder;
 
+    private static final String salt = "sdafwqertcxvbtyeguytrkgfhxcv";
+
     public JwtUserService() {
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     public String saveUserLoginInfo(UserDetails user) throws UnsupportedEncodingException {
-        String genSalt = BCrypt.gensalt();
+        // String genSalt = BCrypt.gensalt();
         //将用户登录信息存入数据库
         Account loginAccount = accountDAO.getAccountByAccountNo(user.getUsername());
         if (loginAccount == null) {
             throw new UsernameNotFoundException("user does not exist");
         }
-        loginAccount.setSalt(genSalt);
+        loginAccount.setSalt(salt);
         accountDAO.save(loginAccount);
-        Algorithm algorithm = Algorithm.HMAC256(genSalt);
+        Algorithm algorithm = Algorithm.HMAC256(salt);
         //缓存时间一周
         Date expires = new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000);
         return JWT.create()

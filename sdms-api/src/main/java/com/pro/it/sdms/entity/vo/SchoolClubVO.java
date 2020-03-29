@@ -34,6 +34,9 @@ public class SchoolClubVO {
 
     private String logoUrl;
 
+    /** 社团人数 */
+    private Integer number;
+
     /** 创建时间 */
     private Date createTime;
 

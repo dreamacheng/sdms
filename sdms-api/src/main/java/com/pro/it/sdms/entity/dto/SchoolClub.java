@@ -45,6 +45,9 @@ public class SchoolClub extends BaseDTO {
     @Column(name = "introduction", columnDefinition = "varchar(100)")
     private String introduction;
 
+    @Column(name = "number", columnDefinition = "int")
+    private Integer number;
+
     public SchoolClubVO toVO() {
         return SchoolClubVO.builder()
                 .id(getId())
@@ -52,6 +55,7 @@ public class SchoolClub extends BaseDTO {
                 .createTime(getCreateDatetime())
                 .leader(getLeader())
                 .type(getType())
+                .number(getNumber())
                 .logoUrl(getLogoUrl())
                 .name(getName()).build();
     }

@@ -44,6 +44,7 @@ public class ClubMember extends BaseDTO {
 
     public ClubMemberVO toVO() {
         return ClubMemberVO.builder()
+                .id(getId())
                 .club(getClub().toVO())
                 .member(getMember().toVO())
                 .liveness(BaseCodeEnum.codeOf(ClubLivenessEnum.class, getLiveness()).toString())

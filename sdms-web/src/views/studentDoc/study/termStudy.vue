@@ -6,6 +6,9 @@
         <span slot="semester" slot-scope="text">
           {{ text | statusFilter}}
         </span>
+        <span slot="grade" slot-scope="text">
+          {{ text | nullFilter}}
+        </span>
         <span slot="action" slot-scope="text, record">
           <a @click="accountDetail(record)">详情</a>
         </span>
@@ -29,12 +32,12 @@
           </detail-list>
           <a-divider style="margin-bottom: 32px"/>
           <detail-list title="老师评价">
-            {{evaluation.teacherEval}}
+            {{evaluation.teacherEval | nullFilter}}
           </detail-list>
           <a-divider style="margin-bottom: 32px"/>
           <detail-list>
-            <detail-list-item term="评定等级">{{evaluation.grade}}</detail-list-item>
-            <detail-list-item term="评价老师">{{evaluation.teacherName}}</detail-list-item>
+            <detail-list-item term="评定等级">{{evaluation.grade | nullFilter}}</detail-list-item>
+            <detail-list-item term="评价老师">{{evaluation.teacherName | nullFilter}}</detail-list-item>
           </detail-list>
         </a-card>
       </a-modal>
@@ -69,19 +72,6 @@ export default {
       accountdata: [],
       // 表头
       columns: [
-        // {
-        //   title: '学号',
-        //   dataIndex: 'studentNo',
-        //   key: 'id'
-        // },
-        // {
-        //   title: '学生姓名',
-        //   dataIndex: 'studentName'
-        // },
-        // {
-        //   title: '评价老师',
-        //   dataIndex: 'teacherName'
-        // },
         {
           title: '学年',
           dataIndex: 'semester',
@@ -89,7 +79,8 @@ export default {
         },
         {
           title: '学期总评价',
-          dataIndex: 'grade'
+          dataIndex: 'grade',
+          scopedSlots: { customRender: 'grade' }
         },
         {
           title: '操作',
@@ -103,6 +94,12 @@ export default {
     }
   },
   filters: {
+    nullFilter (value) {
+      if (!value) {
+        return '暂未录入'
+      }
+      return value
+    },
     statusFilter (status) {
       const statusMap = {
         'CLASS_1': '大一第一学年',

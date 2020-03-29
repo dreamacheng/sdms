@@ -14,7 +14,7 @@ public interface SchoolClubService {
 
     String joinClub(BigDecimal clubId);
 
-    List<ClubMemberVO> queryDetail(String accountNo, BigDecimal clubId, String type);
+    List<ClubMemberVO> queryDetail(BigDecimal clubId, String type);
 
     String approval(BigDecimal id, String operation);
 }

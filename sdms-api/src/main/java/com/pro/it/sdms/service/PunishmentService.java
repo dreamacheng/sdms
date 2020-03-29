@@ -7,9 +7,10 @@ import java.util.List;
 
 public interface PunishmentService {
 
-    String addPunishment(PunishmentVO vo);
+    BigDecimal addPunishment(PunishmentVO vo);
 
-    String cancelPunishment(BigDecimal punishmentId);
+    BigDecimal cancelPunishment(BigDecimal punishmentId);
 
     List<PunishmentVO> queryPunishmentByAccountNo(String accountNo);
+
 }

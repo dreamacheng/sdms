@@ -5,11 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 @ToString
 @Builder(toBuilder=true)
 public class ClubMemberVO {
+
+    private BigDecimal id;
 
     /** 社员 */
     private AccountVO member;

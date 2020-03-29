@@ -82,10 +82,16 @@ export const asyncRouterMap = [
             meta: { title: '社会实践', keepAlive: true, permission: [ 'profile' ] }
           },
           {
-            path: '/studentDoc/person',
-            name: 'person',
-            component: () => import('@/views/studentDoc/person'),
-            meta: { title: '奖惩查询', keepAlive: true, permission: [ 'profile' ] }
+            path: '/studentDoc/money',
+            name: 'money',
+            component: () => import('@/views/studentDoc/money'),
+            meta: { title: '奖学金', keepAlive: true, permission: [ 'profile' ] }
+          },
+          {
+            path: '/studentDoc/punishment',
+            name: 'punishment',
+            component: () => import('@/views/studentDoc/punishment'),
+            meta: { title: '处分记录', keepAlive: true, permission: [ 'profile' ] }
           }
         ]
       },
@@ -107,72 +113,72 @@ export const asyncRouterMap = [
             name: 'StepForm',
             component: () => import('@/views/form/partApply/partApply'),
             meta: { title: '入党申请', keepAlive: true, permission: [ 'form' ] }
-          },
-          {
-            path: '/form/advanced-form',
-            name: 'AdvanceForm',
-            component: () => import('@/views/form/advancedForm/AdvancedForm'),
-            meta: { title: '高级表单', keepAlive: true, permission: [ 'form' ] }
           }
+          // {
+          //   path: '/form/advanced-form',
+          //   name: 'AdvanceForm',
+          //   component: () => import('@/views/form/advancedForm/AdvancedForm'),
+          //   meta: { title: '高级表单', keepAlive: true, permission: [ 'form' ] }
+          // }
         ]
       },
 
       // list
-      {
-        path: '/list',
-        name: 'list',
-        component: PageView,
-        redirect: '/list/table-list',
-        meta: { title: '列表页', icon: 'table', permission: [ 'table' ] },
-        children: [
-          {
-            path: '/list/table-list/:pageNo([1-9]\\d*)?',
-            name: 'TableListWrapper',
-            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/list/TableList'),
-            meta: { title: '查询表格', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/list/basic-list',
-            name: 'BasicList',
-            component: () => import('@/views/list/StandardList'),
-            meta: { title: '标准列表', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/list/card',
-            name: 'CardList',
-            component: () => import('@/views/list/CardList'),
-            meta: { title: '卡片列表', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/list/search',
-            name: 'SearchList',
-            component: () => import('@/views/list/search/SearchLayout'),
-            redirect: '/list/search/article',
-            meta: { title: '搜索列表', keepAlive: true, permission: [ 'table' ] },
-            children: [
-              {
-                path: '/list/search/article',
-                name: 'SearchArticles',
-                component: () => import('../views/list/search/Article'),
-                meta: { title: '搜索列表（文章）', permission: [ 'table' ] }
-              },
-              {
-                path: '/list/search/project',
-                name: 'SearchProjects',
-                component: () => import('../views/list/search/Projects'),
-                meta: { title: '搜索列表（项目）', permission: [ 'table' ] }
-              },
-              {
-                path: '/list/search/application',
-                name: 'SearchApplications',
-                component: () => import('../views/list/search/Applications'),
-                meta: { title: '搜索列表（应用）', permission: [ 'table' ] }
-              }
-            ]
-          }
-        ]
-      },
+      // {
+      //   path: '/list',
+      //   name: 'list',
+      //   component: PageView,
+      //   redirect: '/list/table-list',
+      //   meta: { title: '列表页', icon: 'table', permission: [ 'table' ] },
+      //   children: [
+      //     {
+      //       path: '/list/table-list/:pageNo([1-9]\\d*)?',
+      //       name: 'TableListWrapper',
+      //       hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+      //       component: () => import('@/views/list/TableList'),
+      //       meta: { title: '查询表格', keepAlive: true, permission: [ 'table' ] }
+      //     },
+      //     {
+      //       path: '/list/basic-list',
+      //       name: 'BasicList',
+      //       component: () => import('@/views/list/StandardList'),
+      //       meta: { title: '标准列表', keepAlive: true, permission: [ 'table' ] }
+      //     },
+      //     {
+      //       path: '/list/card',
+      //       name: 'CardList',
+      //       component: () => import('@/views/list/CardList'),
+      //       meta: { title: '卡片列表', keepAlive: true, permission: [ 'table' ] }
+      //     },
+      //     {
+      //       path: '/list/search',
+      //       name: 'SearchList',
+      //       component: () => import('@/views/list/search/SearchLayout'),
+      //       redirect: '/list/search/article',
+      //       meta: { title: '搜索列表', keepAlive: true, permission: [ 'table' ] },
+      //       children: [
+      //         {
+      //           path: '/list/search/article',
+      //           name: 'SearchArticles',
+      //           component: () => import('../views/list/search/Article'),
+      //           meta: { title: '搜索列表（文章）', permission: [ 'table' ] }
+      //         },
+      //         {
+      //           path: '/list/search/project',
+      //           name: 'SearchProjects',
+      //           component: () => import('../views/list/search/Projects'),
+      //           meta: { title: '搜索列表（项目）', permission: [ 'table' ] }
+      //         },
+      //         {
+      //           path: '/list/search/application',
+      //           name: 'SearchApplications',
+      //           component: () => import('../views/list/search/Applications'),
+      //           meta: { title: '搜索列表（应用）', permission: [ 'table' ] }
+      //         }
+      //       ]
+      //     }
+      //   ]
+      // },
 
       // competition
       {
@@ -214,27 +220,27 @@ export const asyncRouterMap = [
       },
 
       // profile
-      {
-        path: '/profile',
-        name: 'profile',
-        component: RouteView,
-        redirect: '/profile/basic',
-        meta: { title: '详情页', icon: 'profile', permission: [ 'profile' ] },
-        children: [
-          {
-            path: '/profile/basic',
-            name: 'ProfileBasic',
-            component: () => import('@/views/profile/basic/Index'),
-            meta: { title: '基础详情页', permission: [ 'profile' ] }
-          },
-          {
-            path: '/profile/advanced',
-            name: 'ProfileAdvanced',
-            component: () => import('@/views/profile/advanced/Advanced'),
-            meta: { title: '高级详情页', permission: [ 'profile' ] }
-          }
-        ]
-      },
+      // {
+      //   path: '/profile',
+      //   name: 'profile',
+      //   component: RouteView,
+      //   redirect: '/profile/basic',
+      //   meta: { title: '详情页', icon: 'profile', permission: [ 'profile' ] },
+      //   children: [
+      //     {
+      //       path: '/profile/basic',
+      //       name: 'ProfileBasic',
+      //       component: () => import('@/views/profile/basic/Index'),
+      //       meta: { title: '基础详情页', permission: [ 'profile' ] }
+      //     },
+      //     {
+      //       path: '/profile/advanced',
+      //       name: 'ProfileAdvanced',
+      //       component: () => import('@/views/profile/advanced/Advanced'),
+      //       meta: { title: '高级详情页', permission: [ 'profile' ] }
+      //     }
+      //   ]
+      // },
 
       // result
       {

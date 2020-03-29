@@ -1,6 +1,7 @@
 package com.pro.it.sdms.controller;
 
 import com.pro.it.common.controller.BaseController;
+import com.pro.it.sdms.controller.request.ApprovalClubRequestEntity;
 import com.pro.it.sdms.controller.result.InfoAPIResult;
 import com.pro.it.sdms.controller.result.ListAPIResult;
 import com.pro.it.sdms.entity.BaseDTO;
@@ -24,14 +25,14 @@ public class SchoolClubController extends BaseController {
 
     private class URL {
         private static final String CLUB_ADD = "/club/add";
-        private static final String CLUB_QUERY = "/club/query";
         private static final String CLUB_JOIN = "/club/join/{clubId}";
+        private static final String CLUB_QUERY = "/club/query";
         private static final String QUERY_CLUB_OR_ACCOUNT ="/club/queryDetail";
         private static final String CLUB_JOIN_APPROVAL = "/club/join/approval";
     }
 
     @PostMapping(URL.CLUB_ADD)
-    public InfoAPIResult<String> addClub(SchoolClubVO vo) {
+    public InfoAPIResult<String> addClub(@RequestBody SchoolClubVO vo) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
         log.info("===> request method : [ Post ], request path [ {} ]", URL.CLUB_ADD);
         log.info("===> request parameter {} : {} ", SchoolClubVO.class.getSimpleName(), vo);
@@ -62,26 +63,24 @@ public class SchoolClubController extends BaseController {
         return result;
     }
 
-    @PostMapping(URL.QUERY_CLUB_OR_ACCOUNT)
-    public ListAPIResult<ClubMemberVO> queryDetail(@RequestParam(value = "accountNo", required = false) String accountNo,
-                                                   @RequestParam(value = "clubId", required = false) BigDecimal clubId,
+    @GetMapping(URL.QUERY_CLUB_OR_ACCOUNT)
+    public ListAPIResult<ClubMemberVO> queryDetail(@RequestParam(value = "clubId", required = false) BigDecimal clubId,
                                                    @RequestParam(value = "type") String type) {
         ListAPIResult<ClubMemberVO> result = new ListAPIResult<>();
         log.info("===> request method : [ Get ], request path [ {} ]", URL.QUERY_CLUB_OR_ACCOUNT);
-        log.info("===> request parameter accountNo: {} , clubId: {} ", accountNo, clubId);
-        List<ClubMemberVO> list = schoolClubService.queryDetail(accountNo, clubId, type);
+        log.info("===> request parameter type: {} , clubId: {} ", type, clubId);
+        List<ClubMemberVO> list = schoolClubService.queryDetail(clubId, type);
         result.setList(list);
         log.info("===> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.CLUB_JOIN_APPROVAL)
-    public InfoAPIResult<String> approval(@RequestParam("id") BigDecimal id,
-                                          @RequestParam("operation") String operation) {
+    public InfoAPIResult<String> approval(@RequestBody ApprovalClubRequestEntity approvalClubRequestEntity) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
         log.info("===> request method : [ Post ], request path [ {} ]", URL.CLUB_JOIN_APPROVAL);
-        log.info("===> request parameter clubMemberId: {}, operation: {} ", id, operation);
-        String status = schoolClubService.approval(id, operation);
+        log.info("===> request parameter  {} : {} ", ApprovalClubRequestEntity.class.getSimpleName(), approvalClubRequestEntity);
+        String status = schoolClubService.approval(approvalClubRequestEntity.getId(), approvalClubRequestEntity.getOperation());
         result.setInfo(status);
         log.info("===> response result {}", result);
         return result;

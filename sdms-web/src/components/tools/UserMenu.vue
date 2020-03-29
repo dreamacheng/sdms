@@ -10,7 +10,7 @@
       <a-dropdown>
         <span class="action ant-dropdown-link user-dropdown-menu">
           <a-avatar class="avatar" size="small" :src="avatar"/>
-          <span>{{ nickname }}</span>
+          <span>{{ accountInfo.username }}</span>
         </span>
         <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
           <a-menu-item key="0">
@@ -35,6 +35,7 @@
 <script>
 import NoticeIcon from '@/components/NoticeIcon'
 import { mapActions, mapGetters } from 'vuex'
+import { currentUserInfo } from '@/api/login'
 
 export default {
   name: 'UserMenu',
@@ -45,8 +46,25 @@ export default {
     ...mapGetters(['nickname', 'avatar'])
 
   },
+  data () {
+    return {
+      accountInfo: {}
+    }
+  },
+  created () {
+    this.loadCurrent()
+  },
   methods: {
     ...mapActions(['Logout']),
+    loadCurrent () {
+      const self = this
+      currentUserInfo()
+        .then(res => {
+          if (res.code === 0) {
+            self.accountInfo = res.info
+          }
+        })
+    },
     handleLogout () {
       this.$confirm({
         title: '提示',

@@ -2,6 +2,7 @@ package com.pro.it.sdms.entity.vo;
 
 
 import com.pro.it.sdms.entity.dto.Punishment;
+import com.pro.it.sdms.enums.PunishmentTypeEnum;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,13 +41,11 @@ public class PunishmentVO {
 
     public Punishment toDTO() {
         return Punishment.builder()
-                .studentNo(getPunishmentNo())
-                .studentName(getPunishmentName())
                 .cancelTime(getCancelTime())
                 .punishmentTime(getPunishmentTime())
                 .desc(getDesc())
                 .isCancel((short) 0)
-                .type(getType()).build();
+                .type(PunishmentTypeEnum.valueOf(getType()).getCode()).build();
     }
 
 }

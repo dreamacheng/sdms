@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,6 +28,9 @@ public class AccountDAOTest {
     public void testExist() {
         UserDetails userDetails = jwtUserService.loadUserByUsername("201513070114");
         System.out.println(userDetails);
+        BigDecimal a = new BigDecimal(1);
+        BigDecimal b = new BigDecimal(1);
+        System.out.println(a.equals(b));
     }
 
     @Test

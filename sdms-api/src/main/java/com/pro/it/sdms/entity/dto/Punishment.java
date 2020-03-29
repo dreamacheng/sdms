@@ -2,13 +2,12 @@ package com.pro.it.sdms.entity.dto;
 
 import com.pro.it.sdms.entity.BaseDTO;
 import com.pro.it.sdms.entity.vo.PunishmentVO;
+import com.pro.it.sdms.enums.BaseCodeEnum;
+import com.pro.it.sdms.enums.PunishmentTypeEnum;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -23,8 +22,8 @@ import java.util.Date;
 public class Punishment extends BaseDTO {
 
     /** 处分类型 */
-    @Column(name = "type", nullable = false, columnDefinition = "varchar(30)")
-    private String type;
+    @Column(name = "type", nullable = false, columnDefinition = "int")
+    private short type;
 
     /** 处分时间 */
     @Column(name = "punishment_time", nullable = false, columnDefinition = "datetime")
@@ -39,12 +38,9 @@ public class Punishment extends BaseDTO {
     private Short isCancel;
 
     /** 受处分人 */
-    @Column(name = "student_no", nullable = false, columnDefinition = "varchar(30)")
-    private String studentNo;
-
-    /** 受处分人姓名 */
-    @Column(name = "student_name", nullable = false, columnDefinition = "varchar(30)")
-    private String studentName;
+    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
+    @JoinColumn(name="student_id")
+    private Account student;
 
     /** 处分原因及描述 */
     @Column(name = "description", columnDefinition = "varchar(255)")
@@ -52,13 +48,13 @@ public class Punishment extends BaseDTO {
 
     public PunishmentVO toVO() {
         return PunishmentVO.builder()
-                .punishmentNo(getStudentNo())
-                .punishmentName(getStudentName())
+                .punishmentNo(getStudent().getAccountNo())
+                .punishmentName(getStudent().getUsername())
                 .cancelTime(getCancelTime())
                 .desc(getDesc())
                 .punishmentTime(getPunishmentTime())
                 .isCancel(getIsCancel())
-                .type(getType()).build();
+                .type(BaseCodeEnum.codeOf(PunishmentTypeEnum.class, getType()).toString()).build();
     }
 
 }
