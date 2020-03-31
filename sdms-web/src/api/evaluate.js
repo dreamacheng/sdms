@@ -8,6 +8,13 @@ export function getCurAccountEvaluation (parameter) {
   })
 }
 
+export function getAllStudentEvaluate () {
+  return axios({
+    url: '/api/semesterEval/query',
+    method: 'get'
+  })
+}
+
 export function evaluateAPI (parameter) {
   return axios({
     url: '/api/semesterEval/evaluate',

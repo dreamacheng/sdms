@@ -27,6 +27,12 @@ public class SemesterEvaluationVO {
     /** 所属学生姓名 */
     private String studentName;
 
+    /** 专业 */
+    private String college;
+
+    /** 专业 */
+    private String major;
+
     /** 自我评价 */
     private String selfEval;
 

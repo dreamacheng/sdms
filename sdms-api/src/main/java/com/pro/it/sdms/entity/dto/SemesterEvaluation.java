@@ -63,6 +63,8 @@ public class SemesterEvaluation extends BaseDTO {
                 .semester(BaseCodeEnum.codeOf(SemesterEnum.class, getSemester()).toString())
                 .teacherNo(getTeacherNo())
                 .studentNo(getStudentNo())
+                .college(getStudentInfo().getCollege())
+                .major(getStudentInfo().getMajor())
                 .studentName(getStudentName())
                 .teacherName(getTeacherName())
                 .selfEval(getSelfEval())

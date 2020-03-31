@@ -19,6 +19,13 @@ export function queryAccountAPI (parameter) {
   })
 }
 
+export function getTeacher () {
+  return axios({
+    url: '/api/account/teacher',
+    method: 'get'
+  })
+}
+
 export function lockUser (parameter) {
   return axios({
     url: `/api/account/lock/${parameter}`,

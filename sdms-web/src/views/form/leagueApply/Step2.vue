@@ -81,7 +81,7 @@ export default {
     }
   },
   created () {
-    getCurAccountApply('PART_APPLY')
+    getCurAccountApply('LEAGUE_APPLY')
       .then(res => {
         if (res.code === 0) {
           this.organizationDetail = res.info

@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { queryAccountAPI } from '@/api/manage'
+import { getTeacher } from '@/api/manage'
 import { applyAddAPI } from '@/api/organization'
 import moment from 'moment'
 
@@ -131,16 +131,11 @@ export default {
       })
     },
     getApproverList () {
-      queryAccountAPI({
-        role: 'MANAGER',
-        pageInfo: {
-          pageSize: 100,
-          pageNum: 0
-        }
-      }).then(res => {
-        const result = res.info.resultList
-        this.approverList = result
-      })
+      getTeacher()
+        .then(res => {
+          const result = res.list
+          this.approverList = result
+        })
     }
   }
 }

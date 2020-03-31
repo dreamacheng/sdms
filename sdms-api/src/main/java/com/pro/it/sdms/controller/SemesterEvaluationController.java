@@ -2,6 +2,7 @@ package com.pro.it.sdms.controller;
 
 
 import com.pro.it.common.controller.BaseController;
+import com.pro.it.sdms.controller.response.EvaluateListResponseEntity;
 import com.pro.it.sdms.controller.result.InfoAPIResult;
 import com.pro.it.sdms.controller.result.ListAPIResult;
 import com.pro.it.sdms.entity.vo.SemesterEvaluationVO;
@@ -50,11 +51,11 @@ public class SemesterEvaluationController extends BaseController {
     }
 
     @GetMapping(URL.SEMESTER_EVALUATION_ALL_QUERY)
-    public ListAPIResult<SemesterEvaluationVO> queryByAccountNo() {
+    public InfoAPIResult<EvaluateListResponseEntity> queryAllStudentCurTerm() {
         log.info("===> request method : [ Get ], request path [ {} ]", URL.SEMESTER_EVALUATION_ALL_QUERY);
-        ListAPIResult<SemesterEvaluationVO> result = new ListAPIResult<>();
-        List<SemesterEvaluationVO> list = semesterEvaluationService.query();
-        result.setList(list);
+        InfoAPIResult<EvaluateListResponseEntity> result = new InfoAPIResult<>();
+        EvaluateListResponseEntity info = semesterEvaluationService.query();
+        result.setInfo(info);
         log.info("===> response result {}", result);
         return result;
     }

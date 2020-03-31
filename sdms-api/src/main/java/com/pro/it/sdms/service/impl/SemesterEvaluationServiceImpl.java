@@ -3,13 +3,12 @@ package com.pro.it.sdms.service.impl;
 import com.pro.it.common.Constants;
 import com.pro.it.common.exceptions.BadRequestException;
 import com.pro.it.common.utils.VerifyUtil;
+import com.pro.it.sdms.controller.response.EvaluateListResponseEntity;
 import com.pro.it.sdms.dao.AccountDAO;
 import com.pro.it.sdms.dao.SemesterEvaluationDAO;
 import com.pro.it.sdms.entity.dto.Account;
-import com.pro.it.sdms.entity.dto.AccountInfo;
 import com.pro.it.sdms.entity.dto.SemesterEvaluation;
 import com.pro.it.sdms.entity.vo.SemesterEvaluationVO;
-import com.pro.it.sdms.enums.BaseCodeEnum;
 import com.pro.it.sdms.enums.SemesterEnum;
 import com.pro.it.sdms.service.SemesterEvaluationService;
 import org.apache.commons.lang3.StringUtils;
@@ -19,8 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,8 +81,13 @@ public class SemesterEvaluationServiceImpl implements SemesterEvaluationService 
      */
     @Override
     @Secured("ROLE_MANAGER")
-    public List<SemesterEvaluationVO> query() {
-        return semesterEvaluationDAO.findAll().stream().map(SemesterEvaluation::toVO).collect(Collectors.toList());
+    public EvaluateListResponseEntity query() {
+        EvaluateListResponseEntity result = new EvaluateListResponseEntity();
+        List<SemesterEvaluationVO> noList = semesterEvaluationDAO.findAllByGradeIsNull().stream().map(SemesterEvaluation::toVO).collect(Collectors.toList());
+        List<SemesterEvaluationVO> list = semesterEvaluationDAO.findAllByGradeIsNotNull().stream().map(SemesterEvaluation::toVO).collect(Collectors.toList());
+        result.setList(list);
+        result.setNotList(noList);
+        return result;
     }
 
     /**

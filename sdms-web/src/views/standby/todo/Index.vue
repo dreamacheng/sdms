@@ -1,213 +1,285 @@
 <template>
   <div class="page-header-index-wide page-header-wrapper-grid-content-main">
-    <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
-        <!-- <a-form layout="inline">
-          <a-row :gutter="48">
-            <a-col :md="6" :sm="24">
-              <a-form-item label="学号">
-                <a-input :value="queryParam.accountNo" placeholder="请输入"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item label="用户姓名">
-                <a-input :value="queryParam.username" placeholder="请输入"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <span class="table-page-search-submitButtons" >
-                <a-button type="primary" @click="loadAccountList">查询</a-button>
-                <a-button style="margin-left: 8px">重置</a-button>
-              </span>
-            </a-col>
-          </a-row>
-        </a-form> -->
-        <P style="font-size: 20px"><a-icon type="form"/>&nbsp;审批列表</p>
-        <a-divider/>
-      </div>
-
-      <a-table :columns="columns" :dataSource="accountdata">
-        <span slot="applyStatus" slot-scope="text">
-          {{ text | statusFilter }}
-        </span>
-        <span slot="type" slot-scope="text">
-          {{ text | applyFilter }}
-        </span>
-        <span slot="action" slot-scope="text, record">
-          <a @click="accountDetail(record)">审批</a>
-        </span>
-      </a-table>
-
-      <a-modal
-        title="审批"
-        :width="800"
-        v-model="visible"
-        @ok="handleOk"
-        okText="提交审批"
-      >
+    <a-row :gutter="24">
+      <a-col :md="24" :lg="7">
         <a-card :bordered="false">
-          <detail-list title="基本信息">
-            <detail-list-item term="申请人学号">{{applyInfo.proposer}}</detail-list-item>
-            <detail-list-item term="申请人姓名">{{applyInfo.proposerName}}</detail-list-item>
-          </detail-list>
-          <detail-list>
-            <detail-list-item term="申请类型">{{applyInfo.type | applyFilter}}</detail-list-item>
-            <detail-list-item term="申请时间">{{applyInfo.applyTime}}</detail-list-item>
-          </detail-list>
-          <a-divider style="margin-bottom: 32px"/>
-          <detail-list title="申请书">
-            {{applyInfo.applyText}}
-          </detail-list>
-          <a-divider style="margin-bottom: 32px"/>
-          <detail-list title="审核意见">
-            <div>
-              <a-textarea v-model="applyResult.applyComment" style="width:400px" :rows="5" placeholder="审核意见"/>
+          <div class="account-center-avatarHolder">
+            <div class="avatar">
+              <img :src="avatar()">
             </div>
-          </detail-list>
-          <a-divider style="margin-bottom: 32px"/>
-          <detail-list title="审核结果">
-            <a-radio-group v-model="applyResult.applyStatus">
-              <a-radio value="Approved" defaultChecked>审核通过</a-radio>
-              <a-radio value="Rejected">审核驳回</a-radio>
-            </a-radio-group>
-          </detail-list>
+            <div class="username">{{ accountInfo.username }}</div>
+            <div class="bio">乡村教师代言人</div>
+          </div>
+          <div class="account-center-detail">
+            <p>
+              <i class="title"></i>{{ accountInfo.college }}
+            </p>
+            <p v-show="accountInfo.role == 'STUDENT'">
+              <i class="group"></i>{{ accountInfo.major }}
+            </p>
+          </div>
+          <a-divider/>
+
+          <div class="account-center-tags">
+            <div class="tagsTitle">标签</div>
+            <div>
+              <template v-for="(tag, index) in tags">
+                <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
+                  <a-tag
+                    :key="tag"
+                    :closable="index !== 0"
+                    :afterClose="() => handleTagClose(tag)"
+                  >{{ `${tag.slice(0, 20)}...` }}</a-tag>
+                </a-tooltip>
+                <a-tag
+                  v-else
+                  :key="tag"
+                  :closable="index !== 0"
+                  :afterClose="() => handleTagClose(tag)"
+                >{{ tag }}</a-tag>
+              </template>
+              <a-input
+                v-if="tagInputVisible"
+                ref="tagInput"
+                type="text"
+                size="small"
+                :style="{ width: '78px' }"
+                :value="tagInputValue"
+                @change="handleInputChange"
+                @blur="handleTagInputConfirm"
+                @keyup.enter="handleTagInputConfirm"
+              />
+              <a-tag v-else @click="showTagInput" style="background: #fff; borderStyle: dashed;">
+                <a-icon type="plus"/>New Tag
+              </a-tag>
+            </div>
+          </div>
+          <a-divider :dashed="true"/>
         </a-card>
-      </a-modal>
-    </a-card>
+      </a-col>
+      <a-col :md="24" :lg="17">
+        <a-card
+          style="width:100%"
+          :bordered="false"
+          :tabList="tabListNoTitle"
+          :activeTabKey="noTitleKey"
+          @tabChange="key => handleTabChange(key, 'noTitleKey')"
+        >
+          <project-page v-if="noTitleKey === 'project'"></project-page>
+          <approval-page v-else-if="noTitleKey === 'approval'"></approval-page>
+          <member-page v-else-if="noTitleKey === 'member'"></member-page>
+          <manager-page v-else-if="noTitleKey === 'manager'"></manager-page>
+        </a-card>
+      </a-col>
+    </a-row>
   </div>
 </template>
+
 <script>
-import DetailList from '@/components/tools/DetailList'
-import { queryCurAll, applyApproval } from '@/api/organization'
-const DetailListItem = DetailList.Item
+import { PageView, RouteView } from '@/layouts'
+import { ProjectPage, ApprovalPage, MemberPage, ManagerPage } from './page'
+import { currentUserInfo } from '@/api/login'
+
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    DetailList,
-    DetailListItem
+    RouteView,
+    PageView,
+    ProjectPage,
+    ApprovalPage,
+    MemberPage,
+    ManagerPage
   },
-  name: 'todo',
   data () {
     return {
-      description: '',
-      confirmOpt: false,
-      visible: false,
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 }
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 }
-      },
-      form: null,
-      applyInfo: {},
-      accountdata: [],
-      applyResult: {
-        id: '',
-        applyComment: '',
-        applyStatus: ''
-      },
-      // 表头
-      columns: [
+      tags: ['务实求真', '友善', '海纳百川'],
+      accountInfo: {},
+      tagInputVisible: false,
+      tagInputValue: '',
+
+      teams: [],
+      teamSpinning: true,
+
+      tabListNoTitle: [
         {
-          title: '申请人学号',
-          dataIndex: 'proposer',
-          key: 'id'
+          key: 'manager',
+          tab: '学期评价'
         },
         {
-          title: '申请人姓名',
-          dataIndex: 'proposerName'
+          key: 'approval',
+          tab: '入团入党审批'
         },
         {
-          title: '申请类型',
-          dataIndex: 'type',
-          scopedSlots: { customRender: 'type' }
+          key: 'project',
+          tab: '奖学金审批'
         },
         {
-          title: '状态',
-          dataIndex: 'applyStatus',
-          scopedSlots: { customRender: 'applyStatus' }
-        },
-        {
-          title: '操作',
-          width: '150px',
-          dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
+          key: 'member',
+          tab: '处分录入'
         }
       ],
-      selectedRowKeys: [],
-      selectedRows: []
-    }
-  },
-  filters: {
-    applyFilter (status) {
-      const statusMap = {
-        'LEAGUE_APPLY': '入团申请',
-        'PART_APPLY': '入党申请'
-      }
-      return statusMap[status]
-    },
-    statusFilter (status) {
-      const statusMap = {
-        'WaitForApproval': '待审核',
-        'Rejected': '拒绝',
-        'Approved': '批准'
-      }
-      return statusMap[status]
+      noTitleKey: 'manager'
     }
   },
   created () {
-    this.loadAccountList()
+    this.loadCurrent()
+  },
+  mounted () {
+    this.getTeams()
   },
   methods: {
-    loadAccountList () {
-      queryCurAll()
-        .then(res => {
-          const result = res.list
-          this.accountdata = result
-        })
-    },
-    accountDetail (record) {
-      this.applyInfo = Object.assign({}, record)
-      this.applyResult.id = record.id
-      this.visible = true
-    },
-    handleOk () {
+    ...mapGetters(['nickname', 'avatar']),
+    loadCurrent () {
       const self = this
-      if (!this.applyResult.applyComment) {
-        this.$message.error('请填写审批意见')
-        return
-      }
-      if (!this.applyResult.applyStatus) {
-        this.$message.error('请勾选审批结果')
-        return
-      }
-      applyApproval(this.applyResult)
+      currentUserInfo()
         .then(res => {
           if (res.code === 0) {
-            this.$message.info('审批成功')
-            self.loadAccountList()
-            this.visible = false
-          } else {
-            this.$message.error('审批失败')
+            self.accountInfo = res.info
           }
         })
-    }
-  },
-  watch: {
-    /*
-      'selectedRows': function (selectedRows) {
-        this.needTotalList = this.needTotalList.map(item => {
-          return {
-            ...item,
-            total: selectedRows.reduce( (sum, val) => {
-              return sum + val[item.dataIndex]
-            }, 0)
-          }
-        })
+    },
+    getTeams () {
+      this.$http.get('/workplace/teams').then(res => {
+        this.teams = res.result
+        this.teamSpinning = false
+      })
+    },
+
+    handleTabChange (key, type) {
+      this[type] = key
+    },
+
+    handleTagClose (removeTag) {
+      const tags = this.tags.filter(tag => tag !== removeTag)
+      this.tags = tags
+    },
+
+    showTagInput () {
+      this.tagInputVisible = true
+      this.$nextTick(() => {
+        this.$refs.tagInput.focus()
+      })
+    },
+
+    handleInputChange (e) {
+      this.tagInputValue = e.target.value
+    },
+
+    handleTagInputConfirm () {
+      const inputValue = this.tagInputValue
+      let tags = this.tags
+      if (inputValue && !tags.includes(inputValue)) {
+        tags = [...tags, inputValue]
       }
-      */
+
+      Object.assign(this, {
+        tags,
+        tagInputVisible: false,
+        tagInputValue: ''
+      })
+    }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.page-header-wrapper-grid-content-main {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  transition: 0.3s;
+
+  .account-center-avatarHolder {
+    text-align: center;
+    margin-bottom: 24px;
+
+    & > .avatar {
+      margin: 0 auto;
+      width: 104px;
+      height: 104px;
+      margin-bottom: 20px;
+      border-radius: 50%;
+      overflow: hidden;
+      img {
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    .username {
+      color: rgba(0, 0, 0, 0.85);
+      font-size: 20px;
+      line-height: 28px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+  }
+
+  .account-center-detail {
+    p {
+      margin-bottom: 8px;
+      padding-left: 26px;
+      position: relative;
+    }
+
+    i {
+      position: absolute;
+      height: 14px;
+      width: 14px;
+      left: 0;
+      top: 4px;
+      background: url(https://gw.alipayobjects.com/zos/rmsportal/pBjWzVAHnOOtAUvZmZfy.svg);
+    }
+
+    .title {
+      background-position: 0 0;
+    }
+    .group {
+      background-position: 0 -22px;
+    }
+    .address {
+      background-position: 0 -44px;
+    }
+  }
+
+  .account-center-tags {
+    .ant-tag {
+      margin-bottom: 8px;
+    }
+  }
+
+  .account-center-team {
+    .members {
+      a {
+        display: block;
+        margin: 12px 0;
+        line-height: 24px;
+        height: 24px;
+        .member {
+          font-size: 14px;
+          color: rgba(0, 0, 0, 0.65);
+          line-height: 24px;
+          max-width: 100px;
+          vertical-align: top;
+          margin-left: 12px;
+          transition: all 0.3s;
+          display: inline-block;
+        }
+        &:hover {
+          span {
+            color: #1890ff;
+          }
+        }
+      }
+    }
+  }
+
+  .tagsTitle,
+  .teamTitle {
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.85);
+    margin-bottom: 12px;
+  }
+}
+</style>

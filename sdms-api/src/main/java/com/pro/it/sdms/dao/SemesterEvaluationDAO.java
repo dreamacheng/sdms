@@ -14,4 +14,9 @@ public interface SemesterEvaluationDAO extends JpaSpecificationExecutor<Semester
     List<SemesterEvaluation> findAllByStudentNo(String studentNo);
 
     SemesterEvaluation findByStudentNoAndSemester(String studentNo, short semester);
+
+    List<SemesterEvaluation> findAllByGradeIsNull();
+
+    List<SemesterEvaluation> findAllByGradeIsNotNull();
+
 }
