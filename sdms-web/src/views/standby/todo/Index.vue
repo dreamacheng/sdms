@@ -8,7 +8,7 @@
               <img :src="avatar()">
             </div>
             <div class="username">{{ accountInfo.username }}</div>
-            <div class="bio">乡村教师代言人</div>
+            <div class="bio">勤学、务实、圆融、卓越</div>
           </div>
           <div class="account-center-detail">
             <p>

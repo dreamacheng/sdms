@@ -2,6 +2,7 @@ package com.pro.it.sdms.service.impl;
 
 import com.pro.it.common.Constants;
 import com.pro.it.common.exceptions.BadRequestException;
+import com.pro.it.sdms.controller.response.ScholarshipListResponseEntity;
 import com.pro.it.sdms.dao.AccountDAO;
 import com.pro.it.sdms.dao.ScholarshipDAO;
 import com.pro.it.sdms.entity.dto.Account;
@@ -11,6 +12,7 @@ import com.pro.it.sdms.enums.ApprovalResult;
 import com.pro.it.sdms.enums.SemesterEnum;
 import com.pro.it.sdms.service.ScholarshipService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -71,4 +73,41 @@ public class ScholarshipServiceImpl implements ScholarshipService {
         Scholarship scholarship = scholarshipDAO.save(vo.toDTO().toBuilder().winner(account).build());
         return scholarship.getId();
     }
+
+    /**
+     * 提交审批
+     * @param vo
+     * @return
+     */
+    @Override
+    public BigDecimal approval(ScholarshipVO vo) {
+        String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (vo == null || vo.getId() == null) {
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter required");
+        }
+        Scholarship dto = scholarshipDAO.getOne(vo.getId());
+        if (dto == null) {
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "scholarship not exist");
+        }
+        dto.setApplyComment(vo.getApplyComment());
+        dto.setApprover(dto.getWinner().getAccountInfo().getCollege());
+        dto.setStatus(ApprovalResult.valueOf(vo.getStatus()).getCode());
+        return scholarshipDAO.save(dto).getId();
+    }
+
+    /**
+     * 查询所有学生奖学金申请记录
+     * @return
+     */
+    @Override
+    @Secured("ROLE_MANAGER")
+    public ScholarshipListResponseEntity queryAll() {
+        ScholarshipListResponseEntity result = new ScholarshipListResponseEntity();
+        List<ScholarshipVO> notList = scholarshipDAO.getAllByApproverIsNull().stream().map(Scholarship::toVO).collect(Collectors.toList());
+        List<ScholarshipVO> list = scholarshipDAO.getAllByApproverIsNotNull().stream().map(Scholarship::toVO).collect(Collectors.toList());
+        result.setList(list);
+        result.setNotList(notList);
+        return result;
+    }
+
 }

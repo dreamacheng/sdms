@@ -2,6 +2,7 @@ package com.pro.it.sdms.controller;
 
 import com.pro.it.common.controller.BaseController;
 import com.pro.it.sdms.controller.request.ApplyResultRequestEntity;
+import com.pro.it.sdms.controller.response.OrganizationListResponseEntity;
 import com.pro.it.sdms.controller.result.InfoAPIResult;
 import com.pro.it.sdms.controller.result.ListAPIResult;
 import com.pro.it.sdms.entity.vo.OrganizationApplyVO;
@@ -74,11 +75,11 @@ public class OrganizationApplyController extends BaseController {
     }
 
     @GetMapping(URL.APPLY_CURRENT_ALL)
-    public ListAPIResult<OrganizationApplyVO> getCurAccountAll() {
-        ListAPIResult<OrganizationApplyVO> result = new ListAPIResult<>();
+    public InfoAPIResult<OrganizationListResponseEntity> getCurAccountAll() {
+        InfoAPIResult<OrganizationListResponseEntity> result = new InfoAPIResult<>();
         log.info("===> request method : [ GET ], request path [ {} ]", URL.APPLY_CURRENT_ALL);
-        List<OrganizationApplyVO> list = organizationApplyService.queryCurAll();
-        result.setList(list);
+        OrganizationListResponseEntity info = organizationApplyService.queryCurAll();
+        result.setInfo(info);
         log.info("===> response result {}", result);
         return result;
     }

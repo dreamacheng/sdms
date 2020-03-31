@@ -29,6 +29,12 @@ public class ScholarshipVO {
     /** 申请学期 */
     private String term;
 
+    /** 学院 */
+    private String college;
+
+    /** 专业 */
+    private String major;
+
     /** 申请人学号 */
     private String studentNo;
 

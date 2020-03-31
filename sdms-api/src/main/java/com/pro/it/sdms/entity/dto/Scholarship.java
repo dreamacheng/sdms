@@ -59,6 +59,8 @@ public class Scholarship extends BaseDTO {
                 .applyComment(getApplyComment())
                 .applyTime(getCreateDatetime())
                 .id(getId())
+                .college(getWinner().getAccountInfo().getCollege())
+                .major(getWinner().getAccountInfo().getMajor())
                 .status(BaseCodeEnum.codeOf(ApprovalResult.class, getStatus()).toString())
                 .applyText(getApplyText())
                 .term(BaseCodeEnum.codeOf(SemesterEnum.class, getTerm()).toString())

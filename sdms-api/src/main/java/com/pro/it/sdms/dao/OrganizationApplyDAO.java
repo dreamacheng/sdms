@@ -15,4 +15,8 @@ public interface OrganizationApplyDAO extends JpaSpecificationExecutor<Organizat
 
     List<OrganizationApply> findByApproverAndApplyStatus(String approver, short applyStatus);
 
+    List<OrganizationApply> findAllByApproverAndApplyCommentIsNotNull(String approver);
+
+    List<OrganizationApply> findAllByApproverAndApplyCommentIsNull(String approver);
+
 }

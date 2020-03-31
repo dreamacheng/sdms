@@ -60,7 +60,7 @@
           </detail-list>
           <a-divider style="margin-bottom: 32px"/>
           <detail-list title="评定等级">
-            <a-select style="width: 200px">
+            <a-select v-model="evaluation.grade" style="width: 200px">
                 <a-select-option value="A">A</a-select-option>
                 <a-select-option value="B">B</a-select-option>
                 <a-select-option value="C">C</a-select-option>

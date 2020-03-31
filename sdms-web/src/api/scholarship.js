@@ -18,6 +18,24 @@ export function getScholarshipList () {
   })
 }
 
+export function getAllScholarshipList () {
+  return axios({
+    url: '/api/scholarship/queryAll',
+    method: 'get'
+  })
+}
+
+export function scholarshipApproval (parameter) {
+  return axios({
+    url: '/api/scholarship/approval',
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
 export function getCurTerm (curTerm) {
   return axios({
     url: `/api/scholarship/query/${curTerm}`,

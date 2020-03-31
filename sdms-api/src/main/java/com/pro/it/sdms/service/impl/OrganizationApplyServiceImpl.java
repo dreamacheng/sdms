@@ -3,6 +3,7 @@ package com.pro.it.sdms.service.impl;
 import com.pro.it.common.Constants;
 import com.pro.it.common.exceptions.BadRequestException;
 import com.pro.it.sdms.controller.request.ApplyResultRequestEntity;
+import com.pro.it.sdms.controller.response.OrganizationListResponseEntity;
 import com.pro.it.sdms.dao.AccountDAO;
 import com.pro.it.sdms.dao.OrganizationApplyDAO;
 import com.pro.it.sdms.entity.dto.Account;
@@ -17,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +31,11 @@ public class OrganizationApplyServiceImpl implements OrganizationApplyService {
     @Autowired
     private AccountDAO accountDAO;
 
+    /**
+     * 添加入团或入党申请
+     * @param vo
+     * @return
+     */
     @Override
     public BigDecimal addApply(OrganizationApplyVO vo) {
         if (vo == null) {
@@ -40,6 +45,11 @@ public class OrganizationApplyServiceImpl implements OrganizationApplyService {
         return save.getId();
     }
 
+    /**
+     * 审批
+     * @param vo
+     * @return
+     */
     @Override
     public BigDecimal approvalApply(ApplyResultRequestEntity vo) {
         if (vo == null || StringUtils.isEmpty(vo.getApplyComment())
@@ -56,6 +66,11 @@ public class OrganizationApplyServiceImpl implements OrganizationApplyService {
         return organizationApplyDAO.save(dto).getId();
     }
 
+    /**
+     * 查询当前用户提交的申请
+     * @param queryType
+     * @return
+     */
     @Override
     public OrganizationApplyVO queryCurAccount(String queryType) {
         if (StringUtils.isEmpty(queryType)) {
@@ -75,16 +90,29 @@ public class OrganizationApplyServiceImpl implements OrganizationApplyService {
         return vo;
     }
 
+    /**
+     * 查询所有学生提交的申请
+     * @return
+     */
     @Override
-    public List<OrganizationApplyVO> queryCurAll() {
+    public OrganizationListResponseEntity queryCurAll() {
+        OrganizationListResponseEntity result = new OrganizationListResponseEntity();
         String approverNo = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<OrganizationApply> byApprover = organizationApplyDAO.findByApproverAndApplyStatus(approverNo, ApprovalResult.WaitForApproval.getCode());
-        return byApprover.stream().map(item -> {
+        List<OrganizationApplyVO> list = organizationApplyDAO.findAllByApproverAndApplyCommentIsNotNull(approverNo).stream().map(item -> {
             OrganizationApplyVO vo = item.toVO();
             Account proposer = accountDAO.getAccountByAccountNo(vo.getProposer());
             vo.setProposerName(proposer.getUsername());
             return vo;
         }).collect(Collectors.toList());
+        List<OrganizationApplyVO> notList = organizationApplyDAO.findAllByApproverAndApplyCommentIsNull(approverNo).stream().map(item -> {
+            OrganizationApplyVO vo = item.toVO();
+            Account proposer = accountDAO.getAccountByAccountNo(vo.getProposer());
+            vo.setProposerName(proposer.getUsername());
+            return vo;
+        }).collect(Collectors.toList());
+        result.setList(list);
+        result.setNotList(notList);
+        return result;
     }
 
 }

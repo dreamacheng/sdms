@@ -1,6 +1,7 @@
 package com.pro.it.sdms.controller;
 
 import com.pro.it.common.controller.BaseController;
+import com.pro.it.sdms.controller.response.ScholarshipListResponseEntity;
 import com.pro.it.sdms.controller.result.InfoAPIResult;
 import com.pro.it.sdms.controller.result.ListAPIResult;
 import com.pro.it.sdms.entity.dto.Scholarship;
@@ -24,6 +25,8 @@ public class ScholarshipController extends BaseController {
         private static final String CURRENT_TERM = "/scholarship/query/{curTerm}";
         private static final String QUERY_CURRENT_STUDENT = "/scholarship/query";
         private static final String SCHOLARSHIP_ADD = "/scholarship/add";
+        private static final String SCHOLARSHIP_QUERY = "/scholarship/queryAll";
+        private static final String SCHOLARSHIP_APPROVAL = "/scholarship/approval";
     }
 
     @PostMapping(URL.SCHOLARSHIP_ADD)
@@ -32,6 +35,17 @@ public class ScholarshipController extends BaseController {
         log.info("===> request method : [ Post ], request path [ {} ]", URL.SCHOLARSHIP_ADD);
         log.info("===> request parameter {} : {} ", ScholarshipVO.class.getSimpleName(), vo);
         BigDecimal s = scholarshipService.addApply(vo);
+        result.setInfo(s);
+        log.info("===> response result {}", result);
+        return result;
+    }
+
+    @PostMapping(URL.SCHOLARSHIP_APPROVAL)
+    public InfoAPIResult<BigDecimal> approval(@RequestBody ScholarshipVO vo) {
+        InfoAPIResult<BigDecimal> result = new InfoAPIResult<>();
+        log.info("===> request method : [ Post ], request path [ {} ]", URL.SCHOLARSHIP_APPROVAL);
+        log.info("===> request parameter {} : {} ", ScholarshipVO.class.getSimpleName(), vo);
+        BigDecimal s = scholarshipService.approval(vo);
         result.setInfo(s);
         log.info("===> response result {}", result);
         return result;
@@ -54,6 +68,16 @@ public class ScholarshipController extends BaseController {
         ListAPIResult<ScholarshipVO> result = new ListAPIResult<>();
         List<ScholarshipVO> list = scholarshipService.query();
         result.setList(list);
+        log.info("===> response result {}", result);
+        return result;
+    }
+
+    @GetMapping(URL.SCHOLARSHIP_QUERY)
+    public InfoAPIResult<ScholarshipListResponseEntity> queryAll() {
+        log.info("===> request method : [ Get ], request path [ {} ]", URL.SCHOLARSHIP_QUERY);
+        InfoAPIResult<ScholarshipListResponseEntity> result = new InfoAPIResult<>();
+        ScholarshipListResponseEntity info = scholarshipService.queryAll();
+        result.setInfo(info);
         log.info("===> response result {}", result);
         return result;
     }

@@ -1,5 +1,6 @@
 package com.pro.it.sdms.service;
 
+import com.pro.it.sdms.controller.response.ScholarshipListResponseEntity;
 import com.pro.it.sdms.entity.vo.ScholarshipVO;
 
 import java.math.BigDecimal;
@@ -12,4 +13,8 @@ public interface ScholarshipService {
     List<ScholarshipVO> query();
 
     BigDecimal addApply(ScholarshipVO vo);
+
+    ScholarshipListResponseEntity queryAll();
+
+    BigDecimal approval(ScholarshipVO vo);
 }
