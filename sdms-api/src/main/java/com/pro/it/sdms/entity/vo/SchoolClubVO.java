@@ -46,7 +46,8 @@ public class SchoolClubVO {
         return ClubApply.builder()
                 .introduction(getIntroduction())
                 .type(getType())
-                .logoUrl(getLogoUrl())
+                // .logoUrl(getLogoUrl())
+                .logoUrl("https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png")
                 .applyStatus(ApprovalResult.WaitForApproval.getCode())
                 .name(getName()).build();
     }

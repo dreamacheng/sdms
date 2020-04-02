@@ -69,6 +69,7 @@
           <approval-page v-else-if="noTitleKey === 'approval'"></approval-page>
           <member-page v-else-if="noTitleKey === 'member'"></member-page>
           <manager-page v-else-if="noTitleKey === 'manager'"></manager-page>
+          <clubApproval-page v-else-if="noTitleKey === 'clubApproval'"></clubApproval-page>
         </a-card>
       </a-col>
     </a-row>
@@ -77,7 +78,7 @@
 
 <script>
 import { PageView, RouteView } from '@/layouts'
-import { ProjectPage, ApprovalPage, MemberPage, ManagerPage } from './page'
+import { ProjectPage, ApprovalPage, MemberPage, ManagerPage, ClubApprovalPage } from './page'
 import { currentUserInfo } from '@/api/login'
 
 import { mapGetters } from 'vuex'
@@ -89,7 +90,8 @@ export default {
     ProjectPage,
     ApprovalPage,
     MemberPage,
-    ManagerPage
+    ManagerPage,
+    ClubApprovalPage
   },
   data () {
     return {
@@ -117,6 +119,10 @@ export default {
         {
           key: 'member',
           tab: '处分录入'
+        },
+        {
+          key: 'clubApproval',
+          tab: '社团审批'
         }
       ],
       noTitleKey: 'manager'

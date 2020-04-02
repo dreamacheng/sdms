@@ -33,10 +33,10 @@ public class PunishmentController extends BaseController {
     @GetMapping(URL.PUNISHMENT_QUERY)
     public ListAPIResult<PunishmentVO> getCurAccountAll() {
         ListAPIResult<PunishmentVO> result = new ListAPIResult<>();
-        log.info("===> request method : [ GET ], request path [ {} ]", URL.PUNISHMENT_QUERY);
+        log.info("=== > request method : [ GET ], request path [ {} ]", URL.PUNISHMENT_QUERY);
         List<PunishmentVO> list = punishmentService.queryPunishmentCur();
         result.setList(list);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
@@ -48,11 +48,11 @@ public class PunishmentController extends BaseController {
     @PostMapping(URL.PUNISHMENT_ADD)
     public InfoAPIResult<BigDecimal> addPunishment(@RequestBody PunishmentVO vo) {
         InfoAPIResult<BigDecimal> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.PUNISHMENT_ADD);
-        log.info("===> request parameter {} : {} ", PunishmentVO.class.getSimpleName(), vo);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.PUNISHMENT_ADD);
+        log.info("=== > request parameter {} : {} ", PunishmentVO.class.getSimpleName(), vo);
         BigDecimal s = punishmentService.addPunishment(vo);
         result.setInfo(s);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
@@ -65,21 +65,21 @@ public class PunishmentController extends BaseController {
     public InfoAPIResult<BigDecimal> cancelPunishment(@PathVariable("id")BigDecimal punishmentId) {
 
         InfoAPIResult<BigDecimal> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.PUNISHMENT_ADD);
-        log.info("===> request parameter punishment_id : {} ", punishmentId);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.PUNISHMENT_ADD);
+        log.info("=== > request parameter punishment_id : {} ", punishmentId);
         BigDecimal s = punishmentService.cancelPunishment(punishmentId);
         result.setInfo(s);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @GetMapping(URL.PUNISHMENT_ALL)
     public ListAPIResult<PunishmentVO> queryAll() {
         ListAPIResult<PunishmentVO> result = new ListAPIResult<>();
-        log.info("===> request method : [ GET ], request path [ {} ]", URL.PUNISHMENT_ALL);
+        log.info("=== > request method : [ GET ], request path [ {} ]", URL.PUNISHMENT_ALL);
         List<PunishmentVO> list = punishmentService.queryAll();
         result.setList(list);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 

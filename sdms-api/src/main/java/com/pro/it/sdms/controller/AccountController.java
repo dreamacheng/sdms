@@ -41,90 +41,90 @@ public class AccountController extends BaseController {
     @PostMapping(URL.REGISTER_URL)
     public InfoAPIResult<String> register(@RequestBody PersistAccountRequestEntity createAccountRequestEntity) throws Exception {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.REGISTER_URL);
-        log.info("===> request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), createAccountRequestEntity);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.REGISTER_URL);
+        log.info("=== > request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), createAccountRequestEntity);
         if (StringUtils.isEmpty(createAccountRequestEntity.getAccountNo())
                 || StringUtils.isEmpty(createAccountRequestEntity.getUsername()) ) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter require");
         }
         accountService.registerAccount(createAccountRequestEntity);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @PostMapping(URL.RESET_PASSWORD)
     public InfoAPIResult<String> resetPwd(ResetPwdRequestEntity resetPwdRequestEntity) throws Exception {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.RESET_PASSWORD);
-        log.info("===> request parameter {} : {} ", ResetPwdRequestEntity.class.getSimpleName(), resetPwdRequestEntity);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.RESET_PASSWORD);
+        log.info("=== > request parameter {} : {} ", ResetPwdRequestEntity.class.getSimpleName(), resetPwdRequestEntity);
         if (resetPwdRequestEntity == null || StringUtils.isEmpty(resetPwdRequestEntity.getAccountNo())
             || StringUtils.isEmpty(resetPwdRequestEntity.getIdentityCard())  || StringUtils.isEmpty(resetPwdRequestEntity.getUsername())) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED,"parameter require");
         }
         accountService.resetPwd(resetPwdRequestEntity);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @PostMapping(URL.ACCOUNT_LIST)
     public InfoAPIResult<QueryResult> queryAccounts(@RequestBody QueryAccountRequestEntity queryAccountRequestEntity) {
         InfoAPIResult<QueryResult> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.ACCOUNT_LIST);
-        log.info("===> request parameter {} : {} ", QueryAccountRequestEntity.class.getSimpleName(), queryAccountRequestEntity);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.ACCOUNT_LIST);
+        log.info("=== > request parameter {} : {} ", QueryAccountRequestEntity.class.getSimpleName(), queryAccountRequestEntity);
         QueryResult<AccountVO> queryResult = accountService.queryAccount(queryAccountRequestEntity);
         result.setInfo(queryResult);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @GetMapping(URL.CURRENT_ACCOUNT)
     public InfoAPIResult<AccountVO> currentAccount() {
         InfoAPIResult<AccountVO> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Get ], request path [ {} ]", URL.CURRENT_ACCOUNT);
+        log.info("=== > request method : [ Get ], request path [ {} ]", URL.CURRENT_ACCOUNT);
         AccountVO vo = accountService.currentAccount();
         result.setInfo(vo);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @GetMapping(URL.LOCK_ACCOUNT)
     public InfoAPIResult<String> lockAccount(@PathVariable("accountNo") String accountNo) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Get ], request path [ {} ]", URL.LOCK_ACCOUNT);
-        log.info("===> request parameter {} : {} ", "AccountNo", accountNo);
+        log.info("=== > request method : [ Get ], request path [ {} ]", URL.LOCK_ACCOUNT);
+        log.info("=== > request parameter {} : {} ", "AccountNo", accountNo);
         String ret = accountService.lockAccount(accountNo);
         result.setInfo(ret);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @PostMapping(URL.UPDATE_ACCOUNT)
     public InfoAPIResult<String> updateAccount(@RequestBody PersistAccountRequestEntity param) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
-        log.info("===> request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), param);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
+        log.info("=== > request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), param);
         accountService.updateAccount(param);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @PostMapping(URL.UPDATE_PWD)
     public InfoAPIResult<String> updatePwd(@RequestBody UpdatePwdRequestEntity param) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
-        log.info("===> request parameter {} : {} ", UpdatePwdRequestEntity.class.getSimpleName(), param);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
+        log.info("=== > request parameter {} : {} ", UpdatePwdRequestEntity.class.getSimpleName(), param);
         accountService.updatePwd(param);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @GetMapping(URL.TEACHER_QUERY)
     public ListAPIResult<AccountVO> teacherList() {
         ListAPIResult<AccountVO> result = new ListAPIResult<>();
-        log.info("===> request method : [ Get ]", URL.TEACHER_QUERY);
+        log.info("=== > request method : [ Get ]", URL.TEACHER_QUERY);
         List<AccountVO> teacherList = accountService.queryTeacher();
         result.setList(teacherList);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 }

@@ -25,15 +25,18 @@ public class FileOperationController extends BaseController {
 
 
     @PostMapping(URL.UPLOAD_FILE)
-    public InfoAPIResult<String> uploadFile(@RequestParam("objectType") String objectType,
+    public InfoAPIResult<String> uploadFile(@RequestParam("uuid") String uuid,
+                                            @RequestParam("objectType") String objectType,
                                             @RequestParam("objectId") BigDecimal id,
                                             @RequestParam("file")MultipartFile file) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.UPLOAD_FILE);
-        log.info("===> request parameter objectType : {}, objectId : {} ", objectType, id);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.UPLOAD_FILE);
+        log.info("=== > request parameter objectType : {}, objectId : {} ", objectType, id);
+
         String filePath = fileOperationService.uploadFile(objectType, id, file);
         result.setInfo(filePath);
-        log.info("===> response result {}", result);
+
+        log.info("=== > response result {}", result);
         return result;
 
     }

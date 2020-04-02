@@ -25,9 +25,10 @@
         :wrapperCol="wrapperCol"
       >
         <a-upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          action="default"
           listType="picture"
           class="upload-list-inline"
+          :customRequest="uploadFile"
           :fileList="fileList"
           @change="handleChange"
         >
@@ -96,6 +97,7 @@ export default {
       })
     },
     handleChange (info) {
+      debugger
       let fileList = [...info.fileList]
       // 1. Limit the number of uploaded files
       //    Only to show two recent uploaded files, and old ones will be replaced by the new
@@ -109,6 +111,9 @@ export default {
         return file
       })
       this.fileList = fileList
+    },
+    uploadFile () {
+      console.log(this.fileList)
     }
   }
 }

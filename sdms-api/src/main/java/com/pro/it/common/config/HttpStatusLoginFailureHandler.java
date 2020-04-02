@@ -15,8 +15,8 @@ public class HttpStatusLoginFailureHandler implements AuthenticationFailureHandl
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException e) throws IOException, ServletException {
-        log.info("======> {} : {}", e.getMessage(), e.getCause().getMessage());
-        log.info("======> {} : {}",request.getRequestURI(), request.getHeader("Authorization"));
+        log.info("====== > {} : {}", e.getMessage(), e.getCause().getMessage());
+        log.info("====== > {} : {}",request.getRequestURI(), request.getHeader("Authorization"));
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
     }
 }

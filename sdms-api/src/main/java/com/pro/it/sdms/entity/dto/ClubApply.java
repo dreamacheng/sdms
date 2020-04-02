@@ -50,6 +50,7 @@ public class ClubApply extends BaseDTO {
 
     public ClubApplyVO toVO() {
         return ClubApplyVO.builder()
+                .id(getId())
                 .applyStatus(BaseCodeEnum.codeOf(ApprovalResult.class, getApplyStatus()).toString())
                 .logoUrl(getLogoUrl())
                 .introduction(getIntroduction())

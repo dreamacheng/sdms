@@ -140,7 +140,7 @@ export default {
         },
         {
           key: 'article',
-          tab: '文章(8)'
+          tab: '我提交的'
         },
         {
           key: 'app',

@@ -14,7 +14,7 @@ public class CreateClubApprovalRequestEntity {
 
     private BigDecimal id;
 
-    private String approvalComment;
+    private String applyComment;
 
-    private String approvalResult;
+    private String applyStatus;
 }

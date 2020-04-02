@@ -19,6 +19,14 @@ export function queryAccountAPI (parameter) {
   })
 }
 
+export function fileUpload (parameter) {
+  return axios({
+    url: '/api/account/query',
+    method: 'post',
+    data: parameter
+  })
+}
+
 export function getTeacher () {
   return axios({
     url: '/api/account/teacher',

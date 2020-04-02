@@ -2,6 +2,8 @@ package com.pro.it.sdms.entity.vo;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @ToString
 @Getter
 @Setter
@@ -9,6 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClubApplyVO {
+
+    private BigDecimal id;
 
     /** 社团名称 */
     private String name;
@@ -22,7 +26,11 @@ public class ClubApplyVO {
     /** 社团简介 */
     private String introduction;
 
+    /** 申请人 */
     private String creator;
+
+    /** 申请人学号 */
+    private String creatorNo;
 
     /** 审核状态 */
     private String applyStatus;

@@ -1,6 +1,7 @@
 package com.pro.it.sdms.service;
 
 import com.pro.it.sdms.controller.request.CreateClubApprovalRequestEntity;
+import com.pro.it.sdms.controller.response.ClubApprovalListResponseEntity;
 import com.pro.it.sdms.entity.vo.ClubApplyVO;
 import com.pro.it.sdms.entity.vo.ClubMemberVO;
 import com.pro.it.sdms.entity.vo.SchoolClubVO;
@@ -22,5 +23,7 @@ public interface SchoolClubService {
 
     BigDecimal approvalAdd(CreateClubApprovalRequestEntity createClubApprovalRequestEntity);
 
-    List<ClubApplyVO> queryAllApproval();
+    ClubApprovalListResponseEntity queryAllApproval();
+
+    List<ClubApplyVO> myMention();
 }

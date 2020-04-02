@@ -36,32 +36,32 @@ public class CompetitionController extends BaseController {
     @PostMapping(URL.COMPETITION_ADD)
     public InfoAPIResult<String> competitionAdd(@RequestBody CompetitionVO vo) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.COMPETITION_ADD);
-        log.info("===> request parameter {} : {} ", CompetitionVO.class.getSimpleName(), vo);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.COMPETITION_ADD);
+        log.info("=== > request parameter {} : {} ", CompetitionVO.class.getSimpleName(), vo);
         String s = competitionService.competitionAdd(vo);
         result.setInfo(s);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @GetMapping(URL.COMPETITION_List)
     public ListAPIResult<CompetitionVO> queryList() {
         ListAPIResult<CompetitionVO> result = new ListAPIResult<>();
-        log.info("===> request method : [ GET ], request path [ {} ]", URL.COMPETITION_List);
+        log.info("=== > request method : [ GET ], request path [ {} ]", URL.COMPETITION_List);
         List<CompetitionVO> list = competitionService.queryAll();
         result.setList(list);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @GetMapping(URL.OMPETITION_GET)
     public InfoAPIResult<CompetitionVO> query(@PathVariable("id") BigDecimal id) {
         InfoAPIResult<CompetitionVO> result = new InfoAPIResult<>();
-        log.info("===> request method : [ GET ], request path [ {} ]", URL.OMPETITION_GET);
-        log.info("===> request parameter id : {} ", id);
+        log.info("=== > request method : [ GET ], request path [ {} ]", URL.OMPETITION_GET);
+        log.info("=== > request parameter id : {} ", id);
         CompetitionVO vo = competitionService.query(id);
         result.setInfo(vo);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
@@ -69,11 +69,11 @@ public class CompetitionController extends BaseController {
     public InfoAPIResult<String> join(@RequestParam("accountNo") String accountNo,
                                       @RequestParam("competitionId") BigDecimal competitionId) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("===> request method : [ POST ], request path [ {} ]", URL.COMPETITION_JOIN);
-        log.info("===> request parameter accountNo : {}, competitionId : {} ", accountNo, competitionId);
+        log.info("=== > request method : [ POST ], request path [ {} ]", URL.COMPETITION_JOIN);
+        log.info("=== > request parameter accountNo : {}, competitionId : {} ", accountNo, competitionId);
         String s = competitionService.join(accountNo, competitionId);
         result.setInfo(s);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
@@ -85,11 +85,11 @@ public class CompetitionController extends BaseController {
     @PostMapping(URL.COMPETITION_WINNER_ADD)
     public InfoAPIResult<String> winnerAdd(@RequestBody CompetitionResultRequestEntity vo) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.COMPETITION_ADD);
-        log.info("===> request parameter {} : {} ", CompetitionResultRequestEntity.class.getSimpleName(), vo);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.COMPETITION_ADD);
+        log.info("=== > request parameter {} : {} ", CompetitionResultRequestEntity.class.getSimpleName(), vo);
         String s = competitionService.winnerAdd(vo);
         result.setInfo(s);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 }

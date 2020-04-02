@@ -25,7 +25,7 @@ public class JwtLoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         String token = jwtUserService.saveUserLoginInfo((UserDetails) authentication.getPrincipal());
-        log.info("===> Return token : [ {} ]", token);
+        log.info("=== > Return token : [ {} ]", token);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("token", token);
         response.getWriter().write(jsonObject.toString());

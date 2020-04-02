@@ -3,6 +3,7 @@ package com.pro.it.sdms.service.impl;
 import com.pro.it.common.Constants;
 import com.pro.it.common.exceptions.BadRequestException;
 import com.pro.it.sdms.controller.request.CreateClubApprovalRequestEntity;
+import com.pro.it.sdms.controller.response.ClubApprovalListResponseEntity;
 import com.pro.it.sdms.dao.AccountDAO;
 import com.pro.it.sdms.dao.ClubApplyDAO;
 import com.pro.it.sdms.dao.ClubMemberDAO;
@@ -19,21 +20,13 @@ import com.pro.it.sdms.enums.BaseCodeEnum;
 import com.pro.it.sdms.enums.ClubLivenessEnum;
 import com.pro.it.sdms.enums.MemBerIdentityEnum;
 import com.pro.it.sdms.service.SchoolClubService;
-import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -173,7 +166,7 @@ public class SchoolClubServiceImpl implements SchoolClubService {
         if (clubApply == null) {
             throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "approval not exist");
         }
-        if(ApprovalResult.Approved.toString().equals(createClubApprovalRequestEntity.getApprovalResult())) {
+        if(ApprovalResult.Approved.toString().equals(createClubApprovalRequestEntity.getApplyStatus())) {
             Account lead = accountDAO.getAccountByAccountNo(clubApply.getCreateUser());
             String leader = lead.getUsername();
             SchoolClub club = SchoolClub.builder()
@@ -191,14 +184,14 @@ public class SchoolClubServiceImpl implements SchoolClubService {
             dto.setPosition(MemBerIdentityEnum.BOSS.toString());
             dto.setMemberStatus(ApprovalResult.Approved.getCode());
             clubMemberDAO.save(dto);
-        } else if(ApprovalResult.Rejected.toString().equals(createClubApprovalRequestEntity.getApprovalResult())) {
+        } else if(ApprovalResult.Rejected.toString().equals(createClubApprovalRequestEntity.getApplyStatus())) {
 
         } else {
             throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "operation not exist");
         }
-        clubApply.setApplyStatus(ApprovalResult.valueOf(createClubApprovalRequestEntity.getApprovalResult()).getCode());
+        clubApply.setApplyStatus(ApprovalResult.valueOf(createClubApprovalRequestEntity.getApplyStatus()).getCode());
         clubApply.setApprover(approver.getUsername());
-        clubApply.setApprovalComment(createClubApprovalRequestEntity.getApprovalComment());
+        clubApply.setApprovalComment(createClubApprovalRequestEntity.getApplyComment());
         clubApplyDAO.save(clubApply);
         return clubApplyDAO.save(clubApply).getId();
     }
@@ -209,10 +202,31 @@ public class SchoolClubServiceImpl implements SchoolClubService {
      */
     @Override
     @Secured("ROLE_MANAGER")
-    public List<ClubApplyVO> queryAllApproval() {
-        return clubApplyDAO.findAll().stream().map(item -> {
+    public ClubApprovalListResponseEntity queryAllApproval() {
+        List<ClubApplyVO> notList = clubApplyDAO.findAllByApplyStatusEquals(ApprovalResult.WaitForApproval.getCode()).stream().map(item -> {
             Account accountByAccountNo = accountDAO.getAccountByAccountNo(item.getCreateUser());
-            return item.toVO().toBuilder().creator(accountByAccountNo.getUsername()).build();
+            return item.toVO().toBuilder().creator(accountByAccountNo.getUsername()).creatorNo(accountByAccountNo.getAccountNo()).build();
+        }).collect(Collectors.toList());
+        List<ClubApplyVO> list = clubApplyDAO.findAllByApplyStatusIsNot(ApprovalResult.WaitForApproval.getCode()).stream().map(item -> {
+            Account accountByAccountNo = accountDAO.getAccountByAccountNo(item.getCreateUser());
+            return item.toVO().toBuilder().creator(accountByAccountNo.getUsername()).creatorNo(accountByAccountNo.getAccountNo()).build();
+        }).collect(Collectors.toList());
+        ClubApprovalListResponseEntity result = new ClubApprovalListResponseEntity();
+        result.setList(list);
+        result.setNotList(notList);
+        return result;
+    }
+
+    /**
+     * 当前学生提交的创建社团申请
+     * @return
+     */
+    @Override
+    public List<ClubApplyVO> myMention() {
+        String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
+        return clubApplyDAO.findAllByCreateUser(accountNo).stream().map(item -> {
+            Account accountByAccountNo = accountDAO.getAccountByAccountNo(accountNo);
+            return item.toVO().toBuilder().creator(accountByAccountNo.getUsername()).creatorNo(accountByAccountNo.getAccountNo()).build();
         }).collect(Collectors.toList());
     }
 }

@@ -39,11 +39,11 @@ public class OrganizationApplyController extends BaseController {
     @PostMapping(URL.APPLY_MENTION)
     public InfoAPIResult<BigDecimal> competitionAdd(@RequestBody OrganizationApplyVO vo) {
         InfoAPIResult<BigDecimal> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.APPLY_MENTION);
-        log.info("===> request parameter {} : {} ", OrganizationApplyVO.class.getSimpleName(), vo);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.APPLY_MENTION);
+        log.info("=== > request parameter {} : {} ", OrganizationApplyVO.class.getSimpleName(), vo);
         BigDecimal s = organizationApplyService.addApply(vo);
         result.setInfo(s);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
@@ -55,32 +55,32 @@ public class OrganizationApplyController extends BaseController {
     @PostMapping(URL.APPLY_APPROVAL)
     public InfoAPIResult<BigDecimal> approval(@RequestBody ApplyResultRequestEntity requestEntity) {
         InfoAPIResult<BigDecimal> result = new InfoAPIResult<>();
-        log.info("===> request method : [ Post ], request path [ {} ]", URL.APPLY_APPROVAL);
-        log.info("===> request parameter {} : {} ", ApplyResultRequestEntity.class.getSimpleName(), requestEntity);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.APPLY_APPROVAL);
+        log.info("=== > request parameter {} : {} ", ApplyResultRequestEntity.class.getSimpleName(), requestEntity);
         BigDecimal id = organizationApplyService.approvalApply(requestEntity);
         result.setInfo(id);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @GetMapping(URL.APPLY_CURRENT_ACCOUNT)
     public InfoAPIResult<OrganizationApplyVO> getCurAccountApply(String type) {
         InfoAPIResult<OrganizationApplyVO> result = new InfoAPIResult<>();
-        log.info("===> request method : [ GET ], request path [ {} ]", URL.APPLY_CURRENT_ACCOUNT);
-        log.info("===> request parameter type : {} ", type);
+        log.info("=== > request method : [ GET ], request path [ {} ]", URL.APPLY_CURRENT_ACCOUNT);
+        log.info("=== > request parameter type : {} ", type);
         OrganizationApplyVO vo = organizationApplyService.queryCurAccount(type);
         result.setInfo(vo);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
     @GetMapping(URL.APPLY_CURRENT_ALL)
     public InfoAPIResult<OrganizationListResponseEntity> getCurAccountAll() {
         InfoAPIResult<OrganizationListResponseEntity> result = new InfoAPIResult<>();
-        log.info("===> request method : [ GET ], request path [ {} ]", URL.APPLY_CURRENT_ALL);
+        log.info("=== > request method : [ GET ], request path [ {} ]", URL.APPLY_CURRENT_ALL);
         OrganizationListResponseEntity info = organizationApplyService.queryCurAll();
         result.setInfo(info);
-        log.info("===> response result {}", result);
+        log.info("=== > response result {}", result);
         return result;
     }
 
