@@ -1,6 +1,8 @@
 package com.pro.it.sdms.entity.vo;
 
+import com.pro.it.sdms.entity.dto.ClubApply;
 import com.pro.it.sdms.entity.dto.SchoolClub;
+import com.pro.it.sdms.enums.ApprovalResult;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,12 +42,12 @@ public class SchoolClubVO {
     /** 创建时间 */
     private Date createTime;
 
-    public SchoolClub toDTO() {
-        return SchoolClub.builder()
+    public ClubApply toDTO() {
+        return ClubApply.builder()
                 .introduction(getIntroduction())
-                .leader(getLeader())
                 .type(getType())
                 .logoUrl(getLogoUrl())
+                .applyStatus(ApprovalResult.WaitForApproval.getCode())
                 .name(getName()).build();
     }
 }

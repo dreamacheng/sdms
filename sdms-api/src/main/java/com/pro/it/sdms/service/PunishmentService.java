@@ -11,6 +11,7 @@ public interface PunishmentService {
 
     BigDecimal cancelPunishment(BigDecimal punishmentId);
 
-    List<PunishmentVO> queryPunishmentByAccountNo(String accountNo);
+    List<PunishmentVO> queryPunishmentCur();
 
+    List<PunishmentVO> queryAll();
 }

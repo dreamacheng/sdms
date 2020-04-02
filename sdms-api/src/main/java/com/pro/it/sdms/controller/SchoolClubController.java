@@ -2,10 +2,12 @@ package com.pro.it.sdms.controller;
 
 import com.pro.it.common.controller.BaseController;
 import com.pro.it.sdms.controller.request.ApprovalClubRequestEntity;
+import com.pro.it.sdms.controller.request.CreateClubApprovalRequestEntity;
 import com.pro.it.sdms.controller.result.InfoAPIResult;
 import com.pro.it.sdms.controller.result.ListAPIResult;
 import com.pro.it.sdms.entity.BaseDTO;
 import com.pro.it.sdms.entity.dto.ClubMember;
+import com.pro.it.sdms.entity.vo.ClubApplyVO;
 import com.pro.it.sdms.entity.vo.ClubMemberVO;
 import com.pro.it.sdms.entity.vo.SchoolClubVO;
 import com.pro.it.sdms.service.SchoolClubService;
@@ -29,6 +31,8 @@ public class SchoolClubController extends BaseController {
         private static final String CLUB_QUERY = "/club/query";
         private static final String QUERY_CLUB_OR_ACCOUNT ="/club/queryDetail";
         private static final String CLUB_JOIN_APPROVAL = "/club/join/approval";
+        private static final String CLUB_APPROVAL = "/club/add/approval";
+        private static final String CLUB_APPROVAL_LIST = "/club/approval/list";
     }
 
     @PostMapping(URL.CLUB_ADD)
@@ -86,5 +90,25 @@ public class SchoolClubController extends BaseController {
         return result;
     }
 
+    @PostMapping(URL.CLUB_APPROVAL)
+    public InfoAPIResult<BigDecimal> approvalAdd(@RequestBody CreateClubApprovalRequestEntity createClubApprovalRequestEntity) {
+        InfoAPIResult<BigDecimal> result = new InfoAPIResult<>();
+        log.info("===> request method : [ Post ], request path [ {} ]", URL.CLUB_APPROVAL);
+        log.info("===> request parameter  {} : {} ", CreateClubApprovalRequestEntity.class.getSimpleName(), createClubApprovalRequestEntity);
+        BigDecimal status = schoolClubService.approvalAdd(createClubApprovalRequestEntity);
+        result.setInfo(status);
+        log.info("===> response result {}", result);
+        return result;
+    }
+
+    @GetMapping(URL.CLUB_APPROVAL_LIST)
+    public ListAPIResult<ClubApplyVO> queryAllApproval() {
+        ListAPIResult<ClubApplyVO> result = new ListAPIResult<>();
+        log.info("===> request method : [ Get ], request path [ {} ]", URL.CLUB_APPROVAL_LIST);
+        List<ClubApplyVO> list = schoolClubService.queryAllApproval();
+        result.setList(list);
+        log.info("===> response result {}", result);
+        return result;
+    }
 
 }

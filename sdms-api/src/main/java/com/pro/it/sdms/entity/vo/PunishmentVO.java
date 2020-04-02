@@ -1,6 +1,7 @@
 package com.pro.it.sdms.entity.vo;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pro.it.sdms.entity.dto.Punishment;
 import com.pro.it.sdms.enums.PunishmentTypeEnum;
 import lombok.Builder;
@@ -21,9 +22,11 @@ public class PunishmentVO {
     private String type;
 
     /** 处分时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT")
     private Date punishmentTime;
 
     /** 取消时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT")
     private Date cancelTime;
 
     /** 是否取消 */

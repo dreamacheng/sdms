@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PunishmentServiceImpl implements PunishmentService {
@@ -35,6 +36,11 @@ public class PunishmentServiceImpl implements PunishmentService {
     @Override
     public BigDecimal addPunishment(PunishmentVO vo) {
         Punishment punishment = vo.toDTO();
+        if (vo.getPunishmentNo() == null) {
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "student no required");
+        }
+        Account punishmentStudent = accountDAO.getAccountByAccountNo(vo.getPunishmentNo());
+        punishment.setStudent(punishmentStudent);
         Punishment save = punishmentDAO.save(punishment);
         return save.getId();
     }
@@ -60,10 +66,8 @@ public class PunishmentServiceImpl implements PunishmentService {
      * 查询某人的处分
      */
     @Override
-    public List<PunishmentVO> queryPunishmentByAccountNo(String accountNo) {
-        if (StringUtils.isEmpty(accountNo)) {
-            accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
-        }
+    public List<PunishmentVO> queryPunishmentCur() {
+        String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
         Account accountByAccountNo = accountDAO.getAccountByAccountNo(accountNo);
         if (accountByAccountNo == null) {
             throw new BadRequestException(Constants.Code.PARAM_FORMAT_ERROR, "account not exist");
@@ -76,6 +80,10 @@ public class PunishmentServiceImpl implements PunishmentService {
         return ret;
     }
 
+    @Override
+    public List<PunishmentVO> queryAll() {
+        return punishmentDAO.findAll().stream().map(Punishment::toVO).collect(Collectors.toList());
+    }
 
 
 }

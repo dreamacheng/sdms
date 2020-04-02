@@ -26,6 +26,9 @@
         <span slot="isCancel" slot-scope="text">
             {{text | statusFilter }}
         </span>
+        <span slot="action" slot-scope="text, record">
+          <a @click="punishmentDetail(record)">详情</a>
+        </span>
       </a-table>
     </a-card>
 
@@ -38,14 +41,16 @@
         <a-card :bordered="false">
           <detail-list title="学生信息">
             <detail-list-item term="受处分人学号">{{punishmentInfo.studentNo}}</detail-list-item>
-            <detail-list-item term="受处分人姓名">{{punishmentInfo.studentName}}</detail-list-item>
-            <detail-list-item term="处分类型">{{punishmentInfo.type}}</detail-list-item>
+            <detail-list-item style="margin-left:50px" term="受处分人姓名">{{punishmentInfo.studentName}}</detail-list-item>
+          </detail-list>
+          <detail-list>
+            <detail-list-item term="处分类型">{{punishmentInfo.type | typeFilter}}</detail-list-item>
+            <detail-list-item style="margin-left:50px" term="处分时间">{{punishmentInfo.punishmentTime}}</detail-list-item>
           </detail-list>
           <a-divider style="margin-bottom: 32px"/>
           <detail-list>
-            <detail-list-item term="处分时间">{{punishmentInfo.punishmentTime}}</detail-list-item>
             <detail-list-item term="取消时间">{{punishmentInfo.cancelTime}}</detail-list-item>
-            <detail-list-item term="是否取消">{{punishmentInfo.isCancel | statusFilter}}</detail-list-item>
+            <detail-list-item style="margin-left:50px" term="是否取消">{{punishmentInfo.isCancel | statusFilter}}</detail-list-item>
           </detail-list>
           <a-divider style="margin-bottom: 32px"/>
           <detail-list title="处分原因及描述">

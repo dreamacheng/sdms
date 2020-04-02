@@ -14,6 +14,7 @@ public enum ApprovalResult implements BaseCodeEnum {
 
 	/**
 	 * 拒绝
+	 *
 	 */
 	Rejected( (short) 1),
 

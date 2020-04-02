@@ -180,14 +180,14 @@ export default {
     },
     termFilter (status) {
       const statusMap = {
-        'CLASS_1': '大一第一学年',
-        'CLASS_2': '大一第二学年',
-        'CLASS_3': '大二第一学年',
-        'CLASS_4': '大二第二学年',
-        'CLASS_5': '大三第一学年',
-        'CLASS_6': '大三第二学年',
-        'CLASS_7': '大四第一学年',
-        'CLASS_8': '大四第二学年'
+        'CLASS_1': '大一',
+        'CLASS_2': '大一',
+        'CLASS_3': '大二',
+        'CLASS_4': '大二',
+        'CLASS_5': '大三',
+        'CLASS_6': '大三',
+        'CLASS_7': '大四',
+        'CLASS_8': '大四'
       }
       return statusMap[status]
     }

@@ -18,6 +18,13 @@ export function getPunishmentList () {
   })
 }
 
+export function getPunishmentAll () {
+  return axios({
+    url: '/api/punishment/all',
+    method: 'get'
+  })
+}
+
 export function getCurTerm (curTerm) {
   return axios({
     url: `/api/scholarship/query/${curTerm}`,

@@ -2,12 +2,16 @@ package com.pro.it.sdms.service.impl;
 
 import com.pro.it.common.Constants;
 import com.pro.it.common.exceptions.BadRequestException;
+import com.pro.it.sdms.controller.request.CreateClubApprovalRequestEntity;
 import com.pro.it.sdms.dao.AccountDAO;
+import com.pro.it.sdms.dao.ClubApplyDAO;
 import com.pro.it.sdms.dao.ClubMemberDAO;
 import com.pro.it.sdms.dao.SchoolClubDAO;
 import com.pro.it.sdms.entity.dto.Account;
+import com.pro.it.sdms.entity.dto.ClubApply;
 import com.pro.it.sdms.entity.dto.ClubMember;
 import com.pro.it.sdms.entity.dto.SchoolClub;
+import com.pro.it.sdms.entity.vo.ClubApplyVO;
 import com.pro.it.sdms.entity.vo.ClubMemberVO;
 import com.pro.it.sdms.entity.vo.SchoolClubVO;
 import com.pro.it.sdms.enums.ApprovalResult;
@@ -15,9 +19,11 @@ import com.pro.it.sdms.enums.BaseCodeEnum;
 import com.pro.it.sdms.enums.ClubLivenessEnum;
 import com.pro.it.sdms.enums.MemBerIdentityEnum;
 import com.pro.it.sdms.service.SchoolClubService;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -44,6 +50,9 @@ public class SchoolClubServiceImpl implements SchoolClubService {
     @Autowired
     private ClubMemberDAO clubMemberDAO;
 
+    @Autowired
+    private ClubApplyDAO clubApplyDAO;
+
     /**
      * 创建社团
      * @param vo
@@ -54,18 +63,7 @@ public class SchoolClubServiceImpl implements SchoolClubService {
         if (vo == null || vo.getName() == null) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter required");
         }
-        String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
-        Account lead = accountDAO.getAccountByAccountNo(accountNo);
-        vo.setLeader(accountNo);
-        vo.setCreateTime(new Date());
-        SchoolClub save = schoolClubDAO.save(vo.toDTO().toBuilder().number(1).logoUrl("https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png").build());
-        ClubMember dto = new ClubMember();
-        dto.setMember(lead);
-        dto.setClub(save);
-        dto.setLiveness(ClubLivenessEnum.LEVEL_1.getCode());
-        dto.setPosition(MemBerIdentityEnum.BOSS.toString());
-        dto.setMemberStatus(ApprovalResult.Approved.getCode());
-        clubMemberDAO.save(dto);
+        ClubApply save = clubApplyDAO.save(vo.toDTO());
         return save.getName();
     }
 
@@ -145,7 +143,7 @@ public class SchoolClubServiceImpl implements SchoolClubService {
         }
         ClubMember clubMember = clubMemberDAO.getOne(id);
         if (clubMember == null) {
-            throw new BadRequestException(Constants.Code.PARAM_FORMAT_ERROR, "clubMember not exist");
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "clubMember not exist");
         }
         if (ApprovalResult.Rejected.equals(operation)) {
             clubMemberDAO.delete(clubMember);
@@ -157,5 +155,64 @@ public class SchoolClubServiceImpl implements SchoolClubService {
         }
         clubMember.setMemberStatus(ApprovalResult.valueOf(operation).getCode());
         return BaseCodeEnum.codeOf(ApprovalResult.class, clubMemberDAO.save(clubMember).getMemberStatus()).toString();
+    }
+
+    /**
+     * 审批社团添加
+     * @param createClubApprovalRequestEntity
+     * @return
+     */
+    @Override
+    public BigDecimal approvalAdd(CreateClubApprovalRequestEntity createClubApprovalRequestEntity) {
+        if(createClubApprovalRequestEntity == null || createClubApprovalRequestEntity.getId() == null) {
+            throw new BadRequestException(Constants.Code.PARAM_FORMAT_ERROR, "club id or required");
+        }
+        ClubApply clubApply = clubApplyDAO.getOne(createClubApprovalRequestEntity.getId());
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account approver = accountDAO.getAccountByAccountNo(currentUser);
+        if (clubApply == null) {
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "approval not exist");
+        }
+        if(ApprovalResult.Approved.toString().equals(createClubApprovalRequestEntity.getApprovalResult())) {
+            Account lead = accountDAO.getAccountByAccountNo(clubApply.getCreateUser());
+            String leader = lead.getUsername();
+            SchoolClub club = SchoolClub.builder()
+                    .number(1)
+                    .logoUrl(clubApply.getLogoUrl())
+                    .introduction(clubApply.getIntroduction())
+                    .name(clubApply.getName())
+                    .type(clubApply.getType())
+                    .leader(leader).build();
+            SchoolClub save = schoolClubDAO.save(club);
+            ClubMember dto = new ClubMember();
+            dto.setMember(lead);
+            dto.setClub(save);
+            dto.setLiveness(ClubLivenessEnum.LEVEL_1.getCode());
+            dto.setPosition(MemBerIdentityEnum.BOSS.toString());
+            dto.setMemberStatus(ApprovalResult.Approved.getCode());
+            clubMemberDAO.save(dto);
+        } else if(ApprovalResult.Rejected.toString().equals(createClubApprovalRequestEntity.getApprovalResult())) {
+
+        } else {
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "operation not exist");
+        }
+        clubApply.setApplyStatus(ApprovalResult.valueOf(createClubApprovalRequestEntity.getApprovalResult()).getCode());
+        clubApply.setApprover(approver.getUsername());
+        clubApply.setApprovalComment(createClubApprovalRequestEntity.getApprovalComment());
+        clubApplyDAO.save(clubApply);
+        return clubApplyDAO.save(clubApply).getId();
+    }
+
+    /**
+     * 查询社团审批列表
+     * @return
+     */
+    @Override
+    @Secured("ROLE_MANAGER")
+    public List<ClubApplyVO> queryAllApproval() {
+        return clubApplyDAO.findAll().stream().map(item -> {
+            Account accountByAccountNo = accountDAO.getAccountByAccountNo(item.getCreateUser());
+            return item.toVO().toBuilder().creator(accountByAccountNo.getUsername()).build();
+        }).collect(Collectors.toList());
     }
 }

@@ -22,7 +22,7 @@
         :width="1000"
         v-model="addVisible"
         @ok="publishInfo"
-        okText="发布"
+        okText="提交"
       >
         <a-card :bordered="false">
             <a-form  ref="formRegister" :form="form" id="formRegister">
@@ -42,10 +42,10 @@
                     </a-select>
                 </a-form-item>
                 <a-form-item label="处分生效时间" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
-                    <a-date-picker size="large" showTime placeholder="比赛时间" v-decorator="['punishmentTime', {rules: [{ required: true, message: '请选择比赛时间'}] }]"/>
+                    <a-date-picker size="large" placeholder="比赛时间" v-decorator="['punishmentTime', {rules: [{ required: true, message: '请选择比赛时间'}] }]"/>
                 </a-form-item>
                 <a-form-item label="取消时间" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
-                    <a-date-picker size="large" showTime placeholder="报名开始时间" v-decorator="['cancelTime', {rules: [{ required: true, message: '请选择报名开始时间'}] }]"/>
+                    <a-date-picker size="large" placeholder="报名开始时间" v-decorator="['cancelTime', {rules: [{ required: true, message: '请选择报名开始时间'}] }]"/>
                 </a-form-item>
                 <a-form-item label="处分原因及描述" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
                     <a-textarea  style="width:500px" :rows="10"  v-decorator="['desc', {rules: [{ required: true, message: '请添加比赛描述'}] }]"/>
@@ -60,33 +60,23 @@
         :width="800"
         v-model="visible"
         @ok="handleOk"
-        okText="提交审批"
       >
-        <a-card :bordered="false">
+        <a-card :bordered="false" class="fo">
           <detail-list title="基本信息">
-            <detail-list-item term="申请人学号">{{applyInfo.proposer}}</detail-list-item>
-            <detail-list-item term="申请人姓名">{{applyInfo.proposerName}}</detail-list-item>
+            <detail-list-item term="受处分人学号">{{applyInfo.punishmentNo}}</detail-list-item>
+            <detail-list-item style="margin-left:50px" term="受处分人姓名">{{applyInfo.punishmentName}}</detail-list-item>
           </detail-list>
           <detail-list>
-            <detail-list-item term="申请类型">{{applyInfo.type | applyFilter}}</detail-list-item>
-            <detail-list-item term="申请时间">{{applyInfo.applyTime}}</detail-list-item>
+            <detail-list-item term="处分类型">{{applyInfo.type | typeFilter}}</detail-list-item>
+            <detail-list-item style="margin-left:50px" term="处分时间">{{applyInfo.punishmentTime}}</detail-list-item>
+          </detail-list>
+          <detail-list>
+            <detail-list-item term="是否取消">{{applyInfo.isCancel | cancelFilter}}</detail-list-item>
+            <detail-list-item style="margin-left:50px" term="取消时间">{{applyInfo.cancelTime}}</detail-list-item>
           </detail-list>
           <a-divider style="margin-bottom: 32px"/>
-          <detail-list title="申请书">
-            {{applyInfo.applyText}}
-          </detail-list>
-          <a-divider style="margin-bottom: 32px"/>
-          <detail-list title="审核意见">
-            <div>
-              <a-textarea v-model="applyResult.applyComment" style="width:400px" :rows="5" placeholder="审核意见"/>
-            </div>
-          </detail-list>
-          <a-divider style="margin-bottom: 32px"/>
-          <detail-list title="审核结果">
-            <a-radio-group v-model="applyResult.applyStatus">
-              <a-radio value="Approved" defaultChecked>审核通过</a-radio>
-              <a-radio value="Rejected">审核驳回</a-radio>
-            </a-radio-group>
+          <detail-list title="收处分原因及描述">
+            {{applyInfo.desc}}
           </detail-list>
         </a-card>
       </a-modal>
@@ -95,8 +85,7 @@
 </template>
 <script>
 import DetailList from '@/components/tools/DetailList'
-import { applyCompetition } from '@/api/competition'
-import { queryCurAll, applyApproval } from '@/api/organization'
+import { punishmentAdd, getPunishmentAll } from '@/api/punishment'
 const DetailListItem = DetailList.Item
 
 export default {
@@ -122,11 +111,6 @@ export default {
       },
       applyInfo: {},
       accountdata: [],
-      applyResult: {
-        id: '',
-        applyComment: '',
-        applyStatus: ''
-      },
       // 表头
       columns: [
         {
@@ -183,14 +167,6 @@ export default {
         'PART_APPLY': '入党申请'
       }
       return statusMap[status]
-    },
-    statusFilter (status) {
-      const statusMap = {
-        'WaitForApproval': '待审核',
-        'Rejected': '拒绝',
-        'Approved': '批准'
-      }
-      return statusMap[status]
     }
   },
   created () {
@@ -198,7 +174,7 @@ export default {
   },
   methods: {
     loadAccountList () {
-      queryCurAll()
+      getPunishmentAll()
         .then(res => {
           const result = res.list
           this.accountdata = result
@@ -213,14 +189,14 @@ export default {
       validateFields({ force: true }, (err, values) => {
         if (!err) {
           const addInfo = { ...values }
-          applyCompetition(addInfo)
+          punishmentAdd(addInfo)
             .then((res) => {
               if (res.code === 0) {
-                self.$message.info('该竞赛发布成功')
+                self.$message.info('提交成功')
                 this.loadAccountList()
                 this.addVisible = false
               } else {
-                self.$message.error('发布失败')
+                self.$message.error('提交失败')
               }
             })
         }
@@ -228,29 +204,10 @@ export default {
     },
     accountDetail (record) {
       this.applyInfo = Object.assign({}, record)
-      this.applyResult.id = record.id
       this.visible = true
     },
     handleOk () {
-      const self = this
-      if (!this.applyResult.applyComment) {
-        this.$message.error('请填写审批意见')
-        return
-      }
-      if (!this.applyResult.applyStatus) {
-        this.$message.error('请勾选审批结果')
-        return
-      }
-      applyApproval(this.applyResult)
-        .then(res => {
-          if (res.code === 0) {
-            this.$message.info('审批成功')
-            self.loadAccountList()
-            this.visible = false
-          } else {
-            this.$message.error('审批失败')
-          }
-        })
+      this.visible = false
     }
   },
   watch: {

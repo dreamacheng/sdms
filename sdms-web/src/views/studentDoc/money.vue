@@ -20,12 +20,15 @@
     </template>
     <div v-show="showApply">
       <a-card :bordered="false" title="当前学期申请">
-        <a-steps :direction="isMobile() && 'vertical' || 'horizontal'" :current="approvalResult" progressDot>
+        <a-steps :current="approvalResult">
           <a-step title="提交申请">
+            <a-icon type="edit" slot="icon" />
           </a-step>
           <a-step title="审核中">
+            <a-icon type="solution" slot="icon" />
           </a-step>
           <a-step title="完成">
+            <a-icon type="check" slot="icon" />
           </a-step>
         </a-steps>
       </a-card>
@@ -244,7 +247,7 @@ export default {
               .then(res => {
                 if (res.code === 0) {
                   if (res.info) {
-                    if (res.info.status === 'Approved') {
+                    if (res.info.status !== 'WaitForApproval') {
                       self.approvalResult = 2
                     }
                     self.showApply = true
