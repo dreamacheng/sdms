@@ -4,6 +4,7 @@ import com.pro.it.common.Constants;
 import com.pro.it.common.exceptions.BadRequestException;
 import com.pro.it.sdms.dao.FileInfoDAO;
 import com.pro.it.sdms.entity.dto.FileInfo;
+import com.pro.it.sdms.enums.ObjectTypeEnum;
 import com.pro.it.sdms.service.FileOperationService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -30,17 +31,22 @@ public class FileOperationServiceImpl implements FileOperationService {
     @Value("${file.upload.filePath}")
     private String FILE_REPO;
 
+    @Value("${file.view.addr}")
+    private String ADDR;
+
+    @Value("${file.download.divider}")
+    private String DIVIDER;
+
     @Override
-    public String uploadFile(String objectType, BigDecimal id, MultipartFile file) {
+    public String uploadFile(String objectType, MultipartFile file) {
         FileInfo fileInfo = new FileInfo();
-        if (StringUtils.isEmpty(objectType) || id == null || file == null) {
+        if (StringUtils.isEmpty(objectType) || file == null) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "upload parameter miss");
         }
-        fileInfo.setObjectId(id);
-        fileInfo.setObjectType(objectType);
 
         String fullName = file.getOriginalFilename();
         fileInfo.setFileName(fullName);
+        fileInfo.setObjectType(ObjectTypeEnum.valueOf(objectType).toString());
         // 以文件关联对象类型作为文件夹区分
         String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
         if(fullName.contains(".")){
@@ -50,7 +56,7 @@ public class FileOperationServiceImpl implements FileOperationService {
         String filePath = FILE_REPO + File.separator + objectType;
         createFile(filePath);
         // 文件位置
-        String fileURL = filePath + fullName;
+        String fileURL = filePath + File.separator+ fullName;
         File uploadFile = new File(fileURL);
         try {
             file.transferTo(uploadFile);
@@ -58,9 +64,10 @@ public class FileOperationServiceImpl implements FileOperationService {
             log.error( "File \"{}\" upload failed. Cause:{}", file.getOriginalFilename(), e.getMessage() );
             throw new RuntimeException( e.getMessage() );
         }
-        fileInfo.setFilePath(fileURL);
+        fileInfo.setFilePath(objectType + File.separator + fullName);
         fileInfoDAO.save(fileInfo);
-        return fileURL;
+        String apiUrl = ADDR + DIVIDER + objectType + File.separator + fullName;
+        return apiUrl;
     }
 
     /**

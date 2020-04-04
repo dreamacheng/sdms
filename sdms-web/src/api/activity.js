@@ -1,8 +1,8 @@
 import { axios } from '@/utils/request'
 
-export function punishmentAdd (parameter) {
+export function activityAdd (parameter) {
   return axios({
-    url: '/api/punishment/add',
+    url: '/api/activity/add',
     method: 'post',
     data: parameter,
     headers: {
@@ -11,23 +11,48 @@ export function punishmentAdd (parameter) {
   })
 }
 
-export function getPunishmentList () {
+export function getActivityList () {
   return axios({
-    url: '/api/punishment/query',
+    url: '/api/activity/query',
     method: 'get'
   })
 }
 
-export function getPunishmentAll (parameter) {
+export function getActivity (id) {
   return axios({
-    url: `/api/punishment/all?type=${parameter.type}&accountNo=${parameter.accountNo}&username=${parameter.username}`,
+    url: `/api/activity/${id}`,
     method: 'get'
   })
 }
 
-export function getCurTerm (curTerm) {
+export function myMention () {
   return axios({
-    url: `/api/scholarship/query/${curTerm}`,
+    url: '/api/club/myMention',
+    method: 'get'
+  })
+}
+
+export function getClubApprovalList () {
+  return axios({
+    url: '/api/club/approval/list',
+    method: 'get'
+  })
+}
+
+export function approvalAdd (parameter) {
+  return axios({
+    url: '/api/club/add/approval',
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+export function getClubListByType (parameter) {
+  return axios({
+    url: `/api/club/queryDetail?type=${parameter.type}&clubId=${parameter.club}`,
     method: 'get'
   })
 }

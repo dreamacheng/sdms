@@ -36,6 +36,7 @@ public class AccountController extends BaseController {
         private static final String UPDATE_ACCOUNT = "/account/update";
         private static final String UPDATE_PWD = "/account/pwd";
         private static final String TEACHER_QUERY = "/account/teacher";
+        private static final String AVATAR_UPDATE = "/account/avatar";
     }
 
     @PostMapping(URL.REGISTER_URL)
@@ -124,6 +125,19 @@ public class AccountController extends BaseController {
         log.info("=== > request method : [ Get ]", URL.TEACHER_QUERY);
         List<AccountVO> teacherList = accountService.queryTeacher();
         result.setList(teacherList);
+        log.info("=== > response result {}", result);
+        return result;
+    }
+
+    @PostMapping(URL.AVATAR_UPDATE)
+    public InfoAPIResult<String> avatarUpdate(@RequestParam("avatar") String avatar) {
+        InfoAPIResult<String> result = new InfoAPIResult<>();
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.AVATAR_UPDATE);
+        log.info("=== > request parameter avatar : {} ", avatar);
+
+        String url = accountService.updateAvatar(avatar);
+        result.setInfo(url);
+
         log.info("=== > response result {}", result);
         return result;
     }

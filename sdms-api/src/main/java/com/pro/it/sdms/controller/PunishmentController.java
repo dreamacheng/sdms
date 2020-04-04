@@ -74,10 +74,12 @@ public class PunishmentController extends BaseController {
     }
 
     @GetMapping(URL.PUNISHMENT_ALL)
-    public ListAPIResult<PunishmentVO> queryAll() {
+    public ListAPIResult<PunishmentVO> queryAll(@RequestParam("accountNo") String accountNo,
+                                                @RequestParam("username") String username,
+                                                @RequestParam("type") String type) {
         ListAPIResult<PunishmentVO> result = new ListAPIResult<>();
         log.info("=== > request method : [ GET ], request path [ {} ]", URL.PUNISHMENT_ALL);
-        List<PunishmentVO> list = punishmentService.queryAll();
+        List<PunishmentVO> list = punishmentService.queryAll(accountNo, username, type);
         result.setList(list);
         log.info("=== > response result {}", result);
         return result;

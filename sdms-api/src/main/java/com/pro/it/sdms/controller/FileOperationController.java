@@ -6,6 +6,7 @@ import com.pro.it.sdms.service.FileOperationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,20 +21,18 @@ public class FileOperationController extends BaseController {
     private FileOperationService fileOperationService;
 
     private class URL {
-        private static final String UPLOAD_FILE = "/fileManager/upload";
+        private static final String UPLOAD_FILE = "/file/upload";
     }
 
 
     @PostMapping(URL.UPLOAD_FILE)
-    public InfoAPIResult<String> uploadFile(@RequestParam("uuid") String uuid,
-                                            @RequestParam("objectType") String objectType,
-                                            @RequestParam("objectId") BigDecimal id,
+    public InfoAPIResult<String> uploadFile(@RequestParam("objectType") String objectType,
                                             @RequestParam("file")MultipartFile file) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
         log.info("=== > request method : [ Post ], request path [ {} ]", URL.UPLOAD_FILE);
-        log.info("=== > request parameter objectType : {}, objectId : {} ", objectType, id);
+        log.info("=== > request parameter Upload Type : [ {} ]", objectType);
 
-        String filePath = fileOperationService.uploadFile(objectType, id, file);
+        String filePath = fileOperationService.uploadFile(objectType, file);
         result.setInfo(filePath);
 
         log.info("=== > response result {}", result);

@@ -7,29 +7,29 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
-              <a-form-item label="学号工号">
+              <a-form-item label="学号工号" allowClear>
                 <a-input :value="queryParam.accountNo" placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
-              <a-form-item label="专业科系">
+              <a-form-item label="专业科系" allowClear>
                 <a-input :value="queryParam.department" placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
-              <a-form-item label="在校公寓">
+              <a-form-item label="在校公寓" allowClear>
                 <a-input :value="queryParam.lodgingHouse" placeholder="请输入"/>
               </a-form-item>
             </a-col>
           </a-row>
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
-              <a-form-item label="用户姓名">
+              <a-form-item label="用户姓名" allowClear>
                 <a-input :value="queryParam.username" placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
-              <a-form-item label="政治面貌">
+              <a-form-item label="政治面貌" allowClear>
                 <a-select :value="queryParam.politicsStatus">
                   <a-select-option value="PART_MEMBER">党员</a-select-option>
                   <a-select-option value="LEAGUE_MEMBER">团员</a-select-option>
@@ -38,7 +38,7 @@
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
-              <a-form-item label="用户类型">
+              <a-form-item label="用户类型" allowClear>
                 <a-select :value="queryParam.role">
                   <a-select-option value="STUDENT">学生</a-select-option>
                   <a-select-option value="MANAGER">教师</a-select-option>

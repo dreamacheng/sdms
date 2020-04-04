@@ -144,7 +144,7 @@ export default {
         },
         {
           key: 'app',
-          tab: '应用(8)'
+          tab: '社团活动'
         }
       ],
       noTitleKey: 'project'

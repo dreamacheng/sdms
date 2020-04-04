@@ -109,7 +109,7 @@ public class Account extends BaseDTO {
                 .gender(BaseCodeEnum.codeOf(GenderEnum.class, getGender()).toString())
                 .tel(getTel())
                 .role(getRole())
-                .avatar("/avatar2.jpg")
+                .avatar(getAvatar())
                 .isLock(getIsLock())
                 .lodgingHouse(accountInfo.getLodgingHouse())
                 .enrollment(accountInfo.getEnrollment())

@@ -7,6 +7,6 @@ import java.math.BigDecimal;
 public interface FileOperationService {
 
 
-    String uploadFile(String objectType, BigDecimal id, MultipartFile file);
+    String uploadFile(String objectType, MultipartFile file);
 
 }

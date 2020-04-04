@@ -5,6 +5,39 @@
         <P style="font-size: 20px"><a-icon type="form"/>&nbsp;处分列表<a-button style="float:right" @click="publish"><a-icon type="plus-circle" />录入学生处分</a-button></p>
       </div>
       <a-divider/>
+      <div class="table-page-search-wrapper">
+        <a-form layout="inline">
+          <a-row :gutter="48">
+            <a-col :md="6" :sm="24">
+              <a-form-item label="处分类型">
+                <a-select v-model="queryParam.type" allowClear>
+                  <a-select-option value="WARNING">警告</a-select-option>
+                  <a-select-option value="FAULT_1">记过</a-select-option>
+                  <a-select-option value="FAULT_2">记大过</a-select-option>
+                  <a-select-option value="SCHOOL_VIEW">留校查看</a-select-option>
+                  <a-select-option value="EXIT">开除学籍</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item label="学生姓名" allowClear>
+                <a-input :v-model="queryParam.username" placeholder="请输入"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item label="学号" allowClear>
+                <a-input :v-model="queryParam.accountNo" placeholder="请输入"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <span class="table-page-search-submitButtons" >
+                <a-button type="primary" @click="loadAccountList">查询</a-button>
+                <a-button style="margin-left: 8px">重置</a-button>
+              </span>
+            </a-col>
+          </a-row>
+        </a-form>
+      </div>
       <a-table :columns="columns" :dataSource="accountdata">
         <span slot="isCancel" slot-scope="text">
           {{ text | cancelFilter }}
@@ -93,7 +126,7 @@ export default {
     DetailList,
     DetailListItem
   },
-  name: 'member',
+  name: 'punishmentQuery',
   data () {
     return {
       form: this.$form.createForm(this),
@@ -111,6 +144,15 @@ export default {
       },
       applyInfo: {},
       accountdata: [],
+      queryParam: {
+        username: '',
+        accountNo: '',
+        type: '',
+        pageInfo: {
+          pageNum: '0',
+          pageSize: '1000'
+        }
+      },
       // 表头
       columns: [
         {
@@ -140,16 +182,7 @@ export default {
         }
       ],
       selectedRowKeys: [],
-      selectedRows: [],
-      queryParam: {
-        username: '',
-        accountNo: '',
-        type: '',
-        pageInfo: {
-          pageNum: '0',
-          pageSize: '1000'
-        }
-      }
+      selectedRows: []
     }
   },
   filters: {

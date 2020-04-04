@@ -23,7 +23,7 @@ public class CompetitionController extends BaseController {
     private class URL {
         private static final String COMPETITION_ADD = "/competition/add";
         private static final String COMPETITION_List = "/competition/list";
-        private static final String OMPETITION_GET = "/competition/{id}";
+        private static final String COMPETITION_GET = "/competition/{id}";
         private static final String COMPETITION_WINNER_ADD = "/competition/winner/add";
         private static final String COMPETITION_JOIN = "/competition/join";
     }
@@ -54,10 +54,10 @@ public class CompetitionController extends BaseController {
         return result;
     }
 
-    @GetMapping(URL.OMPETITION_GET)
+    @GetMapping(URL.COMPETITION_GET)
     public InfoAPIResult<CompetitionVO> query(@PathVariable("id") BigDecimal id) {
         InfoAPIResult<CompetitionVO> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ GET ], request path [ {} ]", URL.OMPETITION_GET);
+        log.info("=== > request method : [ GET ], request path [ {} ]", URL.COMPETITION_GET);
         log.info("=== > request parameter id : {} ", id);
         CompetitionVO vo = competitionService.query(id);
         result.setInfo(vo);

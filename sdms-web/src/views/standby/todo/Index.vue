@@ -117,12 +117,12 @@ export default {
           tab: '奖学金审批'
         },
         {
-          key: 'member',
-          tab: '处分录入'
-        },
-        {
           key: 'clubApproval',
           tab: '社团审批'
+        },
+        {
+          key: 'member',
+          tab: '处分录入'
         }
       ],
       noTitleKey: 'manager'

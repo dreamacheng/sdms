@@ -30,10 +30,6 @@ public class FileInfo extends BaseDTO {
     @Column(name = "object_type", nullable = false, columnDefinition = "varchar(100)")
     private String objectType;
 
-    /** 文件关系对象Id */
-    @Column(name = "object_id", nullable = false, columnDefinition = "int")
-    private BigDecimal objectId;
-
     /** 文件路径 */
     @Column(name = "file_path", nullable = false, columnDefinition = "varchar(100)")
     private String filePath;

@@ -26,4 +26,6 @@ public interface AccountService {
     void updatePwd(UpdatePwdRequestEntity param);
 
     List<AccountVO> queryTeacher();
+
+    String updateAvatar(String avatar);
 }

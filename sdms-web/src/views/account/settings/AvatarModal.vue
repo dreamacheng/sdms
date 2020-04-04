@@ -56,6 +56,8 @@
 </template>
 <script>
 import { VueCropper } from 'vue-cropper'
+import { upload } from '@/api/fileUpload'
+import { updateAvatar } from '@/api/manage'
 
 export default {
   components: {
@@ -74,7 +76,8 @@ export default {
         autoCrop: true,
         autoCropWidth: 200,
         autoCropHeight: 200,
-        fixedBox: true
+        fixedBox: true,
+        fileName: ''
       },
       previews: {}
     }
@@ -103,6 +106,7 @@ export default {
       this.$refs.cropper.rotateRight()
     },
     beforeUpload (file) {
+      this.fileName = file.name
       const reader = new FileReader()
       // 把Array Buffer转化为blob 如果是base64不需要
       // 转化为base64
@@ -128,20 +132,23 @@ export default {
           this.model = true
           this.modelSrc = img
           formData.append('file', data, this.fileName)
-          this.$http.post('https://www.mocky.io/v2/5cc8019d300000980a055e76', formData, { contentType: false, processData: false, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
-            .then((response) => {
-              console.log('upload response:', response)
-              // var res = response.data
-              // if (response.status === 'done') {
-              //   _this.imgFile = ''
-              //   _this.headImg = res.realPathList[0] // 完整路径
-              //   _this.uploadImgRelaPath = res.relaPathList[0] // 非完整路径
-              //   _this.$message.success('上传成功')
-              //   this.visible = false
-              // }
-              _this.$message.success('上传成功')
-              _this.$emit('ok', response.url)
-              _this.visible = false
+          formData.append('objectType', 'AVATAR')
+          upload(formData)
+            .then(res => {
+              if (res.code === 0 && res.info) {
+                const avatar = new FormData()
+                avatar.append('avatar', res.info)
+                updateAvatar(avatar)
+                  .then(res => {
+                    if (res.code === 0) {
+                      _this.$message.success('头像上传成功')
+                      _this.$emit('ok', res.info)
+                      _this.visible = false
+                    }
+                  })
+              } else {
+                this.$message.error('头像上传失败')
+              }
             })
         })
       } else {

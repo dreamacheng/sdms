@@ -211,6 +211,34 @@ export const asyncRouterMap = [
             ]
           },
           {
+            path: '/competition/activity',
+            name: 'activity',
+            component: RouteView,
+            meta: { title: '活动中心', permission: [ 'user' ] },
+            hideChildrenInMenu: true,
+            redirect: '/competition/activity/Index',
+            children: [
+              {
+                path: '/competition/activity/Index',
+                name: 'activity',
+                component: () => import('@/views/competition/activity/Index'),
+                meta: { title: '活动中心', permission: [ 'user' ] }
+              },
+              {
+                path: '/competition/activity/detail',
+                name: 'activityDetail',
+                component: () => import('@/views/competition/activity/detail'),
+                meta: { title: '活动详情', permission: [ 'user' ] }
+              }
+            ]
+          },
+          {
+            path: '/competition/punishment',
+            name: 'punishmentQuery',
+            component: () => import('@/views/competition/punishment/Index'),
+            meta: { title: '处分录入', permission: [ 'user' ] }
+          },
+          {
             path: '/competition/club',
             name: 'club',
             component: () => import('@/views/competition/club/Index'),

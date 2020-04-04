@@ -125,7 +125,7 @@ public class AccountServiceImpl implements AccountService {
             }
             if (!StringUtils.isEmpty(queryAccountRequestEntity.getPoliticsStatus())) {
                 try {
-                    predicateList.add(criteriaBuilder.equal(root.get("politicsStatus"), PoliticsStatusEnum.valueOf(queryAccountRequestEntity.getPoliticsStatus())));
+                    predicateList.add(criteriaBuilder.equal(root.get("politicsStatus"), PoliticsStatusEnum.valueOf(queryAccountRequestEntity.getPoliticsStatus()).getCode()));
 
                 } catch (IllegalArgumentException e) {
                     throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "politics status not exist in this system");
@@ -239,6 +239,22 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<AccountVO> queryTeacher() {
         return accountDAO.findAllByRole(IdentityEnum.MANAGER.toString()).stream().map(Account::toVO).collect(Collectors.toList());
+    }
+
+    /**
+     * 更新头像
+     * @param avatar
+     * @return
+     */
+    @Override
+    public String updateAvatar(String avatar) {
+        if (StringUtils.isEmpty(avatar)) {
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "avatar required");
+        }
+        String no = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account accountByAccountNo = accountDAO.getAccountByAccountNo(no);
+        accountByAccountNo.setAvatar(avatar);
+        return accountDAO.save(accountByAccountNo).getAvatar();
     }
 
 

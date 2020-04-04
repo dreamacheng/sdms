@@ -7,12 +7,17 @@ import com.pro.it.sdms.dao.PunishmentDAO;
 import com.pro.it.sdms.entity.dto.Account;
 import com.pro.it.sdms.entity.dto.Punishment;
 import com.pro.it.sdms.entity.vo.PunishmentVO;
+import com.pro.it.sdms.enums.PunishmentTypeEnum;
 import com.pro.it.sdms.service.PunishmentService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,8 +86,29 @@ public class PunishmentServiceImpl implements PunishmentService {
     }
 
     @Override
-    public List<PunishmentVO> queryAll() {
-        return punishmentDAO.findAll().stream().map(Punishment::toVO).collect(Collectors.toList());
+    public List<PunishmentVO> queryAll(String accountNo, String username, String type) {
+        return punishmentDAO.findAll((root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            if (!StringUtils.isEmpty(accountNo) || !StringUtils.isEmpty(username)) {
+                Join<Punishment, Account> join = root.join("student", JoinType.INNER);
+                if (!StringUtils.isEmpty(accountNo)) {
+                    predicateList.add(criteriaBuilder.equal(join.get("accountNo"), accountNo));
+                }
+                if (!StringUtils.isEmpty(username)) {
+                    predicateList.add(criteriaBuilder.like(join.get("accountName"), accountNo));
+                }
+            }
+            if (!StringUtils.isEmpty(type)) {
+                try {
+                    predicateList.add(criteriaBuilder.equal(root.get("type"), PunishmentTypeEnum.valueOf(type).getCode()));
+
+                } catch (IllegalArgumentException e) {
+                    throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "punishment type not exist in this system");
+                }
+            }
+            Predicate[] predicates = new Predicate[predicateList.size()];
+            return criteriaBuilder.and(predicateList.toArray(predicates));
+        }).stream().map(Punishment::toVO).collect(Collectors.toList());
     }
 
 

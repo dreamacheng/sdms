@@ -13,5 +13,5 @@ public interface PunishmentService {
 
     List<PunishmentVO> queryPunishmentCur();
 
-    List<PunishmentVO> queryAll();
+    List<PunishmentVO> queryAll(String accountNo, String username, String type);
 }

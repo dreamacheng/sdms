@@ -25,12 +25,11 @@
         :wrapperCol="wrapperCol"
       >
         <a-upload
-          action="default"
           listType="picture"
           class="upload-list-inline"
-          :customRequest="uploadFile"
           :fileList="fileList"
           @change="handleChange"
+          :customRequest="customRequest"
         >
           <a-button> <a-icon type="upload" /> 上传logo </a-button>
         </a-upload>
@@ -55,6 +54,7 @@
 
 <script>
 import { clubAdd } from '@/api/club'
+import { upload } from '@/api/fileUpload'
 
 export default {
   name: 'Approval',
@@ -74,16 +74,23 @@ export default {
         pageSize: 3
       },
       clubList: [],
-      fileList: []
+      fileList: [],
+      logoUrl: ''
     }
   },
   methods: {
     submit () {
+      const self = this
       const { form: { validateFields } } = this
       // 先校验，通过表单校验后，才进入下一步
       validateFields((err, values) => {
+        if (!self.logoUrl) {
+          this.$message.error('请上传社团logo')
+          return
+        }
         if (!err) {
           const clubInfo = values
+          clubInfo.logoUrl = self.logoUrl
           clubAdd(clubInfo)
             .then(res => {
               if (res.code === 0) {
@@ -96,24 +103,32 @@ export default {
         }
       })
     },
+    customRequest (data) {
+      const self = this
+      var param = new FormData() // 创建form对象
+      param.append('file', data.file)
+      param.append('objectType', 'CLUB')
+      upload(param)
+        .then(res => {
+          if (res.code === 0 && res.info) {
+            self.logoUrl = res.info
+            self.fileList = self.fileList.map(file => {
+              debugger
+              file.url = res.info
+              return file
+            })
+            this.$message.info('社团logo上传成功')
+          } else {
+            this.$message.error('社团logo上传失败')
+          }
+        })
+    },
     handleChange (info) {
-      debugger
       let fileList = [...info.fileList]
       // 1. Limit the number of uploaded files
       //    Only to show two recent uploaded files, and old ones will be replaced by the new
       fileList = fileList.slice(-1)
-      // 2. read from response and show file link
-      fileList = fileList.map(file => {
-        if (file.response) {
-          // Component will show file.url as link
-          file.url = file.response.url
-        }
-        return file
-      })
       this.fileList = fileList
-    },
-    uploadFile () {
-      console.log(this.fileList)
     }
   }
 }
@@ -149,5 +164,4 @@ export default {
       }
     }
   }
-
 </style>
