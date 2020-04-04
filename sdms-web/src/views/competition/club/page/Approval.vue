@@ -113,7 +113,6 @@ export default {
           if (res.code === 0 && res.info) {
             self.logoUrl = res.info
             self.fileList = self.fileList.map(file => {
-              debugger
               file.url = res.info
               return file
             })

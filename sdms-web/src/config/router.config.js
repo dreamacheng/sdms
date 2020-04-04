@@ -51,7 +51,7 @@ export const asyncRouterMap = [
         name: 'studentDoc',
         redirect: '/studentDoc/study',
         component: RouteView,
-        meta: { title: '成长档案管理', keepAlive: true, icon: bxAnaalyse, permission: [ 'profile' ] },
+        meta: { title: '成长档案管理', keepAlive: true, icon: bxAnaalyse, permission: [ 'student' ] },
         children: [
           {
             path: '/studentDoc/study',
@@ -100,7 +100,7 @@ export const asyncRouterMap = [
         path: '/form',
         redirect: '/form/base-form',
         component: PageView,
-        meta: { title: '入团入党', icon: 'profile', permission: [ 'form' ] },
+        meta: { title: '入团入党', icon: 'profile', permission: [ 'student' ] },
         children: [
           {
             path: '/form/base-form',
@@ -192,7 +192,7 @@ export const asyncRouterMap = [
             path: '/competition/game',
             name: 'competitionGame',
             component: RouteView,
-            meta: { title: '学科竞赛', permission: [ 'user' ] },
+            meta: { title: '学科竞赛', permission: [ 'manager' ] },
             hideChildrenInMenu: true,
             redirect: '/competition/game/Index',
             children: [
@@ -214,7 +214,7 @@ export const asyncRouterMap = [
             path: '/competition/activity',
             name: 'activity',
             component: RouteView,
-            meta: { title: '活动中心', permission: [ 'user' ] },
+            meta: { title: '活动中心', permission: [ 'manager' ] },
             hideChildrenInMenu: true,
             redirect: '/competition/activity/Index',
             children: [
@@ -233,16 +233,38 @@ export const asyncRouterMap = [
             ]
           },
           {
+            path: '/competition/activityStu',
+            name: 'activityStu',
+            component: RouteView,
+            meta: { title: '活动中心', permission: [ 'student' ] },
+            hideChildrenInMenu: true,
+            redirect: '/competition/activityStu/Index',
+            children: [
+              {
+                path: '/competition/activityStu/Index',
+                name: 'activityStu',
+                component: () => import('@/views/competition/activityStu/Index'),
+                meta: { title: '活动中心', permission: [ 'user' ] }
+              },
+              {
+                path: '/competition/activityStu/detail',
+                name: 'activityDetailStu',
+                component: () => import('@/views/competition/activityStu/detail'),
+                meta: { title: '活动详情', permission: [ 'user' ] }
+              }
+            ]
+          },
+          {
             path: '/competition/punishment',
             name: 'punishmentQuery',
             component: () => import('@/views/competition/punishment/Index'),
-            meta: { title: '处分录入', permission: [ 'user' ] }
+            meta: { title: '处分录入', permission: [ 'manager' ] }
           },
           {
             path: '/competition/club',
             name: 'club',
             component: () => import('@/views/competition/club/Index'),
-            meta: { title: '学生天地', hiddenHeaderContent: true, permission: [ 'user' ] }
+            meta: { title: '学生天地', hiddenHeaderContent: true, permission: [ 'student' ] }
           }
         ]
       },
@@ -300,13 +322,13 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/account/center',
         name: 'account',
-        meta: { title: '用户管理', icon: 'user', keepAlive: true, permission: [ 'user' ] },
+        meta: { title: '个人中心', icon: 'user', keepAlive: true, permission: [ 'user' ] },
         children: [
           {
             path: '/account/center',
             name: 'center',
             component: () => import('@/views/account/center/Index'),
-            meta: { title: '个人中心', keepAlive: true, permission: [ 'user' ] }
+            meta: { title: '个人中心', keepAlive: true, permission: [ 'aa' ] }
           },
           {
             path: '/account/settings',
@@ -363,19 +385,19 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/standby/manager',
         name: 'standby',
-        meta: { title: '管理中心', icon: 'user', keepAlive: true, permission: [ 'user' ] },
+        meta: { title: '管理中心', icon: 'user', keepAlive: true, permission: [ 'manager' ] },
         children: [
           {
             path: '/standby/manager',
             name: 'manager',
             component: () => import('@/views/standby/manager/Index'),
-            meta: { title: '系统用户管理', keepAlive: true, permission: [ 'user' ] }
+            meta: { title: '系统用户管理', keepAlive: true, permission: [ 'manager' ] }
           },
           {
             path: '/standby/todo',
             name: 'todo',
             component: () => import('@/views/standby/todo/Index'),
-            meta: { title: '待办待阅', keepAlive: true, permission: [ 'user' ] }
+            meta: { title: '待办待阅', keepAlive: true, permission: [ 'manager' ] }
           }
         ]
       }

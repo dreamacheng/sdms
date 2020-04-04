@@ -18,70 +18,32 @@ export function getActivityList () {
   })
 }
 
+export function getCurActivityList () {
+  return axios({
+    url: '/api/activity/joined',
+    method: 'get'
+  })
+}
+
 export function getActivity (id) {
   return axios({
-    url: `/api/activity/${id}`,
+    url: `/api/activity/detail/${id}`,
     method: 'get'
   })
 }
 
-export function myMention () {
+export function joinActivity (parameter) {
   return axios({
-    url: '/api/club/myMention',
-    method: 'get'
-  })
-}
-
-export function getClubApprovalList () {
-  return axios({
-    url: '/api/club/approval/list',
-    method: 'get'
-  })
-}
-
-export function approvalAdd (parameter) {
-  return axios({
-    url: '/api/club/add/approval',
+    url: '/api/activity/join',
     method: 'post',
-    data: parameter,
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
+    data: parameter
   })
 }
 
-export function getClubListByType (parameter) {
+export function summaryActivity (parameter) {
   return axios({
-    url: `/api/club/queryDetail?type=${parameter.type}&clubId=${parameter.club}`,
-    method: 'get'
-  })
-}
-
-export function approval (parameter) {
-  return axios({
-    url: '/api/club/join/approval',
+    url: '/api/activity/summary',
     method: 'post',
-    data: parameter,
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  })
-}
-
-export function joinClub (parameter) {
-  return axios({
-    url: `/api/club/join/${parameter}`,
-    method: 'get'
-  })
-}
-
-export function applyCompetition (parameter) {
-  return axios({
-    url: '/api/competition/add',
-    method: 'post',
-    data: parameter,
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
+    data: parameter
   })
 }
