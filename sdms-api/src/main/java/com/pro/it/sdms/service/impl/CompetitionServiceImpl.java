@@ -9,10 +9,12 @@ import com.pro.it.sdms.dao.CompetitionResultDAO;
 import com.pro.it.sdms.entity.dto.Account;
 import com.pro.it.sdms.entity.dto.Competition;
 import com.pro.it.sdms.entity.dto.CompetitionResult;
+import com.pro.it.sdms.entity.vo.AccountVO;
 import com.pro.it.sdms.entity.vo.CompetitionVO;
 import com.pro.it.sdms.service.CompetitionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -47,7 +49,24 @@ public class CompetitionServiceImpl implements CompetitionService {
      */
     @Override
     public List<CompetitionVO> queryAll() {
-        return competitionDAO.findAll().stream().map(Competition::toVO).collect(Collectors.toList());
+        String no = SecurityContextHolder.getContext().getAuthentication().getName();
+        AccountVO currentUser = accountDAO.getAccountByAccountNo(no).toVO();
+        return competitionDAO.findAll().stream().
+                map(Competition::toVO)
+                .filter(item -> !item.getAttendeeList().contains(currentUser)).collect(Collectors.toList());
+    }
+
+    /**
+     * 查询当前学生参加的比赛
+     * @return
+     */
+    @Override
+    public List<CompetitionVO> queryPersonal() {
+        String no = SecurityContextHolder.getContext().getAuthentication().getName();
+        AccountVO currentUser = accountDAO.getAccountByAccountNo(no).toVO();
+        return competitionDAO.findAll().stream().
+                map(Competition::toVO)
+                .filter(item -> item.getAttendeeList().contains(currentUser)).collect(Collectors.toList());
     }
 
     /**
@@ -91,15 +110,12 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     /**
      * 参加比赛
-     * @param accountNo 学生学号
      * @param competitionId 比赛Id
      * @return
      */
     @Override
-    public String join(String accountNo, BigDecimal competitionId) {
-        if (StringUtils.isEmpty(accountNo) || competitionId == null) {
-            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "accountNo and competitionId required");
-        }
+    public String join(BigDecimal competitionId) {
+        String accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = accountDAO.getAccountByAccountNo(accountNo);
         Competition competition = competitionDAO.getOne(competitionId);
         if (account == null || competition == null) {
@@ -111,4 +127,5 @@ public class CompetitionServiceImpl implements CompetitionService {
         competition.getAttendeeList().add(account);
         return competitionDAO.save(competition).getName();
     }
+
 }

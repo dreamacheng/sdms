@@ -26,9 +26,10 @@
             <span v-if="record.summary === '' || record.summary === null">已参加，尚未录入总结</span>
             <span v-else>已结束归档</span>
           </span>
-          <span slot="action" slot-scope="text, record">
-            <a-button @click="showDetail(record)">录入活动总结</a-button>
-            </span>
+          <span slot="action"  slot-scope="text, record">
+            <a-button v-if="record.summary === '' || record.summary === null" slot="action" @click="showDetail(record)">录入活动总结</a-button>
+            <a-button v-else @click="showSummary(record)">查看详细</a-button>
+          </span>
       </a-table>
       <a-modal
         title="活动信息"
@@ -36,6 +37,7 @@
         v-model="visible"
         @ok="handleOk"
         okText="参加活动"
+        :okButtonProps="joinBtn"
       >
         <a-card :bordered="false">
           <detail-list>
@@ -86,6 +88,33 @@
           </detail-list>
         </a-card>
       </a-modal>
+      <a-modal
+        title="活动信息"
+        :width="1000"
+        v-model="visible3"
+        @ok="close2"
+      >
+        <a-card :bordered="false">
+          <detail-list>
+            <detail-list-item term="活动名称">{{summaryDetail.activityPracticeVO.title}}</detail-list-item>
+            <detail-list-item term="举办单位" style="margin-left: 100px">{{summaryDetail.activityPracticeVO.organization}}</detail-list-item>
+          </detail-list>
+          <detail-list style="margin-top:30px">
+            <detail-list-item term="报名开始时间">{{summaryDetail.activityPracticeVO.applyStartTime}}</detail-list-item>
+            <detail-list-item term="报名结束时间" style="margin-left: 100px">{{summaryDetail.activityPracticeVO.applyEndTime}}</detail-list-item>
+          </detail-list>
+          <detail-list style="margin-top:30px">
+            <detail-list-item term="活动开始时间">{{summaryDetail.activityPracticeVO.startTime}}</detail-list-item>
+            <detail-list-item term="活动结束时间" style="margin-left: 100px">{{summaryDetail.activityPracticeVO.endTime}}</detail-list-item>
+          </detail-list>
+          <detail-list>
+          </detail-list>
+          <a-divider style="margin-bottom: 32px"/>
+          <detail-list title="活动总结">
+            {{summaryDetail.summary}}
+          </detail-list>
+        </a-card>
+      </a-modal>
     </a-card>
   </div>
 </template>
@@ -109,11 +138,17 @@ export default {
       addVisible: false,
       visible: false,
       visible2: false,
+      visible3: false,
       editor: '',
       account: {},
       competitionList: [],
       activityList: [],
       competitionDetail: {},
+      joinBtn: {
+        props: {
+          disabled: true
+        }
+      },
       activityResult: {
         activityPracticeVO: {
           title: '',
@@ -121,6 +156,15 @@ export default {
           startTime: '',
           endTime: ''
         }
+      },
+      summaryDetail: {
+        activityPracticeVO: {
+          title: '',
+          organization: '',
+          startTime: '',
+          endTime: ''
+        },
+        summary: ''
       },
       summary: '',
       // 表头
@@ -179,7 +223,14 @@ export default {
     },
     showCompetionDetail (record) {
       this.competitionDetail = record
+      if (record.type === '开始报名') {
+        this.joinBtn.props.disabled = false
+      }
       this.visible = true
+    },
+    showSummary (record) {
+      this.summaryDetail = record
+      this.visible3 = true
     },
     showDetail (record) {
       this.activityResult = record
@@ -205,6 +256,9 @@ export default {
             _this.$message.error('提交失败')
           }
         })
+    },
+    close2 () {
+      this.visible3 = false
     },
     handleOk () {
       const self = this

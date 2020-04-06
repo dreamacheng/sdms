@@ -1,8 +1,8 @@
 <template>
   <page-view :avatar="avatar" :title="false">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.name }}<span class="welcome-text">，{{ welcome }}</span></div>
-      <div>前端工程师 | 蚂蚁金服 - 某某某事业群 - VUE平台</div>
+      <div class="title">{{ timeFix }}，{{ accountInfo.username }}<span class="welcome-text">，{{ welcome }}</span></div>
+      <div>{{accountInfo.major}} | 湖南工学院 - {{accountInfo.college}}</div>
     </div>
     <div slot="extra">
       <a-row class="more-info">
@@ -26,25 +26,20 @@
             :loading="loading"
             style="margin-bottom: 24px;"
             :bordered="false"
-            title="进行中的项目"
+            title="官方网站"
             :body-style="{ padding: 0 }">
-            <a slot="extra">全部项目</a>
             <div>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
                     <div slot="title" class="card-title">
                       <a-avatar size="small" :src="item.cover"/>
-                      <a>{{ item.title }}</a>
+                      <a :href="item.link">{{ item.title }}</a>
                     </div>
                     <div slot="description" class="card-description">
                       {{ item.description }}
                     </div>
                   </a-card-meta>
-                  <div class="project-item">
-                    <a href="/#/">科学搬砖组</a>
-                    <span class="datetime">9小时前</span>
-                  </div>
                 </a-card>
               </a-card-grid>
             </div>
@@ -118,6 +113,7 @@ import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
 
 import { getRoleList, getServiceList } from '@/api/manage'
+import { currentUserInfo } from '@/api/login'
 
 const DataSet = require('@antv/data-set')
 
@@ -137,6 +133,7 @@ export default {
       projects: [],
       loading: true,
       radarLoading: true,
+      accountInfo: {},
       activities: [],
       teams: [],
 
@@ -205,6 +202,7 @@ export default {
     this.getActivity()
     this.getTeams()
     this.initRadar()
+    this.loadCurrent()
   },
   methods: {
     getProjects () {
@@ -212,6 +210,15 @@ export default {
         .then(res => {
           this.projects = res.result && res.result.data
           this.loading = false
+        })
+    },
+    loadCurrent () {
+      const self = this
+      currentUserInfo()
+        .then(res => {
+          if (res.code === 0) {
+            self.accountInfo = res.info
+          }
         })
     },
     getActivity () {

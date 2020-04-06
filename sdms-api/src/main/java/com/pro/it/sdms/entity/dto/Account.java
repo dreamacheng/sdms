@@ -28,6 +28,7 @@ import java.util.Date;
 @ToString
 @Builder
 @AllArgsConstructor
+@EqualsAndHashCode(of = "accountNo")
 /**
  * 用户表 （学生、教师）
  */

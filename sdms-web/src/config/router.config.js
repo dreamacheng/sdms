@@ -17,31 +17,14 @@ export const asyncRouterMap = [
         name: 'dashboard',
         redirect: '/dashboard/workplace',
         component: RouteView,
-        meta: { title: '仪表盘', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        meta: { title: '工作台', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        hideChildrenInMenu: true,
         children: [
-          {
-            path: '/dashboard/analysis',
-            name: 'Analysis',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '分析页', keepAlive: false, permission: [ 'dashboard' ] }
-          },
-          // 外部链接
-          {
-            path: 'https://www.baidu.com/',
-            name: 'Monitor',
-            meta: { title: '监控页（外部）', target: '_blank' }
-          },
           {
             path: '/dashboard/workplace',
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: '工作台', keepAlive: true, permission: [ 'dashboard' ] }
-          },
-          {
-            path: '/dashboard/test-work',
-            name: 'TestWork',
-            component: () => import('@/views/dashboard/TestWork'),
-            meta: { title: '测试功能', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { keepAlive: true, permission: [ 'dashboard' ] }
           }
         ]
       },
@@ -75,12 +58,12 @@ export const asyncRouterMap = [
               }
             ]
           },
-          {
-            path: '/studentDoc/practice',
-            name: 'practice',
-            component: () => import('@/views/studentDoc/practice'),
-            meta: { title: '社会实践', keepAlive: true, permission: [ 'profile' ] }
-          },
+          // {
+          //   path: '/studentDoc/practice',
+          //   name: 'practice',
+          //   component: () => import('@/views/studentDoc/practice'),
+          //   meta: { title: '履历中心', keepAlive: true, permission: [ 'profile' ] }
+          // },
           {
             path: '/studentDoc/money',
             name: 'money',
@@ -207,6 +190,22 @@ export const asyncRouterMap = [
                 name: 'competitionDetail',
                 component: () => import('@/views/competition/game/detail'),
                 meta: { title: '竞赛详细', permission: [ 'user' ] }
+              }
+            ]
+          },
+          {
+            path: '/competition/gameStu',
+            name: 'competitionGameStu',
+            component: RouteView,
+            meta: { title: '学科竞赛', permission: [ 'student' ] },
+            hideChildrenInMenu: true,
+            redirect: '/competition/gameStu/Index',
+            children: [
+              {
+                path: '/competition/gameStu/Index',
+                name: 'competitionGame',
+                component: () => import('@/views/competition/gameStu/Index'),
+                meta: { title: '学科竞赛', permission: [ 'user' ] }
               }
             ]
           },
@@ -465,7 +464,7 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '*', redirect: '/404', hidden: true
+    path: '*', redirect: '/dashboard/workplace', hidden: true
   }
 ]
 

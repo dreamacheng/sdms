@@ -26,6 +26,7 @@ public class CompetitionController extends BaseController {
         private static final String COMPETITION_GET = "/competition/{id}";
         private static final String COMPETITION_WINNER_ADD = "/competition/winner/add";
         private static final String COMPETITION_JOIN = "/competition/join";
+        private static final String COMPETITION_PERSONAL = "/competition/personal";
     }
 
     /**
@@ -54,6 +55,16 @@ public class CompetitionController extends BaseController {
         return result;
     }
 
+    @GetMapping(URL.COMPETITION_PERSONAL)
+    public ListAPIResult<CompetitionVO> queryPersonal() {
+        ListAPIResult<CompetitionVO> result = new ListAPIResult<>();
+        log.info("=== > request method : [ GET ], request path [ {} ]", URL.COMPETITION_PERSONAL);
+        List<CompetitionVO> list = competitionService.queryPersonal();
+        result.setList(list);
+        log.info("=== > response result {}", result);
+        return result;
+    }
+
     @GetMapping(URL.COMPETITION_GET)
     public InfoAPIResult<CompetitionVO> query(@PathVariable("id") BigDecimal id) {
         InfoAPIResult<CompetitionVO> result = new InfoAPIResult<>();
@@ -66,12 +77,11 @@ public class CompetitionController extends BaseController {
     }
 
     @PostMapping(URL.COMPETITION_JOIN)
-    public InfoAPIResult<String> join(@RequestParam("accountNo") String accountNo,
-                                      @RequestParam("competitionId") BigDecimal competitionId) {
+    public InfoAPIResult<String> join(@RequestParam("competitionId") BigDecimal competitionId) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
         log.info("=== > request method : [ POST ], request path [ {} ]", URL.COMPETITION_JOIN);
-        log.info("=== > request parameter accountNo : {}, competitionId : {} ", accountNo, competitionId);
-        String s = competitionService.join(accountNo, competitionId);
+        log.info("=== > request parameter  competitionId : {} ", competitionId);
+        String s = competitionService.join(competitionId);
         result.setInfo(s);
         log.info("=== > response result {}", result);
         return result;

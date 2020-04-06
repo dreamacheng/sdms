@@ -1,9 +1,11 @@
 package com.pro.it.sdms.entity;
 
 import com.pro.it.common.utils.BeanUtil;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@EqualsAndHashCode()
 public class BeanBase {
 	
 	@Override

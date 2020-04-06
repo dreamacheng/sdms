@@ -25,6 +25,7 @@ import java.util.TimeZone;
 @ToString
 @Builder
 @AllArgsConstructor
+@EqualsAndHashCode
 public class AccountVO implements Serializable {
 
     private BigDecimal id;

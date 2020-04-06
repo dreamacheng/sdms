@@ -40,51 +40,62 @@ const projects = () => {
   return builder({
     'data': [{
       id: 1,
-      cover: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
-      title: 'Alipay',
-      description: '那是一种内在的东西， 他们到达不了，也无法触及的',
+      cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
+      title: '湖南工学院官网',
+      description: '湖南工学院官网',
       status: 1,
-      updatedAt: '2018-07-26 00:00:00'
+      picSrc: '/b41a.png',
+      link: 'http://www.hnit.edu.cn/index.htm'
     },
     {
       id: 2,
-      cover: 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
-      title: 'Angular',
-      description: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
+      cover: 'http://www.hnit.edu.cn/images/jwxt_08.png',
+      title: '湖南工学院教务系统',
+      description: '湖南工学院综合教务管理系统',
       status: 1,
-      updatedAt: '2018-07-26 00:00:00'
+      updatedAt: '2018-07-26 00:00:00',
+      picSrc: '/b51b.png',
+      link: 'http://jwgl.hnit.edu.cn/'
     },
     {
       id: 3,
-      cover: 'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
-      title: 'Ant Design',
-      description: '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
+      cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
+      title: '湖南工学院统一身份认证平台',
+      description: '湖南工学院统一身份认证平台',
       status: 1,
-      updatedAt: '2018-07-26 00:00:00'
+      updatedAt: '2018-07-26 00:00:00',
+      picSrc: '/b41a.png',
+      link: ''
     },
     {
       id: 4,
-      cover: 'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
-      title: 'Ant Design Pro',
-      description: '那时候我只会想自己想要什么，从不想自己拥有什么',
+      cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
+      title: '湖南工学院课程中心',
+      description: '湖南工学院课程中心',
       status: 1,
-      updatedAt: '2018-07-26 00:00:00'
+      updatedAt: '2018-07-26 00:00:00',
+      picSrc: '/b41a.png',
+      link: 'http://kczx.hnit.edu.cn/G2S/ShowSystem/Index.aspx'
     },
     {
       id: 5,
-      cover: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
-      title: 'Bootstrap',
-      description: '凛冬将至',
+      cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
+      title: '湖南工学院图书馆',
+      description: '湖南工学院图书馆',
       status: 1,
-      updatedAt: '2018-07-26 00:00:00'
+      updatedAt: '2018-07-26 00:00:00',
+      picSrc: '/b41a.png',
+      link: 'http://www.hnit.edu.cn/tsg/'
     },
     {
       id: 6,
-      cover: 'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png',
-      title: 'Vue',
-      description: '生命就像一盒巧克力，结果往往出人意料',
+      cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
+      title: '湖南工学院邮件系统',
+      description: '湖南工学院邮件系统',
       status: 1,
-      updatedAt: '2018-07-26 00:00:00'
+      updatedAt: '2018-07-26 00:00:00',
+      picSrc: '/b41a.png',
+      link: 'http://mail.hnit.edu.cn/'
     }
     ],
     'pageSize': 10,

@@ -19,9 +19,8 @@
 
       <div class="title">参赛学生列表</div>
       <a-table :columns="attendeeColumns" :dataSource="attendeeList"/>
-      <a-divider style="margin-bottom: 32px"/>
-      <div class="title">获奖学生列表 <a-button style="float:right" @click="enterHandler">录入获奖学生</a-button></div>
-      <a-table :columns="winnerColumns" :dataSource="prizewinnerList"/>
+      <div v-show="competitionDetail.type === '已结束'" class="title" style="margin-top:30px">获奖学生列表 <a-button style="float:right" @click="enterHandler">录入获奖学生</a-button></div>
+      <a-table v-show="competitionDetail.type === '已结束'" :columns="winnerColumns" :dataSource="prizewinnerList"/>
 
       <a-modal
         title="获奖信息录入"
@@ -96,7 +95,7 @@ export default {
         },
         {
           title: '参赛者姓名',
-          dataIndex: 'accountName'
+          dataIndex: 'username'
         },
         {
           title: '学院',

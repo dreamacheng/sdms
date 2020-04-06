@@ -7,6 +7,7 @@ import com.pro.it.sdms.enums.BaseCodeEnum;
 import java.math.BigDecimal;
 import java.util.List;
 
+
 public interface CompetitionService {
 
     String competitionAdd(CompetitionVO vo);
@@ -17,5 +18,7 @@ public interface CompetitionService {
 
     String winnerAdd(CompetitionResultRequestEntity vo);
 
-    String join(String accountNo, BigDecimal competitionId);
+    String join(BigDecimal competitionId);
+
+    List<CompetitionVO> queryPersonal();
 }

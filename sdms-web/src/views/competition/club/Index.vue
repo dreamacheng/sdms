@@ -56,7 +56,7 @@
           </div>
           <a-divider :dashed="true"/>
 
-          <div class="account-center-team">
+          <!-- <div class="account-center-team">
             <div class="teamTitle">社团</div>
             <a-spin :spinning="teamSpinning">
               <div class="members">
@@ -70,7 +70,7 @@
                 </a-row>
               </div>
             </a-spin>
-          </div>
+          </div> -->
         </a-card>
       </a-col>
       <a-col :md="24" :lg="17">
@@ -141,10 +141,6 @@ export default {
         {
           key: 'article',
           tab: '我提交的'
-        },
-        {
-          key: 'app',
-          tab: '社团活动'
         }
       ],
       noTitleKey: 'project'

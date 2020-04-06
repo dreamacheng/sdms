@@ -1,46 +1,41 @@
 
 <template>
-  <page-view title="单号：234231029431" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
+  <page-view :title="`学号: ${accountInfo.accountNo}`" logo="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg">
 
-    <detail-list slot="headerContent" size="small" :col="2" class="detail-layout">
-      <detail-list-item term="创建人">曲丽丽</detail-list-item>
-      <detail-list-item term="订购产品">XX服务</detail-list-item>
-      <detail-list-item term="创建时间">2018-08-07</detail-list-item>
-      <detail-list-item term="关联单据"><a>12421</a></detail-list-item>
-      <detail-list-item term="生效日期">2018-08-07 ~ 2018-12-11</detail-list-item>
-      <detail-list-item term="备注">请于两个工作日内确认</detail-list-item>
-    </detail-list>
-    <a-row slot="extra" class="status-list">
-      <a-col :xs="12" :sm="12">
-        <div class="text">状态</div>
-        <div class="heading">待审批</div>
-      </a-col>
-      <a-col :xs="12" :sm="12">
-        <div class="text">订单金额</div>
-        <div class="heading">¥ 568.08</div>
-      </a-col>
-    </a-row>
-    <!-- actions -->
-    <template slot="action">
-      <a-button-group style="margin-right: 4px;">
-        <a-button>操作</a-button>
-        <a-button>操作</a-button>
-        <a-button><a-icon type="ellipsis"/></a-button>
-      </a-button-group>
-      <a-button type="primary" >主操作</a-button>
-    </template>
+    <div slot="headerContent">
+      <detail-list  :col="3" class="detail-layout">
+        <detail-list-item term="学院">{{accountInfo.college}}</detail-list-item>
+        <detail-list-item term="专业">{{accountInfo.major}}</detail-list-item>
+        <detail-list-item term="当前学年">{{accountInfo.currentTerm | termFilter}}</detail-list-item>
+      </detail-list>
+      <detail-list  :col="3" class="detail-layout">
+        <detail-list-item term="入学时间">{{accountInfo.enrollment}}</detail-list-item>
+        <detail-list-item term="联系方式">{{accountInfo.tel}}</detail-list-item>
+        <detail-list-item term="联系地址">{{accountInfo.lodgingHouse}}</detail-list-item>
+      </detail-list>
+    </div>
 
-    <a-card :bordered="false" title="流程进度">
-      <a-steps :direction="isMobile() && 'vertical' || 'horizontal'" :current="1" progressDot>
-        <a-step title="创建项目">
-        </a-step>
-        <a-step title="部门初审">
-        </a-step>
-        <a-step title="财务复核">
-        </a-step>
-        <a-step title="完成">
-        </a-step>
-      </a-steps>
+    <a-card :bordered="false" title="获奖信息">
+      <a-table
+        :columns="operationColumns"
+        :dataSource="scholarshipList"
+      >
+        <span slot="level" slot-scope="text">
+            {{text | typeFilter}}
+        </span>
+        <span slot="term" slot-scope="text">
+            {{text | termFilter }}
+        </span>
+        <span slot="status" slot-scope="text">
+            {{text | statusFilter}}
+        </span>
+        <span slot="approver" slot-scope="text">
+            {{text | nullFilter}}
+        </span>
+        <span slot="applyComment" slot-scope="text">
+            {{text | nullFilter}}
+        </span>
+      </a-table>
     </a-card>
 
     <a-card style="margin-top: 24px" :bordered="false" title="用户信息">
@@ -84,59 +79,15 @@
       <div class="no-data"><a-icon type="frown-o"/>暂无数据</div>
     </a-card>
 
-    <!-- 操作 -->
-    <a-card
-      style="margin-top: 24px"
-      :bordered="false"
-      :tabList="tabList"
-      :activeTabKey="activeTabKey"
-      @tabChange="(key) => {this.activeTabKey = key}"
-    >
-      <a-table
-        v-if="activeTabKey === '1'"
-        :columns="operationColumns"
-        :dataSource="operation1"
-        :pagination="false"
-      >
-        <template
-          slot="status"
-          slot-scope="status">
-          <a-badge :status="status | statusTypeFilter" :text="status | statusFilter"/>
-        </template>
-      </a-table>
-      <a-table
-        v-if="activeTabKey === '2'"
-        :columns="operationColumns"
-        :dataSource="operation2"
-        :pagination="false"
-      >
-        <template
-          slot="status"
-          slot-scope="status">
-          <a-badge :status="status | statusTypeFilter" :text="status | statusFilter"/>
-        </template>
-      </a-table>
-      <a-table
-        v-if="activeTabKey === '3'"
-        :columns="operationColumns"
-        :dataSource="operation3"
-        :pagination="false"
-      >
-        <template
-          slot="status"
-          slot-scope="status">
-          <a-badge :status="status | statusTypeFilter" :text="status | statusFilter"/>
-        </template>
-      </a-table>
-    </a-card>
-
   </page-view>
 </template>
 
 <script>
 import { mixinDevice } from '@/utils/mixin'
 import { PageView } from '@/layouts'
+import { currentUserInfo } from '@/api/login'
 import DetailList from '@/components/tools/DetailList'
+import { getScholarshipList } from '@/api/scholarship'
 
 const DetailListItem = DetailList.Item
 
@@ -150,139 +101,57 @@ export default {
   mixins: [mixinDevice],
   data () {
     return {
-      tabList: [
-        {
-          key: '1',
-          tab: '操作日志一'
-        },
-        {
-          key: '2',
-          tab: '操作日志二'
-        },
-        {
-          key: '3',
-          tab: '操作日志三'
-        }
-      ],
+      accountInfo: {},
       activeTabKey: '1',
 
       operationColumns: [
         {
-          title: '操作类型',
-          dataIndex: 'type',
-          key: 'type'
+          title: '获奖级别',
+          dataIndex: 'level',
+          key: 'level',
+          scopedSlots: { customRender: 'level' }
         },
         {
-          title: '操作人',
-          dataIndex: 'name',
-          key: 'name'
+          title: '申请学期',
+          dataIndex: 'term',
+          key: 'term',
+          scopedSlots: { customRender: 'term' }
         },
         {
-          title: '执行结果',
+          title: '审核结果',
           dataIndex: 'status',
           key: 'status',
           scopedSlots: { customRender: 'status' }
         },
         {
-          title: '操作时间',
-          dataIndex: 'updatedAt',
-          key: 'updatedAt'
+          title: '审核单位',
+          dataIndex: 'approver',
+          key: 'approver',
+          scopedSlots: { customRender: 'approver' }
         },
         {
-          title: '备注',
-          dataIndex: 'remark',
-          key: 'remark'
-        }
-      ],
-      operation1: [
-        {
-          key: 'op1',
-          type: '订购关系生效',
-          name: '曲丽丽',
-          status: 'agree',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '-'
-        },
-        {
-          key: 'op2',
-          type: '财务复审',
-          name: '付小小',
-          status: 'reject',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '不通过原因'
-        },
-        {
-          key: 'op3',
-          type: '部门初审',
-          name: '周毛毛',
-          status: 'agree',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '-'
-        },
-        {
-          key: 'op4',
-          type: '提交订单',
-          name: '林东东',
-          status: 'agree',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '很棒'
-        },
-        {
-          key: 'op5',
-          type: '创建订单',
-          name: '汗牙牙',
-          status: 'agree',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '-'
-        }
-      ],
-      operation2: [
-        {
-          key: 'op2',
-          type: '财务复审',
-          name: '付小小',
-          status: 'reject',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '不通过原因'
-        },
-        {
-          key: 'op3',
-          type: '部门初审',
-          name: '周毛毛',
-          status: 'agree',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '-'
-        },
-        {
-          key: 'op4',
-          type: '提交订单',
-          name: '林东东',
-          status: 'agree',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '很棒'
-        }
-      ],
-      operation3: [
-        {
-          key: 'op2',
-          type: '财务复审',
-          name: '付小小',
-          status: 'reject',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '不通过原因'
-        },
-        {
-          key: 'op3',
-          type: '部门初审',
-          name: '周毛毛',
-          status: 'agree',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '-'
+          title: '审批意见',
+          dataIndex: 'applyComment',
+          key: 'applyComment',
+          scopedSlots: { customRender: 'applyComment' }
         }
       ]
     }
   },
   filters: {
+    termFilter (status) {
+      const statusMap = {
+        'CLASS_1': '大一第一学年',
+        'CLASS_2': '大一第二学年',
+        'CLASS_3': '大二第一学年',
+        'CLASS_4': '大二第二学年',
+        'CLASS_5': '大三第一学年',
+        'CLASS_6': '大三第二学年',
+        'CLASS_7': '大四第一学年',
+        'CLASS_8': '大四第二学年'
+      }
+      return statusMap[status]
+    },
     statusFilter (status) {
       const statusMap = {
         'agree': '成功',
@@ -296,6 +165,26 @@ export default {
         'reject': 'error'
       }
       return statusTypeMap[type]
+    }
+  },
+  created () {
+    this.loadCurrent()
+  },
+  methods: {
+    loadCurrent () {
+      const self = this
+      currentUserInfo()
+        .then(res => {
+          if (res.code === 0) {
+            self.accountInfo = res.info
+          }
+        })
+      getScholarshipList()
+        .then(res => {
+          if (res.code === 0) {
+            self.scholarshipList = res.list
+          }
+        })
     }
   }
 }

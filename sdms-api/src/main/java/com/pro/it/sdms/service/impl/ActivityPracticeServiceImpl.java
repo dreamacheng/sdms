@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,7 +57,14 @@ public class ActivityPracticeServiceImpl implements ActivityPracticeService {
      */
     @Override
     public List<ActivityPracticeVO> queryAll() {
-        return activityPracticeDAO.findAll().stream().map(ActivityPractice::toVO).collect(Collectors.toList());
+        String no = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountDAO.getAccountByAccountNo(no);
+        List<BigDecimal> member = activityResultDAO.findAllByMember(account)
+                .stream().map(item -> item.getActivityPractice().getId()).collect(Collectors.toList());
+        return activityPracticeDAO.findAll().stream()
+                .map(ActivityPractice::toVO)
+                .filter(item ->  !member.contains(item.getId()))
+                .collect(Collectors.toList());
     }
 
     /**

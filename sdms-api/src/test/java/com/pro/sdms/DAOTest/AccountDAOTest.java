@@ -3,6 +3,7 @@ package com.pro.sdms.DAOTest;
 import com.pro.it.SdmsApplication;
 import com.pro.it.common.service.JwtUserService;
 import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
+import com.pro.it.sdms.entity.dto.Account;
 import com.pro.it.sdms.service.AccountService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes= SdmsApplication.class)
@@ -49,5 +52,14 @@ public class AccountDAOTest {
         zc.setTel("17721882275");
         zc.setBirthday(new Date());
         accountService.registerAccount(zc);
+    }
+
+    @Test
+    public void testObj() {
+        Account a = Account.builder().accountNo("201513070114").build();
+        List<Account> list = new ArrayList<>();
+        list.add(a);
+        Account b = Account.builder().accountNo("201513070114").build();
+        System.out.println(list.contains(b));
     }
 }

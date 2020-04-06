@@ -13,6 +13,7 @@
         <img
           slot="extra"
           width="272"
+          height="168"
           alt="logo"
           :src="item.club.logoUrl"
         />

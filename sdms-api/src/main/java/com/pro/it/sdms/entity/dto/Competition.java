@@ -66,10 +66,15 @@ public class Competition extends BaseDTO {
 
     public CompetitionVO toVO() {
         String type;
-        if(competitionTime.before(new Date())) {
-            type = "已结束";
-        } else {
+        Date now = new Date();
+        if (now.before(registrationStartTime)) {
+            type = "准备报名";
+        } else if (now.before(registrationEndTime)) {
+            type = "报名中";
+        } else if (now.before(competitionTime)) {
             type = "尚未开始";
+        } else {
+            type = "已结束";
         }
         if (attendeeList == null) {
             attendeeList = Collections.EMPTY_LIST;

@@ -39,6 +39,7 @@
           <detail-list title="社团logo">
             <img
               width="272"
+              height="168"
               alt="logo"
               :src="applyInfo.logoUrl"
             />

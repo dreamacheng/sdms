@@ -1,6 +1,7 @@
 package com.pro.it.sdms.entity;
 
 import com.pro.it.sdms.entity.BeanBase;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,6 +21,7 @@ import java.util.Date;
 @ToString
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(callSuper = true)
 public class BaseDTO extends BeanBase {
 
     @Id
