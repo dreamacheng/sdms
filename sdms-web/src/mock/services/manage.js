@@ -42,7 +42,7 @@ const projects = () => {
       id: 1,
       cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
       title: '湖南工学院官网',
-      description: '湖南工学院官网',
+      description: '湖南工学院,首页',
       status: 1,
       picSrc: '/b41a.png',
       link: 'http://www.hnit.edu.cn/index.htm'
@@ -51,7 +51,7 @@ const projects = () => {
       id: 2,
       cover: 'http://www.hnit.edu.cn/images/jwxt_08.png',
       title: '湖南工学院教务系统',
-      description: '湖南工学院综合教务管理系统',
+      description: '教务管理 数字校园 综合教务管理 教学管理 ',
       status: 1,
       updatedAt: '2018-07-26 00:00:00',
       picSrc: '/b51b.png',
@@ -59,17 +59,17 @@ const projects = () => {
     },
     {
       id: 3,
-      cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
-      title: '湖南工学院统一身份认证平台',
-      description: '湖南工学院统一身份认证平台',
+      cover: 'http://jy.hnit.edu.cn/favicon.ico?1',
+      title: '湖南工学院就业信息网',
+      description: '湖南工学院云就业平台',
       status: 1,
       updatedAt: '2018-07-26 00:00:00',
       picSrc: '/b41a.png',
-      link: ''
+      link: 'http://jy.hnit.edu.cn/'
     },
     {
       id: 4,
-      cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
+      cover: 'http://www.hnit.edu.cn/images/kczx_11.png',
       title: '湖南工学院课程中心',
       description: '湖南工学院课程中心',
       status: 1,
@@ -79,7 +79,7 @@ const projects = () => {
     },
     {
       id: 5,
-      cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
+      cover: 'http://www.hnit.edu.cn/images/tsg_19.png',
       title: '湖南工学院图书馆',
       description: '湖南工学院图书馆',
       status: 1,
@@ -89,7 +89,7 @@ const projects = () => {
     },
     {
       id: 6,
-      cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
+      cover: 'http://www.hnit.edu.cn/images/yjzx_22.png',
       title: '湖南工学院邮件系统',
       description: '湖南工学院邮件系统',
       status: 1,
@@ -218,40 +218,40 @@ const teams = () => {
 
 const radar = () => {
   return builder([{
-    item: '引用',
+    item: '学习',
     '个人': 70,
-    '团队': 30,
-    '部门': 40
+    '专业': 69,
+    '学院': 77
   },
   {
-    item: '口碑',
+    item: '技能',
     '个人': 60,
-    '团队': 70,
-    '部门': 40
+    '专业': 77,
+    '学院': 69
   },
   {
-    item: '产量',
+    item: '实践',
     '个人': 50,
-    '团队': 60,
-    '部门': 40
+    '专业': 69,
+    '学院': 70
   },
   {
-    item: '贡献',
+    item: '竞赛',
     '个人': 40,
-    '团队': 50,
-    '部门': 40
+    '专业': 72,
+    '学院': 69
   },
   {
-    item: '热度',
+    item: '课外',
     '个人': 60,
-    '团队': 70,
-    '部门': 40
+    '专业': 75,
+    '学院': 77
   },
   {
-    item: '引用',
+    item: '业余',
     '个人': 70,
-    '团队': 50,
-    '部门': 40
+    '专业': 77,
+    '学院': 75
   }
   ])
 }

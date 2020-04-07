@@ -20,6 +20,13 @@ export function login (parameter) {
   })
 }
 
+export function welcomeData () {
+  return axios({
+    url: '/api/index/welcome',
+    method: 'get'
+  })
+}
+
 export function registerAccount (parameter) {
   return axios({
     url: '/api/register',

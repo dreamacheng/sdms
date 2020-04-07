@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder(toBuilder = true)
 public class IndexListResponseEntity {
 
     private List<IndexDataVO> schoolNews;
@@ -22,5 +23,4 @@ public class IndexListResponseEntity {
 
     private List<IndexDataVO> basicInfo;
 
-    private List<IndexDataVO> academic;
 }

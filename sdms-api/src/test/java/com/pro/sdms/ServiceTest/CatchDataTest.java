@@ -1,6 +1,7 @@
 package com.pro.sdms.ServiceTest;
 
 import com.pro.it.SdmsApplication;
+import com.pro.it.sdms.controller.response.IndexListResponseEntity;
 import com.pro.it.sdms.entity.vo.IndexDataVO;
 import com.pro.it.sdms.service.CatchDataService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +22,6 @@ public class CatchDataTest {
 
     @Test
     public void catchDataTest() {
-        List<IndexDataVO> indexDataVOS = catchDataService.catchData();
-        indexDataVOS.forEach(item -> {
-            System.out.println(item);
-        });
+        catchDataService.catchData();
     }
 }
