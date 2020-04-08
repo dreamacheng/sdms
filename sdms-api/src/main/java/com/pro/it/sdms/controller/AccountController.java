@@ -11,6 +11,7 @@ import com.pro.it.sdms.controller.request.UpdatePwdRequestEntity;
 import com.pro.it.sdms.controller.result.InfoAPIResult;
 import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.controller.result.ListAPIResult;
+import com.pro.it.sdms.entity.dto.RegisterCode;
 import com.pro.it.sdms.entity.vo.AccountVO;
 import com.pro.it.sdms.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,8 @@ public class AccountController extends BaseController {
         private static final String UPDATE_PWD = "/account/pwd";
         private static final String TEACHER_QUERY = "/account/teacher";
         private static final String AVATAR_UPDATE = "/account/avatar";
+        private static final String REGISTER_CODE = "/account/code";
+        private static final String RESETPWD_CHECK = "/account/checkInfo";
     }
 
     @PostMapping(URL.REGISTER_URL)
@@ -53,16 +56,35 @@ public class AccountController extends BaseController {
         return result;
     }
 
-    @PostMapping(URL.RESET_PASSWORD)
-    public InfoAPIResult<String> resetPwd(ResetPwdRequestEntity resetPwdRequestEntity) throws Exception {
+    @PostMapping(URL.RESETPWD_CHECK)
+    public InfoAPIResult<String> checkInfo(@RequestParam("identityCard") String identityCard,
+                                           @RequestParam("accountNo") String accountNo,
+                                           @RequestParam("tel") String tel,
+                                           @RequestParam("pwd") String pwd) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.RESET_PASSWORD);
-        log.info("=== > request parameter {} : {} ", ResetPwdRequestEntity.class.getSimpleName(), resetPwdRequestEntity);
-        if (resetPwdRequestEntity == null || StringUtils.isEmpty(resetPwdRequestEntity.getAccountNo())
-            || StringUtils.isEmpty(resetPwdRequestEntity.getIdentityCard())  || StringUtils.isEmpty(resetPwdRequestEntity.getUsername())) {
-            throw new BadRequestException(Constants.Code.PARAM_REQUIRED,"parameter require");
-        }
-        accountService.resetPwd(resetPwdRequestEntity);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.RESETPWD_CHECK);
+        String card = accountService.checkInfo(identityCard, accountNo, tel, pwd);
+        result.setInfo(card);
+        log.info("=== > response result {}", result);
+        return result;
+    }
+
+    @PostMapping(URL.REGISTER_CODE)
+    public InfoAPIResult<String> generateCode() {
+        InfoAPIResult<String> result = new InfoAPIResult<>();
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.REGISTER_CODE);
+        String code = accountService.generate();
+        result.setInfo(code);
+        log.info("=== > response result {}", result);
+        return result;
+    }
+
+    @GetMapping(URL.REGISTER_CODE)
+    public InfoAPIResult<RegisterCode> getCode() {
+        InfoAPIResult<RegisterCode> result = new InfoAPIResult<>();
+        log.info("=== > request method : [ Get ], request path [ {} ]", URL.REGISTER_CODE);
+        RegisterCode code = accountService.query();
+        result.setInfo(code);
         log.info("=== > response result {}", result);
         return result;
     }

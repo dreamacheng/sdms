@@ -73,11 +73,11 @@
       </a-tabs>
 
       <a-form-item>
-        <router-link
-          :to="{ name: 'recover', params: { user: 'aaa'} }"
+        <a
+          @click="resetPwd"
           class="forge-password"
           style="float: left;"
-        > 忘记密码</router-link>
+        > 忘记密码</a>
         <router-link class="register" :to="{ name: 'register' }" style="float: right;">注册账户</router-link>
       </a-form-item>
 
@@ -93,6 +93,36 @@
       </a-form-item>
     </a-form>
 
+    <a-modal
+      title="密码重置"
+      :width="600"
+      v-model="updatePwdShow"
+      @ok="handleEditPwd"
+      okText="重置"
+    >
+      <a-form-item label="学号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+        <a-input
+          size="large"
+          autocomplete="false"
+          v-model="pwdEdit.accountNo"
+        ></a-input>
+      </a-form-item>
+      <a-form-item label="身份证" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+        <a-input
+          size="large"
+          autocomplete="false"
+          v-model="pwdEdit.identityCard"
+        ></a-input>
+      </a-form-item>
+      <a-form-item label="电话" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+        <a-input
+          size="large"
+          autocomplete="false"
+          v-model="pwdEdit.tel"
+        ></a-input>
+      </a-form-item>
+    </a-modal>
+
   </div>
 </template>
 
@@ -100,12 +130,20 @@
 import md5 from 'md5'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
+import { resetPwdAPI } from '@/api/login'
 
 export default {
   data () {
     return {
       loginBtn: false,
       form: this.$form.createForm(this),
+      updatePwdShow: false,
+      pwdEdit: {
+        accountNo: '',
+        identityCard: '',
+        tel: '',
+        pwd: ''
+      },
       state: {
         time: 60,
         loginBtn: false,
@@ -118,6 +156,29 @@ export default {
   },
   methods: {
     ...mapActions(['Login', 'Logout']),
+    handleEditPwd () {
+      if (this.pwdEdit.accountNo === '' || this.pwdEdit.identityCard === '' || this.pwdEdit.tel === '') {
+        this.$message.error('请完整填写验证信息')
+        return false
+      }
+      var data = new FormData()
+      data.append('identityCard', this.pwdEdit.identityCard)
+      data.append('accountNo', this.pwdEdit.accountNo)
+      data.append('tel', this.pwdEdit.tel)
+      data.append('pwd', md5(this.pwdEdit.identityCard))
+      resetPwdAPI(data)
+        .then(res => {
+          if (res === 0) {
+            this.$message.success('密码重置成功')
+          } else {
+            this.$notification['error']({
+              message: '验证失败',
+              description: '请检查验证信息是否正确',
+              duration: 4
+            })
+          }
+        })
+    },
     handleSubmit (e) {
       e.preventDefault()
       const {
@@ -151,17 +212,6 @@ export default {
       })
     },
     loginSuccess (res) {
-      // check res.homePage define, set $router.push name res.homePage
-      // Why not enter onComplete
-      /*
-      this.$router.push({ name: 'analysis' }, () => {
-        console.log('onComplete')
-        this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`
-        })
-      })
-      */
       this.$router.push({ path: '/' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
@@ -170,6 +220,9 @@ export default {
           description: `${timeFix()}，欢迎回来`
         })
       }, 1000)
+    },
+    resetPwd () {
+      this.updatePwdShow = true
     },
     requestFailed (err) {
       this.$notification['error']({

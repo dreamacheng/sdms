@@ -13,7 +13,6 @@ import com.pro.it.sdms.entity.dto.Account;
 import com.pro.it.sdms.entity.dto.RegisterCode;
 import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.entity.vo.AccountVO;
-import com.pro.it.sdms.enums.BaseCodeEnum;
 import com.pro.it.sdms.enums.IdentityEnum;
 import com.pro.it.sdms.enums.PoliticsStatusEnum;
 import com.pro.it.sdms.service.AccountService;
@@ -32,6 +31,7 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,7 +60,7 @@ public class AccountServiceImpl implements AccountService {
                 || registerCode.getAvailable().equals(2)) {
                 throw new BadRequestException(Constants.Register.REGISTER_CODE_INVALID, "Register Code error or invalid");
             }
-            registerCode.setAvailable((short) 1);
+            registerCode.setAvailable((short) 2);
             registerCodeDAO.save(registerCode);
         }
         accountDAO.save(createAccountRequestEntity.toDTO());
@@ -80,27 +80,6 @@ public class AccountServiceImpl implements AccountService {
         if (!accountDAO.getAccountsByIdentityCard(vo.getIdentityCard()).isEmpty()) {
             throw new BadRequestException(Constants.Register.IDENTITY_CARD_EXIST, "identity card has been exist");
         }
-    }
-
-    /**
-     * 重置密码
-     * @param resetPwdRequestEntity
-     */
-    @Override
-    @Transactional
-    public void resetPwd(ResetPwdRequestEntity resetPwdRequestEntity) {
-        Account dto = new Account();
-        dto.setUsername(resetPwdRequestEntity.getUsername());
-        dto.setIdentityCard(resetPwdRequestEntity.getIdentityCard());
-        dto.setAccountNo(resetPwdRequestEntity.getAccountNo());
-        dto.setTel(resetPwdRequestEntity.getTel());
-        Optional<Account> optionalAccount = accountDAO.findOne(Example.of(dto));
-        Account account = optionalAccount.get();
-        if (account == null) {
-            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "user not exist");
-        }
-        // todo 密码重置为---
-        accountDAO.save(account);
     }
 
     /**
@@ -257,6 +236,44 @@ public class AccountServiceImpl implements AccountService {
         return accountDAO.save(accountByAccountNo).getAvatar();
     }
 
+    /**
+     * 生成注册码
+     * @return
+     */
+    @Override
+    @Secured("ROLE_MANAGER")
+    public String generate() {
+        String generateCode = generateCode();
+        RegisterCode registerCode = RegisterCode.builder().available((short) 1).code(generateCode).build();
+        return registerCodeDAO.save(registerCode).getCode();
+    }
+
+    /**
+     * 查询当前用户生成的注册码
+     * @return
+     */
+    @Override
+    public RegisterCode query() {
+        String no = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<RegisterCode> registerCodeByCreateUser = registerCodeDAO.getRegisterCodeByCreateUser(no).stream().filter(item -> item.getAvailable().equals((short) 1)).collect(Collectors.toList());
+        if (registerCodeByCreateUser.isEmpty()) {
+            return RegisterCode.builder().available((short)2).build();
+        }
+        return registerCodeByCreateUser.get(0);
+    }
+
+    @Override
+    public String checkInfo(String identityCard, String accountNo, String tel, String pwd) {
+        Account account = accountDAO.findByAccountNoAndIdentityCardAndTel(accountNo, identityCard, tel);
+        if (account == null) {
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "user not exist");
+        }
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        String newPwd = encoder.encode(pwd);
+        account.setPassword(newPwd);
+        return accountDAO.save(account).getAccountNo();
+    }
+
 
     /**
      * 构建分页对象，并按更新时间与创建时间排序
@@ -281,4 +298,13 @@ public class AccountServiceImpl implements AccountService {
         return PageRequest.of(pageInfo.getPageNum() - 1, pageInfo.getPageSize(), sort);
     }
 
+    private String generateCode() {
+        char[] codeArr = new char[]{'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2','3','4','5','6','7','8','9','0'};
+        Random random = new Random();
+        String code = "";
+        for (int i = 0; i< 4; i++) {
+            code = "" + codeArr[random.nextInt(35)] + codeArr[random.nextInt(35)] + codeArr[random.nextInt(35)] + codeArr[random.nextInt(35)] + codeArr[random.nextInt(35)];
+        }
+        return code;
+    }
 }

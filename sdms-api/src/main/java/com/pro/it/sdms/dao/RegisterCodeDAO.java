@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public interface RegisterCodeDAO extends JpaSpecificationExecutor<RegisterCode>, JpaRepository<RegisterCode, BigDecimal> {
 
         RegisterCode getRegisterCodeByCode(String code);
+
+        List<RegisterCode> getRegisterCodeByCreateUser(String accountNo);
 
 }

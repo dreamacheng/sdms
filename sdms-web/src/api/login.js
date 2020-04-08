@@ -102,3 +102,25 @@ export function logout () {
     }
   })
 }
+
+export function generate () {
+  return axios({
+    url: '/api/account/code',
+    method: 'post'
+  })
+}
+
+export function getCode () {
+  return axios({
+    url: '/api/account/code',
+    method: 'get'
+  })
+}
+
+export function resetPwdAPI (data) {
+  return axios({
+    url: '/api/account/checkInfo',
+    method: 'post',
+    data: data
+  })
+}

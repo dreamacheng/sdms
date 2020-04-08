@@ -1,9 +1,7 @@
 package com.pro.it.sdms.entity.dto;
 
 import com.pro.it.sdms.entity.BaseDTO;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
@@ -17,6 +15,9 @@ import javax.persistence.Table;
 @Table(name = "sdms_register_code")
 @ToString
 @EntityListeners(AuditingEntityListener.class)
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder = true)
 public class RegisterCode extends BaseDTO {
 
     @Column(name = "code", nullable = false, columnDefinition = "varchar(10)")

@@ -5,7 +5,7 @@
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
-              <img :src="avatar()">
+              <img :src="accountInfo.avatar">
             </div>
             <div class="username">{{ accountInfo.username }}</div>
             <div class="bio">勤学、务实、圆融、卓越</div>
@@ -81,8 +81,6 @@ import { PageView, RouteView } from '@/layouts'
 import { ProjectPage, ApprovalPage, MemberPage, ManagerPage, ClubApprovalPage } from './page'
 import { currentUserInfo } from '@/api/login'
 
-import { mapGetters } from 'vuex'
-
 export default {
   components: {
     RouteView,
@@ -135,7 +133,6 @@ export default {
     this.getTeams()
   },
   methods: {
-    ...mapGetters(['nickname', 'avatar']),
     loadCurrent () {
       const self = this
       currentUserInfo()

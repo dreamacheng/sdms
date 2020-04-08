@@ -27,7 +27,7 @@
             </a-menu-item>
             <a-menu-item key="/account/settings/notification">
               <router-link :to="{ name: 'NotificationSettings' }">
-                新消息通知
+                管理员注册
               </router-link>
             </a-menu-item>
           </a-menu>

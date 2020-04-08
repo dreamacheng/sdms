@@ -5,6 +5,7 @@ import com.pro.it.sdms.controller.request.QueryAccountRequestEntity;
 import com.pro.it.sdms.controller.request.ResetPwdRequestEntity;
 import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.controller.request.UpdatePwdRequestEntity;
+import com.pro.it.sdms.entity.dto.RegisterCode;
 import com.pro.it.sdms.entity.vo.AccountVO;
 
 import java.util.List;
@@ -12,8 +13,6 @@ import java.util.List;
 public interface AccountService {
 
     void registerAccount(PersistAccountRequestEntity vo);
-
-    void resetPwd(ResetPwdRequestEntity resetPwdRequestEntity);
 
     QueryResult<AccountVO> queryAccount(QueryAccountRequestEntity queryAccountRequestEntity);
 
@@ -28,4 +27,10 @@ public interface AccountService {
     List<AccountVO> queryTeacher();
 
     String updateAvatar(String avatar);
+
+    String generate();
+
+    RegisterCode query();
+
+    String checkInfo(String identityCard, String accountNo, String tel, String pwd);
 }

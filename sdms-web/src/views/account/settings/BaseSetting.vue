@@ -44,7 +44,6 @@
                 <a-radio value="MASSES">群众</a-radio>
               </a-radio-group>
             </div>
-            <a-icon type="edit" style="margin-top:-25px;float:right" @click="editShow.politicsStatus = !editShow.politicsStatus"/>
           </a-form-item>
           <div v-show="account.role == 'STUDENT'">
             <a-form-item

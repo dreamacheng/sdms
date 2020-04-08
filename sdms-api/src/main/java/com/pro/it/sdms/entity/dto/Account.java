@@ -7,6 +7,7 @@ import com.pro.it.sdms.enums.GenderEnum;
 import com.pro.it.sdms.enums.PoliticsStatusEnum;
 import com.pro.it.sdms.enums.SemesterEnum;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -98,6 +99,9 @@ public class Account extends BaseDTO {
         short currentTerm = (short) ((period.getYears()* 12 + period.getMonths())/6 + 1);
         LocalDate previousAge = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(getBirthday()), dateTimeFormatter);
         Period periodAge = Period.between(previousAge, localDate);
+        if (StringUtils.isEmpty(getAvatar())) {
+            setAvatar("/avatar2.jpg");
+        }
         return AccountVO.builder()
                 .username(getUsername())
                 .accountNo(getAccountNo())

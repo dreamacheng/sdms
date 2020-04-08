@@ -319,16 +319,11 @@ export const asyncRouterMap = [
       {
         path: '/account',
         component: RouteView,
-        redirect: '/account/center',
+        redirect: '/account/settings',
         name: 'account',
-        meta: { title: '个人中心', icon: 'user', keepAlive: true, permission: [ 'user' ] },
+        meta: { title: '个人设置', icon: 'user', keepAlive: true, permission: [ 'user' ] },
+        hideChildrenInMenu: true,
         children: [
-          {
-            path: '/account/center',
-            name: 'center',
-            component: () => import('@/views/account/center/Index'),
-            meta: { title: '个人中心', keepAlive: true, permission: [ 'aa' ] }
-          },
           {
             path: '/account/settings',
             name: 'settings',
@@ -365,7 +360,7 @@ export const asyncRouterMap = [
                 path: '/account/settings/notification',
                 name: 'NotificationSettings',
                 component: () => import('@/views/account/settings/Notification'),
-                meta: { title: '新消息通知', keepAlive: true, permission: [ 'user' ] }
+                meta: { title: '管理员邀请码', keepAlive: true, permission: [ 'user' ] }
               }
             ]
           }
