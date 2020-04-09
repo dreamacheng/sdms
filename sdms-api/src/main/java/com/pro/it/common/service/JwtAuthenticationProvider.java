@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.pro.it.common.config.AuthenticationContextHolder;
 import com.pro.it.common.config.JwtAuthenticationToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import org.springframework.security.web.authentication.www.NonceExpiredException
 
 import java.util.Calendar;
 
+@Slf4j
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private JwtUserService userService;
@@ -40,6 +42,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             JWTVerifier verifier = JWT.require(algorithm)
                     .withSubject(accountNo)
                     .build();
+            log.info("====== > verify token : [{}]", jwt.getToken());
             verifier.verify(jwt.getToken());
         } catch (Exception e) {
             throw new BadCredentialsException("JWT token verify fail", e);

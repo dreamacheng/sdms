@@ -24,7 +24,7 @@ export const asyncRouterMap = [
             path: '/dashboard/workplace',
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: '工作台', keepAlive: true, permission: [ 'dashboard' ] }
           }
         ]
       },

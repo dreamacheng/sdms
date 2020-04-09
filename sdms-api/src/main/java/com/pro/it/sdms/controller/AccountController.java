@@ -39,7 +39,7 @@ public class AccountController extends BaseController {
         private static final String TEACHER_QUERY = "/account/teacher";
         private static final String AVATAR_UPDATE = "/account/avatar";
         private static final String REGISTER_CODE = "/account/code";
-        private static final String RESETPWD_CHECK = "/account/checkInfo";
+        private static final String RESET_PWD_CHECK = "/account/checkInfo";
     }
 
     @PostMapping(URL.REGISTER_URL)
@@ -56,14 +56,15 @@ public class AccountController extends BaseController {
         return result;
     }
 
-    @PostMapping(URL.RESETPWD_CHECK)
+    @PostMapping(URL.RESET_PWD_CHECK)
     public InfoAPIResult<String> checkInfo(@RequestParam("identityCard") String identityCard,
                                            @RequestParam("accountNo") String accountNo,
+                                           @RequestParam("username") String username,
                                            @RequestParam("tel") String tel,
                                            @RequestParam("pwd") String pwd) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.RESETPWD_CHECK);
-        String card = accountService.checkInfo(identityCard, accountNo, tel, pwd);
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.RESET_PWD_CHECK);
+        String card = accountService.checkInfo(identityCard, accountNo, username, tel, pwd);
         result.setInfo(card);
         log.info("=== > response result {}", result);
         return result;

@@ -50,17 +50,21 @@
             <detail-list-item term="申请类型">{{applyInfo.type | applyFilter}}</detail-list-item>
             <detail-list-item term="申请时间">{{applyInfo.applyTime}}</detail-list-item>
           </detail-list>
-          <a-divider style="margin-bottom: 32px"/>
+          <a-divider/>
           <detail-list title="申请书">
             {{applyInfo.applyText}}
           </detail-list>
-          <a-divider style="margin-bottom: 32px"/>
+          <a-divider/>
+          <detail-list>
+            <a :href="applyInfo.applyAccessory">下载附件</a>
+          </detail-list>
+          <a-divider style="margin-bottom: 10px"/>
           <detail-list title="审核意见">
             <div>
               <a-textarea v-model="applyResult.applyComment" style="width:400px" :rows="5" placeholder="审核意见"/>
             </div>
           </detail-list>
-          <a-divider style="margin-bottom: 32px"/>
+          <a-divider style="margin-bottom: 0px"/>
           <detail-list title="审核结果">
             <a-radio-group v-model="applyResult.applyStatus">
               <a-radio value="Approved" defaultChecked>审核通过</a-radio>

@@ -80,7 +80,7 @@ public class Account extends BaseDTO {
     private Short isLock;
 
     /** 登录salt */
-    @Column(name = "salt",columnDefinition = "varchar(30)")
+    @Column(name = "salt",columnDefinition = "varchar(300)")
     private String salt;
 
     @Column(name = "role",columnDefinition = "varchar(10)")

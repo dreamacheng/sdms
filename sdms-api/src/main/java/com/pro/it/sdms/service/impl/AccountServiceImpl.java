@@ -263,8 +263,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String checkInfo(String identityCard, String accountNo, String tel, String pwd) {
-        Account account = accountDAO.findByAccountNoAndIdentityCardAndTel(accountNo, identityCard, tel);
+    public String checkInfo(String identityCard, String accountNo, String username, String tel, String pwd) {
+        Account account = accountDAO.findByAccountNoAndIdentityCardAndTelAndUsername(accountNo, identityCard, tel, username);
         if (account == null) {
             throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "user not exist");
         }

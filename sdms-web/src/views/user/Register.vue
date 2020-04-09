@@ -2,8 +2,8 @@
   <div class="mainR user-layout-register">
     <a-form  ref="formRegister" :form="form" id="formRegister">
       <a-row>
-        <a-col :span="6">&nbsp;</a-col>
-        <a-col :span="6">
+        <a-col :span="4">&nbsp;</a-col>
+        <a-col :span="8">
           <a-form-item label="学号/职工号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
             <a-input size="large" placeholder="学号" v-decorator="['accountNo', {rules: [{ required: true, message: '请输入正确的学号', pattern: /^\d{7,}$/ }], validateTrigger: ['change', 'blur'] }]"/>
           </a-form-item>
@@ -12,7 +12,7 @@
           </a-form-item>
           <a-popover
             placement="leftTop"
-            :trigger="['focus']"
+            :trigger="[]"
             :getPopupContainer="(trigger) => trigger.parentElement"
             v-model="state.passwordLevelChecked">
             <template slot="content">
@@ -51,7 +51,7 @@
             <a-date-picker size="large" placeholder="入校时间" v-decorator="['enrollment', {rules: [{ required: true, message: '请输入入校时间' }] }]"/>
           </a-form-item>
         </a-col>
-        <a-col :span="6">
+        <a-col :span="8">
           <a-form-item label="性别" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
             <a-radio-group name="gender"  v-decorator="['gender', {rules: [{ required: true, message: '请选择性别'}], validateTrigger: ['change', 'blur'] }]">
               <a-radio value="MALE" defaultChecked>男</a-radio>
@@ -229,7 +229,7 @@ export default {
 
     handlePasswordInputClick () {
       if (!this.isMobile()) {
-        this.state.passwordLevelChecked = true
+        this.state.passwordLevelChecked = false
         return
       }
       this.state.passwordLevelChecked = false

@@ -15,8 +15,10 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.AccountLockedException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class JwtUserService implements UserDetailsService {
@@ -26,18 +28,21 @@ public class JwtUserService implements UserDetailsService {
 
     private PasswordEncoder passwordEncoder;
 
-    private static final String salt = "sdafwqertcxvbtyeguytrkgfhxcv";
+    private static final String salt = "sadfewqfczxknweaiikjanjkzcxojweasnjzxu";
 
     public JwtUserService() {
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    public String saveUserLoginInfo(UserDetails user) throws UnsupportedEncodingException {
+    public String saveUserLoginInfo(UserDetails user) throws UnsupportedEncodingException, AccountLockedException {
         // String genSalt = BCrypt.gensalt();
         //将用户登录信息存入数据库
         Account loginAccount = accountDAO.getAccountByAccountNo(user.getUsername());
         if (loginAccount == null) {
             throw new UsernameNotFoundException("user does not exist");
+        }
+        if (loginAccount.getIsLock().equals( (short) 1)) {
+            throw new AccountLockedException();
         }
         loginAccount.setSalt(salt);
         accountDAO.save(loginAccount);
@@ -69,6 +74,10 @@ public class JwtUserService implements UserDetailsService {
         Account account = accountDAO.getAccountByAccountNo(accountNo);
         if (account == null) {
             throw new UsernameNotFoundException("user does not exist");
+        }
+        boolean isLocked = false;
+        if (account.getIsLock().equals( (short) 1 )) {
+            isLocked = true;
         }
         return User.builder().username(account.getAccountNo())
                 .password(account.getPassword())

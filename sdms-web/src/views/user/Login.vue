@@ -1,3 +1,4 @@
+eslint-disable
 <template>
   <div class="main">
     <a-form
@@ -107,6 +108,13 @@
           v-model="pwdEdit.accountNo"
         ></a-input>
       </a-form-item>
+      <a-form-item label="姓名" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+        <a-input
+          size="large"
+          autocomplete="false"
+          v-model="pwdEdit.username"
+        ></a-input>
+      </a-form-item>
       <a-form-item label="身份证" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
         <a-input
           size="large"
@@ -142,7 +150,8 @@ export default {
         accountNo: '',
         identityCard: '',
         tel: '',
-        pwd: ''
+        pwd: '',
+        username: ''
       },
       state: {
         time: 60,
@@ -157,7 +166,8 @@ export default {
   methods: {
     ...mapActions(['Login', 'Logout']),
     handleEditPwd () {
-      if (this.pwdEdit.accountNo === '' || this.pwdEdit.identityCard === '' || this.pwdEdit.tel === '') {
+      if (this.pwdEdit.accountNo === '' || this.pwdEdit.identityCard === '' ||
+      this.pwdEdit.tel === '' || this.pwdEdit.username === '') {
         this.$message.error('请完整填写验证信息')
         return false
       }
@@ -166,9 +176,10 @@ export default {
       data.append('accountNo', this.pwdEdit.accountNo)
       data.append('tel', this.pwdEdit.tel)
       data.append('pwd', md5(this.pwdEdit.identityCard))
+      data.append('username', this.pwdEdit.username)
       resetPwdAPI(data)
         .then(res => {
-          if (res === 0) {
+          if (res.code === 0) {
             this.$message.success('密码重置成功')
           } else {
             this.$notification['error']({

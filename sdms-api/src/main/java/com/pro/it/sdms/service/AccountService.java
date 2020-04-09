@@ -32,5 +32,5 @@ public interface AccountService {
 
     RegisterCode query();
 
-    String checkInfo(String identityCard, String accountNo, String tel, String pwd);
+    String checkInfo(String identityCard, String accountNo, String username, String tel, String pwd);
 }

@@ -20,6 +20,6 @@ public interface AccountDAO extends JpaSpecificationExecutor<Account>, JpaReposi
 
     List<Account> findAllByRole(String role);
 
-    Account findByAccountNoAndIdentityCardAndTel(String accountNo, String identityCard, String tel);
+    Account findByAccountNoAndIdentityCardAndTelAndUsername(String accountNo, String identityCard, String tel, String username);
 
 }

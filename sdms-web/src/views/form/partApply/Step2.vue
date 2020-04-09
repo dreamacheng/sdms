@@ -43,6 +43,10 @@
           <detail-list title="入党申请书">
             {{organizationDetail.applyText}}
           </detail-list>
+          <a-divider/>
+          <detail-list title="入团申请附件">
+            <a :href="organizationDetail.applyAccessory">附件材料</a>
+          </detail-list>
         </a-card>
       </a-modal>
   </div>

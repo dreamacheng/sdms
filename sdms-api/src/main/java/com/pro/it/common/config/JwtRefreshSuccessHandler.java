@@ -2,10 +2,12 @@ package com.pro.it.common.config;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.pro.it.common.service.JwtUserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import javax.security.auth.login.AccountLockedException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,8 +33,14 @@ public class JwtRefreshSuccessHandler implements AuthenticationSuccessHandler {
         DecodedJWT jwt = ((JwtAuthenticationToken)authentication).getToken();
         boolean shouldRefresh = shouldTokenRefresh(jwt.getIssuedAt());
         if (shouldRefresh) {
-            String newToken = jwtUserService.saveUserLoginInfo((UserDetails) authentication.getPrincipal());
-            response.setHeader("Authorization", newToken);
+            String newToken = null;
+            try {
+                newToken = jwtUserService.saveUserLoginInfo((UserDetails) authentication.getPrincipal());
+                response.setHeader("Authorization", newToken);
+            } catch (AccountLockedException e) {
+                e.printStackTrace();
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+            }
         }
     }
 

@@ -33,7 +33,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/file/**").permitAll()
-                .antMatchers("/register","/resetPwd").permitAll()
+                .antMatchers("/register","/account/checkInfo").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")
                 .anyRequest().authenticated()
@@ -50,7 +50,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
             .addFilterAfter(new OptionsRequestFilter(), CorsFilter.class)
             .apply(new JsonLoginConfigurer<>()).loginSuccessHandler(jwtLoginSuccessHandler())
             .and()
-            .apply(new JwtLoginConfigurer<>()).tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls("/logout", "/register")
+            .apply(new JwtLoginConfigurer<>()).tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls("/logout", "/register","/account/checkInfo")
             .and()
             .logout()
 //                .logoutUrl("/logout") //默认即为logout

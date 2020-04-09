@@ -6,18 +6,14 @@
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <a-input
-          placeholder="请填写姓名"
-          v-decorator="['proposerName', { rules: [{required: true, message: '申请人姓名必须填写'}] }]"/>
+        <span style="margin-left:20px">{{ accountInfo.username}}</span>
       </a-form-item>
       <a-form-item
         label="申请人学号"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <a-input
-          placeholder="请填写学号"
-          v-decorator="['proposerNo', { rules: [{required: true, message: '申请人学号必须填写'}] }]"/>
+        <span style="margin-left:20px">{{accountInfo.accountNo}}</span>
       </a-form-item>
       <a-form-item
         label="申请时间"
@@ -49,21 +45,20 @@
           placeholder="请填写入党申请书"
           v-decorator="['applyText', { rules: [{required: true, message: '入党申请书必须填写'}] }]"/>
       </a-form-item>
-      <!-- <a-form-item
+      <a-form-item
         label="上传附件材料"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
         <a-upload
-          name="file"
-          :multiple="true"
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          :headers="headers"
+          class="upload-list-inline"
+          :fileList="fileList"
           @change="handleChange"
+          :customRequest="customRequest"
         >
-          <a-button> <a-icon type="upload" /> Click to Upload </a-button>
+          <a-button> <a-icon type="upload" />上传附件材料</a-button>
         </a-upload>
-      </a-form-item> -->
+      </a-form-item>
       <a-form-item :wrapperCol="{span: 19, offset: 5}">
         <a-button type="primary" @click="nextStep">下一步</a-button>
       </a-form-item>
@@ -87,6 +82,8 @@
 import { getTeacher } from '@/api/manage'
 import { applyAddAPI } from '@/api/organization'
 import moment from 'moment'
+import { upload } from '@/api/fileUpload'
+import { currentUserInfo } from '@/api/login'
 
 export default {
   name: 'Step1',
@@ -96,7 +93,10 @@ export default {
       wrapperCol: { lg: { span: 19 }, sm: { span: 19 } },
       form: this.$form.createForm(this),
       approverList: [],
-      proposer: {}
+      fileList: [],
+      proposer: {},
+      accountInfo: {},
+      applyAccessory: ''
     }
   },
   created () {
@@ -104,8 +104,39 @@ export default {
   },
   methods: {
     moment,
+    handleChange (info) {
+      let fileList = [...info.fileList]
+      // 1. Limit the number of uploaded files
+      //    Only to show two recent uploaded files, and old ones will be replaced by the new
+      fileList = fileList.slice(-1)
+      this.fileList = fileList
+    },
+    customRequest (data) {
+      const self = this
+      var param = new FormData() // 创建form对象
+      param.append('file', data.file)
+      param.append('objectType', 'ORGANIZATION')
+      upload(param)
+        .then(res => {
+          if (res.code === 0 && res.info) {
+            self.applyAccessory = res.info
+            self.fileList = self.fileList.map(file => {
+              file.url = res.info
+              file.status = 'done'
+              return file
+            })
+            this.$message.info('附件材料上传成功！')
+          } else {
+            this.$message.error('附件材料上传失败！')
+          }
+        })
+    },
     nextStep () {
       const { form: { validateFields } } = this
+      if (this.applyAccessory === '') {
+        this.$message.warning('请上传附件')
+        return
+      }
       // 先校验，通过表单校验后，才进入下一步
       validateFields((err, values) => {
         if (!err) {
@@ -135,6 +166,12 @@ export default {
         .then(res => {
           const result = res.list
           this.approverList = result
+        })
+      currentUserInfo()
+        .then(res => {
+          if (res.code === 0) {
+            this.accountInfo = res.info
+          }
         })
     }
   }

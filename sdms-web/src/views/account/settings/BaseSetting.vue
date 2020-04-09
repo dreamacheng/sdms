@@ -284,6 +284,7 @@ export default {
         })
     },
     handleSubmit (e) {
+      const _this = this
       e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
@@ -293,10 +294,19 @@ export default {
             .then(res => {
               if (res.code === 0) {
                 this.$message.info('更新个人资料成功')
+                _this.loadCurrent()
+                _this.editShow = {
+                  accountNo: false,
+                  username: false,
+                  lodgingHouse: false,
+                  politicsStatus: false,
+                  major: false,
+                  birthday: false,
+                  college: false
+                }
               } else {
                 this.$message.info('更新个人资料失败')
               }
-              location.reload()
             })
         }
       })
