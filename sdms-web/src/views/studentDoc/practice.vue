@@ -21,62 +21,23 @@
         :dataSource="scholarshipList"
       >
         <span slot="level" slot-scope="text">
-            {{text | typeFilter}}
+            {{text | levelFilter}}
         </span>
         <span slot="term" slot-scope="text">
             {{text | termFilter }}
         </span>
-        <span slot="status" slot-scope="text">
-            {{text | statusFilter}}
-        </span>
         <span slot="approver" slot-scope="text">
-            {{text | nullFilter}}
-        </span>
-        <span slot="applyComment" slot-scope="text">
             {{text | nullFilter}}
         </span>
       </a-table>
     </a-card>
 
-    <a-card style="margin-top: 24px" :bordered="false" title="用户信息">
-      <detail-list>
-        <detail-list-item term="用户姓名">付晓晓</detail-list-item>
-        <detail-list-item term="会员卡号">32943898021309809423</detail-list-item>
-        <detail-list-item term="身份证">3321944288191034921</detail-list-item>
-        <detail-list-item term="联系方式">18112345678</detail-list-item>
-        <detail-list-item term="联系地址">浙江省杭州市西湖区黄姑山路工专路交叉路口</detail-list-item>
-      </detail-list>
-      <detail-list title="信息组">
-        <detail-list-item term="某某数据">725</detail-list-item>
-        <detail-list-item term="该数据更新时间">2018-08-08</detail-list-item>
-        <detail-list-item ></detail-list-item>
-        <detail-list-item term="某某数据">725</detail-list-item>
-        <detail-list-item term="该数据更新时间">2018-08-08</detail-list-item>
-        <detail-list-item ></detail-list-item>
-      </detail-list>
-      <a-card type="inner" title="多层信息组">
-        <detail-list title="组名称" size="small">
-          <detail-list-item term="负责人">林东东</detail-list-item>
-          <detail-list-item term="角色码">1234567</detail-list-item>
-          <detail-list-item term="所属部门">XX公司-YY部</detail-list-item>
-          <detail-list-item term="过期时间">2018-08-08</detail-list-item>
-          <detail-list-item term="描述">这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...</detail-list-item>
-        </detail-list>
-        <a-divider style="margin: 16px 0" />
-        <detail-list title="组名称" size="small" :col="1">
-          <detail-list-item term="学名">	Citrullus lanatus (Thunb.) Matsum. et Nakai一年生蔓生藤本；茎、枝粗壮，具明显的棱。卷须较粗..</detail-list-item>
-        </detail-list>
-        <a-divider style="margin: 16px 0" />
-        <detail-list title="组名称" size="small" :col="2">
-          <detail-list-item term="负责人">付小小</detail-list-item>
-          <detail-list-item term="角色码">1234567</detail-list-item>
-        </detail-list>
-      </a-card>
-
-    </a-card>
-
-    <a-card style="margin-top: 24px" :bordered="false" title="用户近半年来电记录">
-      <div class="no-data"><a-icon type="frown-o"/>暂无数据</div>
+    <a-card :bordered="false" title="所获证书">
+      <a-table
+        :columns="columns"
+        :dataSource="scholarshipList"
+      >
+      </a-table>
     </a-card>
 
   </page-view>
@@ -87,7 +48,7 @@ import { mixinDevice } from '@/utils/mixin'
 import { PageView } from '@/layouts'
 import { currentUserInfo } from '@/api/login'
 import DetailList from '@/components/tools/DetailList'
-import { getScholarshipList } from '@/api/scholarship'
+import { getScholarshipGetList } from '@/api/scholarship'
 
 const DetailListItem = DetailList.Item
 
@@ -103,7 +64,7 @@ export default {
     return {
       accountInfo: {},
       activeTabKey: '1',
-
+      scholarshipList: [],
       operationColumns: [
         {
           title: '获奖级别',
@@ -118,22 +79,22 @@ export default {
           scopedSlots: { customRender: 'term' }
         },
         {
-          title: '审核结果',
-          dataIndex: 'status',
-          key: 'status',
-          scopedSlots: { customRender: 'status' }
-        },
-        {
           title: '审核单位',
           dataIndex: 'approver',
           key: 'approver',
           scopedSlots: { customRender: 'approver' }
+        }
+      ],
+      columns: [
+        {
+          title: '证书名称',
+          dataIndex: 'name',
+          key: 'name'
         },
         {
-          title: '审批意见',
-          dataIndex: 'applyComment',
-          key: 'applyComment',
-          scopedSlots: { customRender: 'applyComment' }
+          title: '证书成绩',
+          dataIndex: 'grade',
+          key: 'grade'
         }
       ]
     }
@@ -154,17 +115,27 @@ export default {
     },
     statusFilter (status) {
       const statusMap = {
-        'agree': '成功',
-        'reject': '驳回'
+        'WaitForApproval': '待审核',
+        'Rejected': '拒绝',
+        'Approved': '通过'
       }
       return statusMap[status]
     },
-    statusTypeFilter (type) {
-      const statusTypeMap = {
-        'agree': 'success',
-        'reject': 'error'
+    levelFilter (status) {
+      const statusMap = {
+        'COUNTRY_1': '国家奖学金',
+        'COUNTRY_2': '国家励志奖学金',
+        'SCHOOL_1': '校级一等奖',
+        'SCHOOL_2': '校级二等奖',
+        'SCHOOL_3': '校级三等奖'
       }
-      return statusTypeMap[type]
+      return statusMap[status]
+    },
+    nullFilter (value) {
+      if (!value) {
+        return '暂未录入'
+      }
+      return value
     }
   },
   created () {
@@ -179,7 +150,7 @@ export default {
             self.accountInfo = res.info
           }
         })
-      getScholarshipList()
+      getScholarshipGetList()
         .then(res => {
           if (res.code === 0) {
             self.scholarshipList = res.list

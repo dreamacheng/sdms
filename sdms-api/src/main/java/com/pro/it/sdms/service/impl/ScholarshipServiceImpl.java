@@ -57,6 +57,20 @@ public class ScholarshipServiceImpl implements ScholarshipService {
     }
 
     /**
+     * 查询当前学生所有获奖记录
+     * @return
+     */
+    @Override
+    public List<ScholarshipVO> queryPass() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountDAO.getAccountByAccountNo(name);
+        return scholarshipDAO.getAllByWinner(account).stream()
+                .map(Scholarship::toVO)
+                .filter(item -> item.getStatus().equals(ApprovalResult.Approved.getCode()))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 添加奖学金申请
      * @param vo
      * @return

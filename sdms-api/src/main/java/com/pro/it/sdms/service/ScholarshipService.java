@@ -12,6 +12,8 @@ public interface ScholarshipService {
 
     List<ScholarshipVO> query();
 
+    List<ScholarshipVO> queryPass();
+
     BigDecimal addApply(ScholarshipVO vo);
 
     ScholarshipListResponseEntity queryAll();

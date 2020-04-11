@@ -25,7 +25,7 @@
                 个性化
               </router-link>
             </a-menu-item>
-            <a-menu-item key="/account/settings/notification">
+            <a-menu-item v-show="role === 'MANAGER'" key="/account/settings/notification">
               <router-link :to="{ name: 'NotificationSettings' }">
                 管理员注册
               </router-link>
@@ -46,6 +46,7 @@
 <script>
 import { PageView, RouteView } from '@/layouts'
 import { mixinDevice } from '@/utils/mixin.js'
+import { currentUserInfo } from '@/api/login'
 
 export default {
   components: {
@@ -60,7 +61,7 @@ export default {
 
       openKeys: [],
       selectedKeys: [],
-
+      role: '',
       // cropper
       preview: {},
 
@@ -68,9 +69,19 @@ export default {
     }
   },
   created () {
+    this.loadCurrent()
     this.updateMenu()
   },
   methods: {
+    loadCurrent () {
+      const self = this
+      currentUserInfo()
+        .then(res => {
+          if (res.code === 0) {
+            self.role = res.info.role
+          }
+        })
+    },
     onOpenChange (openKeys) {
       this.openKeys = openKeys
     },

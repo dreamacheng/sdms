@@ -18,6 +18,13 @@ export function getScholarshipList () {
   })
 }
 
+export function getScholarshipGetList () {
+  return axios({
+    url: '/api/scholarship/query/pass',
+    method: 'get'
+  })
+}
+
 export function getAllScholarshipList () {
   return axios({
     url: '/api/scholarship/queryAll',

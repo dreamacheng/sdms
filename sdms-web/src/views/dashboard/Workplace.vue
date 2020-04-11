@@ -1,5 +1,5 @@
 <template>
-  <page-view :avatar="avatar" :title="false">
+  <page-view :avatar="accountInfo.avatar" :title="false">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{ accountInfo.username }}<span class="welcome-text">，{{ welcome }}</span></div>
       <div>{{accountInfo.major}} | 湖南工学院 - {{accountInfo.college}}</div>

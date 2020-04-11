@@ -262,6 +262,15 @@ public class AccountServiceImpl implements AccountService {
         return registerCodeByCreateUser.get(0);
     }
 
+    /**
+     * 密码重置
+     * @param identityCard
+     * @param accountNo
+     * @param username
+     * @param tel
+     * @param pwd
+     * @return
+     */
     @Override
     public String checkInfo(String identityCard, String accountNo, String username, String tel, String pwd) {
         Account account = accountDAO.findByAccountNoAndIdentityCardAndTelAndUsername(accountNo, identityCard, tel, username);
@@ -302,8 +311,8 @@ public class AccountServiceImpl implements AccountService {
         char[] codeArr = new char[]{'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2','3','4','5','6','7','8','9','0'};
         Random random = new Random();
         String code = "";
-        for (int i = 0; i< 4; i++) {
-            code = "" + codeArr[random.nextInt(35)] + codeArr[random.nextInt(35)] + codeArr[random.nextInt(35)] + codeArr[random.nextInt(35)] + codeArr[random.nextInt(35)];
+        for (int i = 0; i< 5; i++) {
+            code += "" + codeArr[random.nextInt(35)];
         }
         return code;
     }

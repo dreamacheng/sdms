@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.security.auth.login.AccountLockedException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -28,14 +29,13 @@ public class JwtUserService implements UserDetailsService {
 
     private PasswordEncoder passwordEncoder;
 
-    private static final String salt = "sadfewqfczxknweaiikjanjkzcxojweasnjzxu";
-
     public JwtUserService() {
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     public String saveUserLoginInfo(UserDetails user) throws UnsupportedEncodingException, AccountLockedException {
         // String genSalt = BCrypt.gensalt();
+        String genSalt = generateCode();
         //将用户登录信息存入数据库
         Account loginAccount = accountDAO.getAccountByAccountNo(user.getUsername());
         if (loginAccount == null) {
@@ -44,13 +44,13 @@ public class JwtUserService implements UserDetailsService {
         if (loginAccount.getIsLock().equals( (short) 1)) {
             throw new AccountLockedException();
         }
-        loginAccount.setSalt(salt);
+        loginAccount.setSalt(genSalt);
         accountDAO.save(loginAccount);
-        Algorithm algorithm = Algorithm.HMAC256(salt);
+        Algorithm algorithm = Algorithm.HMAC256(genSalt);
         //缓存时间一周
         Date expires = new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000);
         return JWT.create()
-                .withSubject(user.getUsername())
+                .withSubject(loginAccount.getAccountNo())
                 .withExpiresAt(expires)
                 .withIssuedAt(new Date())
                 .sign(algorithm);
@@ -75,10 +75,6 @@ public class JwtUserService implements UserDetailsService {
         if (account == null) {
             throw new UsernameNotFoundException("user does not exist");
         }
-        boolean isLocked = false;
-        if (account.getIsLock().equals( (short) 1 )) {
-            isLocked = true;
-        }
         return User.builder().username(account.getAccountNo())
                 .password(account.getPassword())
                 .roles(account.getRole()).build();
@@ -92,6 +88,16 @@ public class JwtUserService implements UserDetailsService {
         }
         account.setSalt(StringUtils.EMPTY);
         accountDAO.save(account);
+    }
+
+    private String generateCode() {
+        char[] codeArr = new char[]{'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2','3','4','5','6','7','8','9','0'};
+        Random random = new Random();
+        String code = "";
+        for (int i = 0; i< 30; i++) {
+            code += "" + codeArr[random.nextInt(35)];
+        }
+        return code;
     }
 
 }
