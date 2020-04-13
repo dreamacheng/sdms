@@ -42,7 +42,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             JWTVerifier verifier = JWT.require(algorithm)
                     .withSubject(accountNo)
                     .build();
-            log.info("====== > verify token : [{}]", jwt.getToken());
             verifier.verify(jwt.getToken());
         } catch (Exception e) {
             throw new BadCredentialsException("JWT token verify fail", e);

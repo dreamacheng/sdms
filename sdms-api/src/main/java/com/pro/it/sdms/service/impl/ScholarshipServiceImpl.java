@@ -11,6 +11,7 @@ import com.pro.it.sdms.entity.vo.ScholarshipVO;
 import com.pro.it.sdms.enums.ApprovalResult;
 import com.pro.it.sdms.enums.SemesterEnum;
 import com.pro.it.sdms.service.ScholarshipService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -61,12 +62,14 @@ public class ScholarshipServiceImpl implements ScholarshipService {
      * @return
      */
     @Override
-    public List<ScholarshipVO> queryPass() {
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        Account account = accountDAO.getAccountByAccountNo(name);
+    public List<ScholarshipVO> queryPass(String accountNo) {
+        if (StringUtils.isEmpty(accountNo)) {
+            accountNo = SecurityContextHolder.getContext().getAuthentication().getName();
+        }
+        Account account = accountDAO.getAccountByAccountNo(accountNo);
         return scholarshipDAO.getAllByWinner(account).stream()
                 .map(Scholarship::toVO)
-                .filter(item -> item.getStatus().equals(ApprovalResult.Approved.getCode()))
+                .filter(item -> item.getStatus().equals(ApprovalResult.Approved.toString()))
                 .collect(Collectors.toList());
     }
 
@@ -99,12 +102,17 @@ public class ScholarshipServiceImpl implements ScholarshipService {
         if (vo == null || vo.getId() == null) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter required");
         }
+        Account accountByAccountNo = accountDAO.getAccountByAccountNo(accountNo);
         Scholarship dto = scholarshipDAO.getOne(vo.getId());
         if (dto == null) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "scholarship not exist");
         }
         dto.setApplyComment(vo.getApplyComment());
-        dto.setApprover(dto.getWinner().getAccountInfo().getCollege());
+        String approver = accountByAccountNo.getAccountInfo().getCollege();
+        if (StringUtils.isEmpty(accountByAccountNo.getAccountInfo().getCollege())) {
+            approver = "湖南工学院";
+        }
+        dto.setApprover(approver);
         dto.setStatus(ApprovalResult.valueOf(vo.getStatus()).getCode());
         return scholarshipDAO.save(dto).getId();
     }

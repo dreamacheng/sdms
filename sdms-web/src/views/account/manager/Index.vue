@@ -15,7 +15,7 @@
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
-              <a-form-item label="在校公寓">
+              <a-form-item label="学院">
                 <a-input :value="queryParam.lodgingHouse" placeholder="请输入"/>
               </a-form-item>
             </a-col>
@@ -102,38 +102,31 @@
             <detail-list-item term="用户类型">{{ account.role | roleFilter }}</detail-list-item>
           </detail-list>
           <a-divider style="margin-bottom: 32px"/>
-          <detail-list title="获奖记录">
-            <detail-list-item term="用户姓名">付小小</detail-list-item>
-            <detail-list-item term="联系电话">18100000000</detail-list-item>
-            <detail-list-item term="常用快递">菜鸟仓储</detail-list-item>
-            <detail-list-item term="取货地址">浙江省杭州市西湖区万塘路18号</detail-list-item>
-            <detail-list-item term="备注">	无</detail-list-item>
-          </detail-list>
-          <a-divider style="margin-bottom: 32px"/>
-
-          <div class="title">社会实践</div>
-          <!-- <s-table
-            style="margin-bottom: 24px"
-            row-key="id"
-            :columns="goodsColumns"
-            :data="loadGoodsData">
-
-          </s-table> -->
-
-          <div class="title">退货进度</div>
-          <!-- <s-table
-            style="margin-bottom: 24px"
-            row-key="key"
-            :columns="scheduleColumns"
-            :data="loadScheduleData">
-
-            <template
-              slot="status"
-              slot-scope="status">
-              <a-badge :status="status" :text="status | statusFilter"/>
-            </template>
-
-          </s-table> -->
+          <div class="table-page-search-wrapper">
+            <P style="font-size: 20px"><a-icon type="profile"/>&nbsp;获奖信息</p>
+          </div>
+          <a-table
+            :columns="scholarshipColumns"
+            :dataSource="scholarshipList"
+          >
+            <span slot="level" slot-scope="text">
+                {{text | levelFilter}}
+            </span>
+            <span slot="term" slot-scope="text">
+                {{text | termFilter }}
+            </span>
+            <span slot="approver" slot-scope="text">
+                {{text | nullFilter}}
+            </span>
+          </a-table>
+          <div class="table-page-search-wrapper">
+            <P style="font-size: 20px"><a-icon type="profile"/>&nbsp;所获证书<a-button style="float:right" @click="publish"><a-icon type="plus-circle" />录入证书</a-button></p>
+          </div>
+          <a-table
+            :columns="certificateColumns"
+            :dataSource="certificateList"
+          >
+          </a-table>
         </a-card>
       </a-modal>
     </a-card>
@@ -153,6 +146,8 @@ export default {
   data () {
     return {
       description: '用户管理',
+      scholarshipList: [],
+      certificateList: [],
       visible: false,
       labelCol: {
         xs: { span: 24 },
@@ -217,7 +212,39 @@ export default {
         }
       ],
       selectedRowKeys: [],
-      selectedRows: []
+      selectedRows: [],
+      scholarshipColumns: [
+        {
+          title: '获奖级别',
+          dataIndex: 'level',
+          key: 'level',
+          scopedSlots: { customRender: 'level' }
+        },
+        {
+          title: '申请学期',
+          dataIndex: 'term',
+          key: 'term',
+          scopedSlots: { customRender: 'term' }
+        },
+        {
+          title: '审核单位',
+          dataIndex: 'approver',
+          key: 'approver',
+          scopedSlots: { customRender: 'approver' }
+        }
+      ],
+      certificateColumns: [
+        {
+          title: '证书名称',
+          dataIndex: 'name',
+          key: 'name'
+        },
+        {
+          title: '证书成绩',
+          dataIndex: 'grade',
+          key: 'grade'
+        }
+      ]
     }
   },
   filters: {
@@ -263,6 +290,19 @@ export default {
         })
     },
     accountDetail (record) {
+      const self = this
+      getScholarshipGetList(record.accountNo)
+        .then(res => {
+          if (res.code === 0) {
+            self.scholarshipList = res.list
+          }
+        })
+      getCertificateList(record.accountNo)
+        .then(res => {
+          if (res.code === 0) {
+            self.certificateList = res.list
+          }
+        })
       this.account = Object.assign({}, record)
       this.visible = true
     },

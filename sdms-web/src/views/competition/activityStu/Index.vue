@@ -233,6 +233,10 @@ export default {
       this.visible3 = true
     },
     showDetail (record) {
+      if (record.activityPracticeVO.type !== '活动结束') {
+        this.$message.info('请等待活动结束后录入总结')
+        return
+      }
       this.activityResult = record
       console.log(this.activityResult)
       this.visible2 = true

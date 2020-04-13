@@ -126,31 +126,21 @@ export const asyncRouterMap = [
                 path: '/competition/game/Index',
                 name: 'competitionGame',
                 component: () => import('@/views/competition/game/Index'),
-                meta: { title: '学科竞赛', permission: [ 'user' ] }
+                meta: { title: '竞赛列表', permission: [ 'manager' ] }
               },
               {
                 path: '/competition/game/detail',
                 name: 'competitionDetail',
                 component: () => import('@/views/competition/game/detail'),
-                meta: { title: '竞赛详细', permission: [ 'user' ] }
+                meta: { title: '竞赛详细', permission: [ 'manager' ] }
               }
             ]
           },
           {
             path: '/competition/gameStu',
             name: 'competitionGameStu',
-            component: RouteView,
-            meta: { title: '学科竞赛', permission: [ 'student' ] },
-            hideChildrenInMenu: true,
-            redirect: '/competition/gameStu/Index',
-            children: [
-              {
-                path: '/competition/gameStu/Index',
-                name: 'competitionGame',
-                component: () => import('@/views/competition/gameStu/Index'),
-                meta: { title: '学科竞赛', permission: [ 'user' ] }
-              }
-            ]
+            component: () => import('@/views/competition/gameStu/Index'),
+            meta: { title: '学科竞赛', permission: [ 'student' ] }
           },
           {
             path: '/competition/activity',
@@ -164,7 +154,7 @@ export const asyncRouterMap = [
                 path: '/competition/activity/Index',
                 name: 'activity',
                 component: () => import('@/views/competition/activity/Index'),
-                meta: { title: '活动中心', permission: [ 'user' ] }
+                meta: { title: '活动列表', permission: [ 'user' ] }
               },
               {
                 path: '/competition/activity/detail',
@@ -186,7 +176,7 @@ export const asyncRouterMap = [
                 path: '/competition/activityStu/Index',
                 name: 'activityStu',
                 component: () => import('@/views/competition/activityStu/Index'),
-                meta: { title: '活动中心', permission: [ 'user' ] }
+                meta: { title: '活动列表', permission: [ 'user' ] }
               },
               {
                 path: '/competition/activityStu/detail',

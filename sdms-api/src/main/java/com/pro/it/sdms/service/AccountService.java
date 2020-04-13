@@ -33,4 +33,8 @@ public interface AccountService {
     RegisterCode query();
 
     String checkInfo(String identityCard, String accountNo, String username, String tel, String pwd);
+
+    String deleteAccount(String accountNo);
+
+    String changeTel(String newTel);
 }

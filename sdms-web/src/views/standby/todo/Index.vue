@@ -67,7 +67,6 @@
         >
           <project-page v-if="noTitleKey === 'project'"></project-page>
           <approval-page v-else-if="noTitleKey === 'approval'"></approval-page>
-          <member-page v-else-if="noTitleKey === 'member'"></member-page>
           <manager-page v-else-if="noTitleKey === 'manager'"></manager-page>
           <clubApproval-page v-else-if="noTitleKey === 'clubApproval'"></clubApproval-page>
         </a-card>
@@ -117,10 +116,6 @@ export default {
         {
           key: 'clubApproval',
           tab: '社团审批'
-        },
-        {
-          key: 'member',
-          tab: '处分录入'
         }
       ],
       noTitleKey: 'manager'

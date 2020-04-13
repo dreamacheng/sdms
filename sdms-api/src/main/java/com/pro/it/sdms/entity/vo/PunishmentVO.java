@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Column;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @ToString
@@ -17,6 +18,8 @@ import java.util.Date;
 @Setter
 @Builder(toBuilder=true)
 public class PunishmentVO {
+
+    private BigDecimal id;
 
     /** 处分类型 */
     private String type;

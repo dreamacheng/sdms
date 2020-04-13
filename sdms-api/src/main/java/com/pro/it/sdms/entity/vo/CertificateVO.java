@@ -14,4 +14,6 @@ public class CertificateVO {
     private String name;
 
     private String grade;
+
+    private AccountVO student;
 }

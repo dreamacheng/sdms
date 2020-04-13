@@ -70,7 +70,7 @@ public class AccountVO implements Serializable {
     private String politicsStatus;
 
     /** 入学时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT")
+    @JsonFormat(pattern = "yyyy-MM", timezone = "GMT")
     private Date enrollment;
 
     /** 用户角色 */

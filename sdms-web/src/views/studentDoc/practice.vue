@@ -15,7 +15,10 @@
       </detail-list>
     </div>
 
-    <a-card :bordered="false" title="获奖信息">
+    <a-card :bordered="false">
+      <div class="table-page-search-wrapper">
+        <P style="font-size: 20px"><a-icon type="profile"/>&nbsp;获奖信息</p>
+      </div>
       <a-table
         :columns="operationColumns"
         :dataSource="scholarshipList"
@@ -32,13 +35,35 @@
       </a-table>
     </a-card>
 
-    <a-card :bordered="false" title="所获证书">
+    <a-card :bordered="false">
+      <div class="table-page-search-wrapper">
+        <P style="font-size: 20px"><a-icon type="profile"/>&nbsp;所获证书<a-button style="float:right" @click="publish"><a-icon type="plus-circle" />录入证书</a-button></p>
+      </div>
       <a-table
         :columns="columns"
-        :dataSource="scholarshipList"
+        :dataSource="certificateList"
       >
       </a-table>
     </a-card>
+
+    <a-modal
+        title="证书信息"
+        :width="600"
+        v-model="addVisible"
+        @ok="publishInfo"
+        okText="录入"
+      >
+        <a-card :bordered="false">
+            <a-form  ref="formRegister" :form="form" id="formRegister">
+                <a-form-item label="证书名称" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
+                    <a-input size="large" v-decorator="['name', {rules: [{ required: true, message: '请输入证书名称' }] }]"/>
+                </a-form-item>
+                <a-form-item label="成绩" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
+                    <a-input size="large" v-decorator="['grade', {rules: [{ required: true, message: '请输入成绩' }] }]"/>
+                </a-form-item>
+            </a-form>
+        </a-card>
+      </a-modal>
 
   </page-view>
 </template>
@@ -49,6 +74,7 @@ import { PageView } from '@/layouts'
 import { currentUserInfo } from '@/api/login'
 import DetailList from '@/components/tools/DetailList'
 import { getScholarshipGetList } from '@/api/scholarship'
+import { certificateAdd, getCertificateList } from '@/api/certificate'
 
 const DetailListItem = DetailList.Item
 
@@ -62,9 +88,12 @@ export default {
   mixins: [mixinDevice],
   data () {
     return {
+      form: this.$form.createForm(this),
       accountInfo: {},
       activeTabKey: '1',
       scholarshipList: [],
+      certificateList: [],
+      addVisible: false,
       operationColumns: [
         {
           title: '获奖级别',
@@ -142,18 +171,47 @@ export default {
     this.loadCurrent()
   },
   methods: {
+    publish () {
+      this.addVisible = true
+    },
+    publishInfo () {
+      const self = this
+      const { form: { validateFields } } = this
+      validateFields({ force: true }, (err, values) => {
+        if (!err) {
+          const addInfo = { ...values }
+          certificateAdd(addInfo)
+            .then((res) => {
+              if (res.code === 0) {
+                self.$message.info('录入成功')
+                self.form.resetFields()
+                this.loadCurrent()
+                this.addVisible = false
+              } else {
+                self.$message.error('提交失败')
+              }
+            })
+        }
+      })
+    },
     loadCurrent () {
       const self = this
       currentUserInfo()
         .then(res => {
           if (res.code === 0) {
             self.accountInfo = res.info
-          }
-        })
-      getScholarshipGetList()
-        .then(res => {
-          if (res.code === 0) {
-            self.scholarshipList = res.list
+            getScholarshipGetList(res.info.accountNo)
+              .then(res => {
+                if (res.code === 0) {
+                  self.scholarshipList = res.list
+                }
+              })
+            getCertificateList(res.info.accountNo)
+              .then(res => {
+                if (res.code === 0) {
+                  self.certificateList = res.list
+                }
+              })
           }
         })
     }

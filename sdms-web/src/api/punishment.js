@@ -18,6 +18,13 @@ export function getPunishmentList () {
   })
 }
 
+export function cancelPunishment (id) {
+  return axios({
+    url: `/api/punishment/cancel/${id}`,
+    method: 'get'
+  })
+}
+
 export function getPunishmentAll (parameter) {
   return axios({
     url: `/api/punishment/all?type=${parameter.type}&accountNo=${parameter.accountNo}&username=${parameter.username}`,

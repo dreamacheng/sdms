@@ -47,3 +47,10 @@ export function summaryActivity (parameter) {
     data: parameter
   })
 }
+
+export function getStudentSummary (parameter) {
+  return axios({
+    url: `/api/activity/summary/view?accountNo=${parameter.accountNo}&activityId=${parameter.activityId}`,
+    method: 'get'
+  })
+}

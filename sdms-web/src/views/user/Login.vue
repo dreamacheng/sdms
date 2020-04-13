@@ -8,70 +8,34 @@ eslint-disable
       :form="form"
       @submit="handleSubmit"
     >
-      <a-tabs
-        :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-      >
-        <a-tab-pane key="tab1" tab="学生入口">
-          <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              placeholder="学号"
-              v-decorator="[
-                'accountNo',
-                {rules: [{ required: true, message: '请输入学号' }], validateTrigger: 'change'}
-              ]"
-            >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+      <a-form-item>
+        <a-input
+          size="large"
+          type="text"
+          placeholder="学号/教职工号"
+          v-decorator="[
+            'accountNo',
+            {rules: [{ required: true, message: '请输入学号/教职工号' }], validateTrigger: 'change'}
+          ]"
+        >
+          <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+        </a-input>
+      </a-form-item>
 
-          <a-form-item>
-            <a-input
-              size="large"
-              type="password"
-              autocomplete="false"
-              placeholder="密码"
-              v-decorator="[
-                'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
-            >
-              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
-        </a-tab-pane>
-        <a-tab-pane key="tab2" tab="教师入口">
-          <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              placeholder="教职工号"
-              v-decorator="[
-                'accountNo',
-                {rules: [{ required: true, message: '请输入教职工号' }], validateTrigger: 'change'}
-              ]"
-            >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
-
-          <a-form-item>
-            <a-input
-              size="large"
-              type="password"
-              autocomplete="false"
-              placeholder="密码"
-              v-decorator="[
-                'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
-            >
-              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
-        </a-tab-pane>
-      </a-tabs>
+      <a-form-item>
+        <a-input
+          size="large"
+          type="password"
+          autocomplete="false"
+          placeholder="密码"
+          v-decorator="[
+            'password',
+            {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+          ]"
+        >
+          <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+        </a-input>
+      </a-form-item>
 
       <a-form-item>
         <a

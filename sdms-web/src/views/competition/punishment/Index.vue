@@ -21,12 +21,12 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item label="学生姓名" allowClear>
-                <a-input :v-model="queryParam.username" placeholder="请输入"/>
+                <a-input v-model="queryParam.username" placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item label="学号" allowClear>
-                <a-input :v-model="queryParam.accountNo" placeholder="请输入"/>
+                <a-input v-model="queryParam.accountNo" placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
@@ -47,6 +47,7 @@
         </span>
         <span slot="action" slot-scope="text, record">
           <a @click="accountDetail(record)">详情</a>
+          <a v-show="record.isCancel === 0" @click="cancelPunishmentConfirm(record)" style="margin-left:30px">取消处分</a>
         </span>
       </a-table>
 
@@ -75,10 +76,10 @@
                     </a-select>
                 </a-form-item>
                 <a-form-item label="处分生效时间" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
-                    <a-date-picker size="large" placeholder="处分生效时间" v-decorator="['punishmentTime', {rules: [{ required: true, message: '请选择比赛时间'}] }]"/>
+                    <a-date-picker size="large" placeholder="处分生效时间" v-decorator="['punishmentTime', {rules: [{ required: true, message: '请选择处分生效时间'}] }]"/>
                 </a-form-item>
-                <a-form-item label="取消时间" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
-                    <a-date-picker size="large" placeholder="取消时间" v-decorator="['cancelTime', {rules: [{ required: true, message: '请选择报名开始时间'}] }]"/>
+                <a-form-item label="处分取消时间" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
+                    <a-date-picker size="large" placeholder="处分取消时间" v-decorator="['cancelTime']"/>
                 </a-form-item>
                 <a-form-item label="处分原因及描述" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
                     <a-textarea  style="width:500px" :rows="10"  v-decorator="['desc', {rules: [{ required: true, message: '请添加比赛描述'}] }]"/>
@@ -118,7 +119,7 @@
 </template>
 <script>
 import DetailList from '@/components/tools/DetailList'
-import { punishmentAdd, getPunishmentAll } from '@/api/punishment'
+import { punishmentAdd, getPunishmentAll, cancelPunishment } from '@/api/punishment'
 const DetailListItem = DetailList.Item
 
 export default {
@@ -176,8 +177,8 @@ export default {
         },
         {
           title: '操作',
-          width: '150px',
           dataIndex: 'action',
+          align: 'center',
           scopedSlots: { customRender: 'action' }
         }
       ],
@@ -215,6 +216,25 @@ export default {
     this.loadAccountList()
   },
   methods: {
+    cancelPunishmentConfirm (record) {
+      const _this = this
+      this.$confirm({
+        title: '确认',
+        content: '确认取消 ' + record.punishmentNo + ' 学生的处分吗？',
+        onOk () {
+          cancelPunishment(record.id)
+            .then(res => {
+              if (res.code === 0) {
+                _this.loadAccountList()
+                _this.$message.info('取消该学生处分成功！')
+              } else {
+                _this.$message.error('撤销失败！')
+              }
+            })
+        },
+        onCancel () {}
+      })
+    },
     loadAccountList () {
       getPunishmentAll(this.queryParam)
         .then(res => {
@@ -235,6 +255,7 @@ export default {
             .then((res) => {
               if (res.code === 0) {
                 self.$message.info('提交成功')
+                self.form.resetFields()
                 this.loadAccountList()
                 this.addVisible = false
               } else {

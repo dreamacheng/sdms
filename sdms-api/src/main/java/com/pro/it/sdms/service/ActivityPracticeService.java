@@ -20,4 +20,6 @@ public interface ActivityPracticeService {
     List<ActivityResultVO> queryJoin();
 
     String summary(BigDecimal activityResultId, String summary);
+
+    ActivityResultVO summaryView(String accountNo, BigDecimal activityId);
 }

@@ -140,4 +140,27 @@ public class ActivityPracticeServiceImpl implements ActivityPracticeService {
         activityResult.setSummary(summary);
         return activityResultDAO.save(activityResult).getUpdateUser();
     }
+
+    /**
+     * 查询某生某活动参加履历
+     * @param accountNo
+     * @param activityId
+     * @return
+     */
+    @Override
+    public ActivityResultVO summaryView(String accountNo, BigDecimal activityId) {
+        if (StringUtils.isEmpty(accountNo) || activityId == null) {
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "accountNo or activityId required");
+        }
+        Account student = accountDAO.getAccountByAccountNo(accountNo);
+        ActivityPractice activityPractice = activityPracticeDAO.getOne(activityId);
+        if (student == null || activityPractice == null) {
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "account or Practice not exist");
+        }
+        ActivityResult result = activityResultDAO.getByActivityPracticeAndMember(activityPractice, student);
+        if (result == null) {
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "result not exist");
+        }
+        return result.toVO();
+    }
 }

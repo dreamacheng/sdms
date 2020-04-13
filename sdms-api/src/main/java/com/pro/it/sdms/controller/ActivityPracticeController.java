@@ -27,6 +27,7 @@ public class ActivityPracticeController extends BaseController {
         private static final String ACTIVITY_JOIN = "/activity/join";
         private static final String ACTIVITY_JOINED = "/activity/joined";
         private static final String ACTIVITY_SUMMARY = "/activity/summary";
+        private static final String SUMMARY_VIEW = "/activity/summary/view";
     }
 
     /**
@@ -55,6 +56,19 @@ public class ActivityPracticeController extends BaseController {
 
         List<ActivityPracticeVO> list = activityPracticeService.queryAll();
         result.setList(list);
+
+        log.info("=== > response result {}", result);
+        return result;
+    }
+
+    @GetMapping(URL.SUMMARY_VIEW)
+    public InfoAPIResult<ActivityResultVO> summaryView(@RequestParam("accountNo") String accountNo,
+                                                       @RequestParam("activityId") BigDecimal activityId) {
+        InfoAPIResult<ActivityResultVO> result = new InfoAPIResult<>();
+        log.info("=== > request method : [ GET ], request path [ {} ]", URL.SUMMARY_VIEW);
+
+        ActivityResultVO info = activityPracticeService.summaryView(accountNo, activityId);
+        result.setInfo(info);
 
         log.info("=== > response result {}", result);
         return result;

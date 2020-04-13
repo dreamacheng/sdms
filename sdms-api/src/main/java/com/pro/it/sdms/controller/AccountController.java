@@ -30,7 +30,6 @@ public class AccountController extends BaseController {
 
     private class URL {
         private static final String REGISTER_URL = "/register";
-        private static final String RESET_PASSWORD = "/account/resetPwd";
         private static final String ACCOUNT_LIST = "/account/query";
         private static final String CURRENT_ACCOUNT = "/account/current";
         private static final String LOCK_ACCOUNT = "/account/lock/{accountNo}";
@@ -40,6 +39,8 @@ public class AccountController extends BaseController {
         private static final String AVATAR_UPDATE = "/account/avatar";
         private static final String REGISTER_CODE = "/account/code";
         private static final String RESET_PWD_CHECK = "/account/checkInfo";
+        private static final String DELETE_ACCOUNT = "/account/delete";
+        private static final String CHANGE_TEL = "/account/tel";
     }
 
     @PostMapping(URL.REGISTER_URL)
@@ -56,6 +57,16 @@ public class AccountController extends BaseController {
         return result;
     }
 
+    @PostMapping(URL.DELETE_ACCOUNT)
+    public InfoAPIResult<String> deleteAccount(@RequestParam("accountNo") String accountNo) {
+        InfoAPIResult<String> result = new InfoAPIResult<>();
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.DELETE_ACCOUNT);
+        String card = accountService.deleteAccount(accountNo);
+        result.setInfo(card);
+        log.info("=== > response result {}", result);
+        return result;
+    }
+
     @PostMapping(URL.RESET_PWD_CHECK)
     public InfoAPIResult<String> checkInfo(@RequestParam("identityCard") String identityCard,
                                            @RequestParam("accountNo") String accountNo,
@@ -65,6 +76,16 @@ public class AccountController extends BaseController {
         InfoAPIResult<String> result = new InfoAPIResult<>();
         log.info("=== > request method : [ Post ], request path [ {} ]", URL.RESET_PWD_CHECK);
         String card = accountService.checkInfo(identityCard, accountNo, username, tel, pwd);
+        result.setInfo(card);
+        log.info("=== > response result {}", result);
+        return result;
+    }
+
+    @PostMapping(URL.CHANGE_TEL)
+    public InfoAPIResult<String> changeTel(@RequestParam("newTel") String newTel) {
+        InfoAPIResult<String> result = new InfoAPIResult<>();
+        log.info("=== > request method : [ Post ], request path [ {} ]", URL.CHANGE_TEL);
+        String card = accountService.changeTel(newTel);
         result.setInfo(card);
         log.info("=== > response result {}", result);
         return result;

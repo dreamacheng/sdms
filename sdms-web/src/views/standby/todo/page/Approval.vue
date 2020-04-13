@@ -93,6 +93,10 @@
           <detail-list title="申请书">
             {{applyInfo2.applyText}}
           </detail-list>
+          <a-divider/>
+          <detail-list>
+            <a :href="applyInfo2.applyAccessory">下载附件</a>
+          </detail-list>
           <a-divider style="margin-bottom: 32px"/>
           <detail-list title="审核意见">
             {{applyInfo2.applyComment}}

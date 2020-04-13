@@ -82,9 +82,16 @@ public class SemesterEvaluationServiceImpl implements SemesterEvaluationService 
     @Override
     @Secured("ROLE_MANAGER")
     public EvaluateListResponseEntity query() {
+        String no = SecurityContextHolder.getContext().getAuthentication().getName();
         EvaluateListResponseEntity result = new EvaluateListResponseEntity();
-        List<SemesterEvaluationVO> noList = semesterEvaluationDAO.findAllByGradeIsNull().stream().map(SemesterEvaluation::toVO).collect(Collectors.toList());
-        List<SemesterEvaluationVO> list = semesterEvaluationDAO.findAllByGradeIsNotNull().stream().map(SemesterEvaluation::toVO).collect(Collectors.toList());
+        List<SemesterEvaluationVO> noList = semesterEvaluationDAO.findAllByGradeIsNull().stream()
+                .map(SemesterEvaluation::toVO)
+                .filter(item -> !item.getStudentNo().equals(no))
+                .collect(Collectors.toList());
+        List<SemesterEvaluationVO> list = semesterEvaluationDAO.findAllByGradeIsNotNull().stream()
+                .map(SemesterEvaluation::toVO)
+                .filter(item -> !item.getStudentNo().equals(no))
+                .collect(Collectors.toList());
         result.setList(list);
         result.setNotList(noList);
         return result;

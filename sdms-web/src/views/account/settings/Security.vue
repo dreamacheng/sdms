@@ -53,11 +53,34 @@
         ></a-input>
       </a-form-item>
     </a-modal>
+    <a-modal
+      title="电话修改"
+      :width="600"
+      v-model="updateTelShow"
+      @ok="handleEditTel"
+    >
+      <a-form-item label="原手机号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+        <a-input
+          size="large"
+          autocomplete="false"
+          placeholder="原手机号"
+          v-model="telEdit.oldTel"
+        ></a-input>
+      </a-form-item>
+      <a-form-item label="新手机号" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
+        <a-input
+          size="large"
+          autocomplete="false"
+          placeholder="新手机号"
+          v-model="telEdit.newTel"
+        ></a-input>
+      </a-form-item>
+    </a-modal>
   </div>
 </template>
 
 <script>
-import { updatePwdApi } from '@/api/login'
+import { updatePwdApi, currentUserInfo, changeTel } from '@/api/login'
 import md5 from 'md5'
 
 export default {
@@ -65,7 +88,7 @@ export default {
     return {
       data: [
         { title: '账户密码', description: '当前密码强度', value: '强', actions: { title: '修改', callback: () => { this.updatePwdShow = true } } },
-        { title: '密保手机', description: '已绑定手机', value: '1**********', actions: { title: '修改', callback: () => { this.$message.info('Proceeding......') } } }
+        { title: '密保手机', description: '已绑定手机', value: '1**********', actions: { title: '修改', callback: () => { this.updateTelShow = true } } }
       ],
       updatePwdShow: false,
       updateTelShow: false,
@@ -80,7 +103,45 @@ export default {
       }
     }
   },
+  created () {
+    this.loadCurrent()
+  },
   methods: {
+    loadCurrent () {
+      const self = this
+      currentUserInfo()
+        .then(res => {
+          if (res.code === 0) {
+            self.accountInfo = res.info
+            self.data[1].value = res.info.tel.substring(0, 3) + '****' + res.info.tel.substring(7)
+          }
+        })
+    },
+    handleEditTel () {
+      const self = this
+      if (this.telEdit.oldTel !== this.accountInfo.tel) {
+        this.$message.error('原手机号错误')
+        return
+      }
+      var reg = /^1[3456789]\d{9}$/
+      if (!reg.test(this.telEdit.newTel)) {
+        this.$message.error('新手机号格式错误')
+        return
+      }
+      var parameter = new FormData()
+      parameter.append('newTel', this.telEdit.newTel)
+      changeTel(parameter)
+        .then(res => {
+          if (res.code === 0) {
+            this.$message.info('电话修改成功')
+            self.loadCurrent()
+            self.telEdit = {}
+            self.updateTelShow = false
+          } else {
+            this.$message.error('电话修改失败')
+          }
+        })
+    },
     handleEditPwd () {
       if (!this.handlePasswordCheck()) {
         return
@@ -94,6 +155,7 @@ export default {
         .then(res => {
           if (res.code === 0) {
             this.$message.info('密码修改成功')
+            self.pwdEdit = {}
             self.updatePwdShow = false
           }
           if (res.code === 91005) {

@@ -10,6 +10,7 @@ import com.pro.it.sdms.controller.request.UpdatePwdRequestEntity;
 import com.pro.it.sdms.dao.AccountDAO;
 import com.pro.it.sdms.dao.RegisterCodeDAO;
 import com.pro.it.sdms.entity.dto.Account;
+import com.pro.it.sdms.entity.dto.AccountInfo;
 import com.pro.it.sdms.entity.dto.RegisterCode;
 import com.pro.it.sdms.controller.request.PersistAccountRequestEntity;
 import com.pro.it.sdms.entity.vo.AccountVO;
@@ -27,6 +28,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,13 +97,15 @@ public class AccountServiceImpl implements AccountService {
         Page<Account> all = accountDAO.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
             if (!StringUtils.isEmpty(queryAccountRequestEntity.getAccountNo())) {
-                predicateList.add(criteriaBuilder.equal(root.get("accountNo"), queryAccountRequestEntity.getAccountNo()));
+                predicateList.add(criteriaBuilder.like(root.get("accountNo"), "%" + queryAccountRequestEntity.getAccountNo() + "%"));
             }
             if (!StringUtils.isEmpty(queryAccountRequestEntity.getDepartment())) {
-                predicateList.add(criteriaBuilder.like(root.get("department"), queryAccountRequestEntity.getDepartment()));
+                Join<AccountVO, AccountInfo> join = root.join("accountInfo", JoinType.INNER);
+                predicateList.add(criteriaBuilder.like(join.get("college"), "%" + queryAccountRequestEntity.getDepartment() + "%"));
             }
             if (!StringUtils.isEmpty(queryAccountRequestEntity.getLodgingHouse())) {
-                predicateList.add(criteriaBuilder.like(root.get("lodgingHouse"), queryAccountRequestEntity.getLodgingHouse()));
+                Join<AccountVO, AccountInfo> join = root.join("accountInfo", JoinType.INNER);
+                predicateList.add(criteriaBuilder.like(join.get("major"), "%" + queryAccountRequestEntity.getLodgingHouse() + "%"));
             }
             if (!StringUtils.isEmpty(queryAccountRequestEntity.getPoliticsStatus())) {
                 try {
@@ -111,7 +116,7 @@ public class AccountServiceImpl implements AccountService {
                 }
             }
             if (!StringUtils.isEmpty(queryAccountRequestEntity.getUsername())) {
-                predicateList.add(criteriaBuilder.like(root.get("username"), queryAccountRequestEntity.getUsername()));
+                predicateList.add(criteriaBuilder.like(root.get("username"), "%" + queryAccountRequestEntity.getUsername() + "%"));
             }
             if (!StringUtils.isEmpty(queryAccountRequestEntity.getRole())) {
                 predicateList.add(criteriaBuilder.equal(root.get("role"), queryAccountRequestEntity.getRole()));
@@ -121,7 +126,10 @@ public class AccountServiceImpl implements AccountService {
         }, pageable);
 
         QueryResult<AccountVO> queryResult = new QueryResult<>();
-        List<AccountVO> list = all.getContent().stream().map(Account::toVO).collect(Collectors.toList());
+        List<AccountVO> list = all.getContent().stream()
+                .map(Account::toVO)
+                .filter(item -> item.getRole().equals(IdentityEnum.STUDENT.toString()))
+                .collect(Collectors.toList());
         queryResult.setResultList(list);
         queryResult.setTotalRecord(all.getTotalElements());
 
@@ -281,6 +289,28 @@ public class AccountServiceImpl implements AccountService {
         String newPwd = encoder.encode(pwd);
         account.setPassword(newPwd);
         return accountDAO.save(account).getAccountNo();
+    }
+
+    @Override
+    @Secured("ROLE_MANAGER")
+    public String deleteAccount(String accountNo) {
+        if (StringUtils.isEmpty(accountNo)) {
+            throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "accountNo required");
+        }
+        Account account = accountDAO.getAccountByAccountNo(accountNo);
+        if (account == null) {
+            throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "user not exist");
+        }
+        accountDAO.delete(account);
+        return "success";
+    }
+
+    @Override
+    public String changeTel(String newTel) {
+        String no = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account accountByAccountNo = accountDAO.getAccountByAccountNo(no);
+        accountByAccountNo.setTel(newTel);
+        return accountDAO.save(accountByAccountNo).getAccountNo();
     }
 
 

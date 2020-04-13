@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
@@ -92,10 +93,10 @@ public class PunishmentServiceImpl implements PunishmentService {
             if (!StringUtils.isEmpty(accountNo) || !StringUtils.isEmpty(username)) {
                 Join<Punishment, Account> join = root.join("student", JoinType.INNER);
                 if (!StringUtils.isEmpty(accountNo)) {
-                    predicateList.add(criteriaBuilder.equal(join.get("accountNo"), accountNo));
+                    predicateList.add(criteriaBuilder.like(join.get("accountNo"), "%" + accountNo + "%"));
                 }
                 if (!StringUtils.isEmpty(username)) {
-                    predicateList.add(criteriaBuilder.like(join.get("accountName"), accountNo));
+                    predicateList.add(criteriaBuilder.like(join.get("username"), "%" + username + "%"));
                 }
             }
             if (!StringUtils.isEmpty(type)) {

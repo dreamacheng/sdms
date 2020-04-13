@@ -15,4 +15,6 @@ public interface ActivityResultDAO extends JpaSpecificationExecutor<ActivityResu
 
     List<ActivityResult> findAllByMember(Account member);
 
+    ActivityResult getByActivityPracticeAndMember(ActivityPractice activityPractice, Account member);
+
 }

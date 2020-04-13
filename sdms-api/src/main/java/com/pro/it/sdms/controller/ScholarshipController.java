@@ -24,7 +24,7 @@ public class ScholarshipController extends BaseController {
     private class URL {
         private static final String CURRENT_TERM = "/scholarship/query/{curTerm}";
         private static final String QUERY_CURRENT_STUDENT = "/scholarship/query";
-        private static final String QUERY_CURRENT_STUDENT_PASS = "/scholarship/query/pass";
+        private static final String QUERY_CURRENT_STUDENT_PASS = "/scholarship/query/pass/{accountNo}";
         private static final String SCHOLARSHIP_ADD = "/scholarship/add";
         private static final String SCHOLARSHIP_QUERY = "/scholarship/queryAll";
         private static final String SCHOLARSHIP_APPROVAL = "/scholarship/approval";
@@ -74,10 +74,10 @@ public class ScholarshipController extends BaseController {
     }
 
     @GetMapping(URL.QUERY_CURRENT_STUDENT_PASS)
-    public ListAPIResult<ScholarshipVO> queryByAccountNoPass() {
+    public ListAPIResult<ScholarshipVO> queryByAccountNoPass(@PathVariable("accountNo") String accountNo) {
         log.info("=== > request method : [ Get ], request path [ {} ]", URL.QUERY_CURRENT_STUDENT_PASS);
         ListAPIResult<ScholarshipVO> result = new ListAPIResult<>();
-        List<ScholarshipVO> list = scholarshipService.queryPass();
+        List<ScholarshipVO> list = scholarshipService.queryPass(accountNo);
         result.setList(list);
         log.info("=== > response result {}", result);
         return result;

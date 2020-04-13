@@ -12,7 +12,7 @@ public interface ScholarshipService {
 
     List<ScholarshipVO> query();
 
-    List<ScholarshipVO> queryPass();
+    List<ScholarshipVO> queryPass(String accountNo);
 
     BigDecimal addApply(ScholarshipVO vo);
 

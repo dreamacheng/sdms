@@ -29,13 +29,15 @@ public class JwtUserService implements UserDetailsService {
 
     private PasswordEncoder passwordEncoder;
 
+    private static final String  salt = "123456j";
+
     public JwtUserService() {
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     public String saveUserLoginInfo(UserDetails user) throws UnsupportedEncodingException, AccountLockedException {
         // String genSalt = BCrypt.gensalt();
-        String genSalt = generateCode();
+        String genSalt = salt;
         //将用户登录信息存入数据库
         Account loginAccount = accountDAO.getAccountByAccountNo(user.getUsername());
         if (loginAccount == null) {

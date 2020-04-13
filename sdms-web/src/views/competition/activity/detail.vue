@@ -22,8 +22,30 @@
       <a-divider style="margin-bottom: 32px"/>
 
       <div class="title">参加学生列表</div>
-      <a-table :columns="attendeeColumns" :dataSource="attendeeList"/>
+      <a-table :columns="attendeeColumns" :dataSource="attendeeList">
+        <span slot="action" slot-scope="text, record">
+          <a @click="viewSummary(record.accountNo)">查看总结</a>
+        </span>
+      </a-table>
       <a-divider style="margin-bottom: 32px"/>
+
+      <a-modal
+        title="学生总结"
+        :width="1000"
+        v-model="visible2"
+        @ok="close"
+      >
+        <a-card :bordered="false">
+          <detail-list>
+            <detail-list-item term="总结学生">{{activityResult.accountVO.username}}</detail-list-item>
+            <detail-list-item term="学生学号" style="margin-left: 100px">{{activityResult.accountVO.accountNo}}</detail-list-item>
+          </detail-list>
+          <a-divider style="margin-bottom: 32px"/>
+          <detail-list title="活动总结">
+            {{activityResult.summary}}
+          </detail-list>
+        </a-card>
+      </a-modal>
 
     </a-card>
   </div>
@@ -31,7 +53,7 @@
 
 <script>
 import DetailList from '@/components/tools/DetailList'
-import { getActivity } from '@/api/activity'
+import { getActivity, getStudentSummary } from '@/api/activity'
 const DetailListItem = DetailList.Item
 
 export default {
@@ -45,7 +67,21 @@ export default {
   },
   data () {
     return {
+      activityResult: {
+        activityPracticeVO: {
+          title: '',
+          organization: '',
+          startTime: '',
+          endTime: ''
+        },
+        accountVO: {
+          accountNo: '',
+          username: ''
+        },
+        summary: ''
+      },
       visible: false,
+      visible2: false,
       competitionDetail: {},
       attendeeList: [],
       attendeeColumns: [
@@ -55,7 +91,7 @@ export default {
         },
         {
           title: '学生姓名',
-          dataIndex: 'accountName'
+          dataIndex: 'username'
         },
         {
           title: '学院',
@@ -64,6 +100,11 @@ export default {
         {
           title: '科系',
           dataIndex: 'major'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          scopedSlots: { customRender: 'action' }
         }
       ]
     }
@@ -80,8 +121,27 @@ export default {
           })
       }
     },
+    viewSummary (accountNo) {
+      const _this = this
+      const param = {
+        accountNo: accountNo,
+        activityId: this.competitionDetail.id
+      }
+      getStudentSummary(param)
+        .then(res => {
+          if (res.code === 0 & res.info.summary !== '' && res.info.summary != null) {
+            _this.activityResult = res.info
+            _this.visible2 = true
+          } else {
+            _this.$message.info('该生尚未录入总结')
+          }
+        })
+    },
     enterHandler () {
       this.visible = true
+    },
+    close () {
+      this.visible2 = false
     }
   },
   computed: {

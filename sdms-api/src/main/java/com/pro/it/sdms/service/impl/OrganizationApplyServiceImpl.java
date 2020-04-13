@@ -41,7 +41,8 @@ public class OrganizationApplyServiceImpl implements OrganizationApplyService {
         if (vo == null) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter required");
         }
-        OrganizationApply save = organizationApplyDAO.save(vo.toDTO());
+        String proposer = SecurityContextHolder.getContext().getAuthentication().getName();
+        OrganizationApply save = organizationApplyDAO.save(vo.toDTO().toBuilder().proposer(proposer).build());
         return save.getId();
     }
 

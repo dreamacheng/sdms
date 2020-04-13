@@ -42,6 +42,14 @@ export function lockUser (parameter) {
   })
 }
 
+export function deleteUser (parameter) {
+  return axios({
+    url: '/api/account/delete',
+    method: 'post',
+    data: parameter
+  })
+}
+
 export function getUserList (parameter) {
   return axios({
     url: api.user,

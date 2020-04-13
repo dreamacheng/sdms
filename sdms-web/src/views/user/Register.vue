@@ -48,7 +48,7 @@
             <a-input size="large" placeholder="身份证号码" v-decorator="['identityCard', {rules: [{ required: true, message: '请输入正确的身份证号码', pattern: /^\d{17}(\w?\d?)$/ }], validateTrigger: ['blur'] }]"/>
           </a-form-item >
           <a-form-item label="入校时间" :label-col="{ span: 6 }" :wrapper-col="{ span: 12 }">
-            <a-date-picker size="large" placeholder="入校时间" v-decorator="['enrollment', {rules: [{ required: true, message: '请输入入校时间' }] }]"/>
+            <a-month-picker size="large" month="month" placeholder="入校时间" v-decorator="['enrollment', {rules: [{ required: true, message: '请输入入校时间' }] }]"/>
           </a-form-item>
         </a-col>
         <a-col :span="8">

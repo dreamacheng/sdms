@@ -44,8 +44,8 @@
                 <a-form-item label="处分生效时间" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
                     <a-date-picker size="large" placeholder="处分生效时间" v-decorator="['punishmentTime', {rules: [{ required: true, message: '请选择比赛时间'}] }]"/>
                 </a-form-item>
-                <a-form-item label="取消时间" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
-                    <a-date-picker size="large" placeholder="取消时间" v-decorator="['cancelTime', {rules: [{ required: true, message: '请选择报名开始时间'}] }]"/>
+                <a-form-item label="处分取消时间" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
+                    <a-date-picker size="large" placeholder="处分取消时间" v-decorator="['cancelTime']"/>
                 </a-form-item>
                 <a-form-item label="处分原因及描述" :label-col="{ span: 6 }" :wrapper-col="{ span: 12, offset: 2 }">
                     <a-textarea  style="width:500px" :rows="10"  v-decorator="['desc', {rules: [{ required: true, message: '请添加比赛描述'}] }]"/>

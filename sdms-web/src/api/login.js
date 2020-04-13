@@ -60,6 +60,14 @@ export function updatePwdApi (parameter) {
   })
 }
 
+export function changeTel (parameter) {
+  return axios({
+    url: '/api/account/tel',
+    method: 'post',
+    data: parameter
+  })
+}
+
 export function currentUserInfo () {
   return axios({
     url: '/api/account/current',

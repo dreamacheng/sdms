@@ -30,7 +30,7 @@ public class Punishment extends BaseDTO {
     private Date punishmentTime;
 
     /** 取消时间 */
-    @Column(name = "cancel_time", nullable = false, columnDefinition = "datetime")
+    @Column(name = "cancel_time", columnDefinition = "datetime")
     private Date cancelTime;
 
     /** 是否取消 */
@@ -48,6 +48,7 @@ public class Punishment extends BaseDTO {
 
     public PunishmentVO toVO() {
         return PunishmentVO.builder()
+                .id((getId()))
                 .punishmentNo(getStudent().getAccountNo())
                 .punishmentName(getStudent().getUsername())
                 .cancelTime(getCancelTime())

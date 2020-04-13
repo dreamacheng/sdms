@@ -27,7 +27,7 @@ public class PunishmentController extends BaseController {
         private static final String PUNISHMENT_ADD = "/punishment/add";
         private static final String PUNISHMENT_CANCEL = "/punishment/cancel/{id}";
         private static final String PUNISHMENT_QUERY = "/punishment/query";
-        private static final String PUNISHMENT_ALL = "punishment/all";
+        private static final String PUNISHMENT_ALL = "/punishment/all";
     }
 
     @GetMapping(URL.PUNISHMENT_QUERY)
