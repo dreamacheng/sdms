@@ -26,6 +26,7 @@ export default {
         })
     },
     generateCode () {
+      const self = this
       this.$confirm({
         title: '确认',
         content: '确认生成新的注册码吗？',
@@ -34,7 +35,7 @@ export default {
             .then(res => {
               if (res.code === 0) {
                 self.$message.info('生成注册邀请码成功')
-                this.code = res.info
+                self.code = res.info
               } else {
                 self.$message.error('生成失败')
               }

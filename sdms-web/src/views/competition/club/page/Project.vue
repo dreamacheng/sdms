@@ -4,7 +4,7 @@
       <a-list-item slot="renderItem" slot-scope="item" key="item.title">
         <div slot="footer"></div>
         <template slot="actions" >
-          <a-button type="primary" @click="joinClub(item.id)">加入社团</a-button>
+          <a-button type="primary" v-show="item.joinFlag === 'join'" @click="joinClub(item.id)">加入社团</a-button>
         </template>
         <img
           slot="extra"

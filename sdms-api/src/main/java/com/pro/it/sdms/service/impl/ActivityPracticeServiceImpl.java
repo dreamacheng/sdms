@@ -47,7 +47,11 @@ public class ActivityPracticeServiceImpl implements ActivityPracticeService {
         }
         String no = SecurityContextHolder.getContext().getAuthentication().getName();
         Account current = accountDAO.getAccountByAccountNo(no);
-        activityPracticeDAO.save(vo.toDTO().toBuilder().organization(current.getAccountInfo().getCollege()).build());
+        String organization = current.getAccountInfo().getCollege();
+        if (StringUtils.isEmpty(current.getAccountInfo().getCollege())) {
+            organization = "湖南工学院";
+        }
+        activityPracticeDAO.save(vo.toDTO().toBuilder().organization(organization).build());
         return null;
     }
 

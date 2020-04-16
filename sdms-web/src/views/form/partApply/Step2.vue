@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-form style="margin: 40px auto 0;">
-      <result title="申请成功" :is-success="true" :description="applyResult" style="max-width: 560px;">
+      <result :title="applyTitle" :is-success="true" :type="applyIdentity" :description="applyResult" style="max-width: 560px;">
         <div class="information">
           <a-row>
             <a-col :sm="8" :xs="24">申请人学号：</a-col>
@@ -44,7 +44,7 @@
             {{organizationDetail.applyText}}
           </detail-list>
           <a-divider/>
-          <detail-list title="入团申请附件">
+          <detail-list title="入党申请附件">
             <a :href="organizationDetail.applyAccessory">附件材料</a>
           </detail-list>
         </a-card>
@@ -65,7 +65,9 @@ export default {
     return {
       applyResult: '请等待审核人审批',
       organizationDetail: {},
-      visible: false
+      visible: false,
+      applyIdentity: 'success',
+      applyTitle: '申请成功'
     }
   },
   filters: {
@@ -85,12 +87,18 @@ export default {
     }
   },
   created () {
+    const self = this
     getCurAccountApply('PART_APPLY')
       .then(res => {
         if (res.code === 0) {
-          this.organizationDetail = res.info
+          self.organizationDetail = res.info
           if (res.info.applyStatus === 'Approved') {
-            this.applyResult = '你已通过初次审批，请准备后续材料等待党组织通知'
+            self.applyResult = '你已通过初次审批，请准备后续材料等待党组织通知'
+          }
+          if (res.info.applyStatus === 'Rejected') {
+            self.applyIdentity = 'reject'
+            self.applyTitle = '驳回'
+            self.applyResult = '不符合条件，你的申请已被驳回'
           }
         }
       })

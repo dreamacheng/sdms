@@ -148,6 +148,9 @@ export default {
           this.accountdata = res.list
         })
     },
+    close () {
+      this.visible = false
+    },
     accountDetail (record) {
       this.applyInfo = Object.assign({}, record)
       this.visible = true

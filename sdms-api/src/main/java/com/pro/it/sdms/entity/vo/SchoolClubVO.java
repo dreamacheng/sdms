@@ -42,6 +42,9 @@ public class SchoolClubVO {
     /** 创建时间 */
     private Date createTime;
 
+    /** 是否可加入标志位 */
+    private String joinFlag;
+
     public ClubApply toDTO() {
         return ClubApply.builder()
                 .introduction(getIntroduction())

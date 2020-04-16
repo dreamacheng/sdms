@@ -54,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public void registerAccount(PersistAccountRequestEntity createAccountRequestEntity) {
         verifyAccountInfoValid(createAccountRequestEntity);
-        if ("ADMIN".equals(createAccountRequestEntity.getRole())) {
+        if ("MANAGER".equals(createAccountRequestEntity.getRole())) {
             if (StringUtils.isEmpty(createAccountRequestEntity.getRegisterCode())) {
                 throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "Register Code missing");
             }

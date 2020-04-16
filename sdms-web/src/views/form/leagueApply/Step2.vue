@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-form style="margin: 40px auto 0;">
-      <result title="申请成功" :is-success="true" :description="applyResult" style="max-width: 560px;">
+      <result :title="applyTitle" :is-success="true" :type="applyIdentity" :description="applyResult" style="max-width: 560px;">
         <div class="information">
           <a-row>
             <a-col :sm="8" :xs="24">申请人学号：</a-col>
@@ -65,7 +65,9 @@ export default {
     return {
       applyResult: '请等待审核人审批',
       organizationDetail: {},
-      visible: false
+      visible: false,
+      applyIdentity: 'success',
+      applyTitle: '申请成功'
     }
   },
   filters: {
@@ -91,6 +93,11 @@ export default {
           this.organizationDetail = res.info
           if (res.info.applyStatus === 'Approved') {
             this.applyResult = '你已通过初次审批，请准备后续材料等待团组织通知'
+          }
+          if (res.info.applyStatus === 'Rejected') {
+            self.applyIdentity = 'reject'
+            self.applyTitle = '驳回'
+            self.applyResult = '不符合条件，你的申请已被驳回'
           }
         }
       })

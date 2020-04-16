@@ -71,8 +71,13 @@ public class SchoolClubServiceImpl implements SchoolClubService {
         List<ClubMember> all = clubMemberDAO.getAllByMember(account);
         Set<BigDecimal> ids = all.stream().map(item -> item.getClub().getId()).collect(Collectors.toSet());
         return schoolClubDAO.findAll().stream()
-                .filter(item -> !ids.contains(item.getId()))
-                .map(SchoolClub::toVO).collect(Collectors.toList());
+                .map(item -> {
+                    SchoolClubVO vo = item.toVO();
+                    if (!ids.contains(item.getId())) {
+                        vo.setJoinFlag("join");
+                    }
+                    return vo;
+                }).collect(Collectors.toList());
     }
 
     /**
