@@ -1,6 +1,7 @@
 package com.pro.it.sdms.service.impl;
 
 import com.pro.it.common.Constants;
+import com.pro.it.common.exceptions.AuthenticationException;
 import com.pro.it.common.utils.PageInfo;
 import com.pro.it.common.exceptions.BadRequestException;
 import com.pro.it.common.utils.QueryResult;
@@ -17,9 +18,11 @@ import com.pro.it.sdms.entity.vo.AccountVO;
 import com.pro.it.sdms.enums.IdentityEnum;
 import com.pro.it.sdms.enums.PoliticsStatusEnum;
 import com.pro.it.sdms.service.AccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,6 +41,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class AccountServiceImpl implements AccountService {
 
     @Autowired
@@ -45,6 +49,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private RegisterCodeDAO registerCodeDAO;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 注册用户
@@ -146,8 +153,18 @@ public class AccountServiceImpl implements AccountService {
         if (authentication == null || authentication.getPrincipal() == null) {
             throw new BadRequestException(Constants.Code.PARAM_ILLEGAL_VALUE, "token illegal");
         }
-        Account account = accountDAO.getAccountByAccountNo(authentication.getName());
-
+        String accountNo = authentication.getName();
+        Account account;
+        if (redisTemplate.opsForHash().hasKey(Account.class.getSimpleName(), accountNo)) {
+            account = (Account) redisTemplate.opsForHash().get("account", accountNo);
+            log.info("缓存命中: [{}]", accountNo);
+        } else {
+            account = accountDAO.getAccountByAccountNo(accountNo);
+            if (account == null) {
+                throw new AuthenticationException(Constants.ACCOUNT_NOT_EXIST, "user does not exist");
+            }
+            redisTemplate.opsForHash().put(Account.class.getSimpleName(), account.getAccountNo(), account);
+        }
         if (account == null) {
             throw new BadRequestException(Constants.ACCOUNT_NOT_EXIST, "account not exist");
         }

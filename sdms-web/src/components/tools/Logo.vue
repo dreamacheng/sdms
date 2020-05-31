@@ -18,7 +18,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: '湖南工学院',
+      default: '成都理工大学',
       required: false
     },
     showTitle: {

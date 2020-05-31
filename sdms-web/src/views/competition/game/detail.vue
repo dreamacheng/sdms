@@ -151,12 +151,15 @@ export default {
     handleOk () {
       if (this.winnerInfo.accountNo === '') {
         this.$message.info('请键入获奖者学号')
+        return
       }
       if (this.winnerInfo.accountName === '') {
         this.$message.info('请键入获奖者姓名')
+        return
       }
       if (this.winnerInfo.grade === '') {
         this.$message.info('请选择获奖级别')
+        return
       }
       this.winnerInfo.competitionId = this.competitionDetail.id
       this.winnerInfo.competitionName = this.competitionDetail.name
@@ -164,6 +167,9 @@ export default {
       addWinner(this.winnerInfo)
         .then(res => {
           if (res.code === 0) {
+            if (res.info === 'notJoin') {
+              this.$message.info('该生未参加该比赛')
+            }
             this.$message.info('录入成功')
             self.loadCurrent(self.competitionDetail.id)
             self.visible = false

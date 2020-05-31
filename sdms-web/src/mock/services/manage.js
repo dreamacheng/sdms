@@ -41,61 +41,61 @@ const projects = () => {
     'data': [{
       id: 1,
       cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585513352783&di=5a0ecb8d17c59b7030c0d63003b35d81&imgtype=0&src=http%3A%2F%2Fimg.ccutu.com%2Fupload%2Fimages%2F2017-6%2Fp00032164.jpg',
-      title: '湖南工学院官网',
-      description: '湖南工学院,首页',
+      title: '成都理工大学官网',
+      description: '成都理工大学,首页',
       status: 1,
       picSrc: '/b41a.png',
-      link: 'http://www.hnit.edu.cn/index.htm'
+      link: 'http://www.cdut.edu.cn/'
     },
     {
       id: 2,
       cover: 'http://www.hnit.edu.cn/images/jwxt_08.png',
-      title: '湖南工学院教务系统',
+      title: '成都理工大学教务系统',
       description: '教务管理 数字校园 综合教务管理 教学管理 ',
       status: 1,
       updatedAt: '2018-07-26 00:00:00',
       picSrc: '/b51b.png',
-      link: 'http://jwgl.hnit.edu.cn/'
+      link: 'http://www.aao.cdut.edu.cn/'
     },
     {
       id: 3,
       cover: 'http://jy.hnit.edu.cn/favicon.ico?1',
-      title: '湖南工学院就业信息网',
-      description: '湖南工学院云就业平台',
+      title: '成都理工大学就业信息网',
+      description: '成都理工大学云就业平台',
       status: 1,
       updatedAt: '2018-07-26 00:00:00',
       picSrc: '/b41a.png',
-      link: 'http://jy.hnit.edu.cn/'
+      link: 'http://www.jy.cdut.edu.cn/'
     },
     {
       id: 4,
       cover: 'http://www.hnit.edu.cn/images/kczx_11.png',
-      title: '湖南工学院课程中心',
-      description: '湖南工学院课程中心',
+      title: '成都理工大学课程中心',
+      description: '成都理工大学课程中心',
       status: 1,
       updatedAt: '2018-07-26 00:00:00',
       picSrc: '/b41a.png',
-      link: 'http://kczx.hnit.edu.cn/G2S/ShowSystem/Index.aspx'
+      link: 'http://cdut.fanya.chaoxing.com/portal'
     },
     {
       id: 5,
       cover: 'http://www.hnit.edu.cn/images/tsg_19.png',
-      title: '湖南工学院图书馆',
-      description: '湖南工学院图书馆',
+      title: '成都理工大学图书馆',
+      description: '成都理工大学图书馆',
       status: 1,
       updatedAt: '2018-07-26 00:00:00',
       picSrc: '/b41a.png',
-      link: 'http://www.hnit.edu.cn/tsg/'
+      link: 'http://www.lib.cdut.edu.cn/'
     },
     {
       id: 6,
       cover: 'http://www.hnit.edu.cn/images/yjzx_22.png',
-      title: '湖南工学院邮件系统',
-      description: '湖南工学院邮件系统',
+      title: '成都理工大学一卡通',
+      description: '成都理工大学一卡通',
       status: 1,
       updatedAt: '2018-07-26 00:00:00',
       picSrc: '/b41a.png',
-      link: 'http://mail.hnit.edu.cn/'
+      link: 'http://www.campuscard.cdut.edu.cn/'
     }
     ],
     'pageSize': 10,

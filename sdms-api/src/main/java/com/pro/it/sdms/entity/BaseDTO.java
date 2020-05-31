@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -22,7 +23,7 @@ import java.util.Date;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(callSuper = true)
-public class BaseDTO extends BeanBase {
+public class BaseDTO extends BeanBase implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,4 +46,5 @@ public class BaseDTO extends BeanBase {
     @LastModifiedBy
     @Column(name = "update_user")
     private String updateUser;
+
 }

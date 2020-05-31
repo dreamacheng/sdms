@@ -74,5 +74,10 @@ public final class Constants {
 		 */
 		public static final int PARAM_ILLEGAL_VALUE = 90005;
 
+		/**
+		 * 远程调用失败
+		 */
+		public static final int REMOTE_INVOKING_ERROR = 91111;
+
 	}
 }

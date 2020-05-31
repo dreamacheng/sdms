@@ -2,7 +2,7 @@
   <div class="footer">
     <div class="copyright">
       Copyright
-      <a-icon type="copyright" /> 2020 <span>湖南工学院</span>
+      <a-icon type="copyright" /> 2020 <span>成都理工大学</span>
     </div>
   </div>
 </template>

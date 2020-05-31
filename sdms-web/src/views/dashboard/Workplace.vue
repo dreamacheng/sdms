@@ -2,7 +2,7 @@
   <page-view :avatar="accountInfo.avatar" :title="false">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{ accountInfo.username }}<span class="welcome-text">，{{ welcome }}</span></div>
-      <div>{{accountInfo.major}} | 湖南工学院 - {{accountInfo.college}}</div>
+      <div>{{accountInfo.major}} | 成都理工大学 - {{accountInfo.college}}</div>
     </div>
     <!-- <div slot="extra">
       <a-row class="more-info">
@@ -45,7 +45,7 @@
             </div>
           </a-card>
 
-          <a-card :loading="loading" title="媒体湖工" :bordered="false">
+          <a-card :loading="loading" title="媒体成理" :bordered="false">
             <a-list>
               <a-list-item :key="index" v-for="(item, index) in mediaCollege">
                 <a-list-item-meta>
@@ -190,8 +190,8 @@ export default {
   },
   filters: {
     lengthFilter (value) {
-      if (value.length > 20) {
-        return value.substring(0, 20) + '...'
+      if (value.length > 18) {
+        return value.substring(0, 18) + '...'
       }
       return value
     }

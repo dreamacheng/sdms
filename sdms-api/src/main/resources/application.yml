@@ -1,0 +1,60 @@
+# 应用名称
+server:
+  port: 8088
+# 访问端口号
+  tomcat:
+    uri-encoding: UTF-8
+
+# 编码格式
+spring:
+  application:
+    name: sdms-api
+
+  # 数据库相关配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/sdms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: admin
+    driver:
+      class: org.hibernate.dialect.MySQL5InnoDBDialect
+  jpa:
+    hibernate:
+      ddl-auto: update
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  show-sql: false
+
+# redis相关配置
+  redis:
+    password: admin
+    host: 192.168.93.129
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 8  #连接池最大连接数
+        max-wait: 1000  #连接池最大阻塞等待时间
+        max-idle: 8  #连接池中的最大空闲连接
+        min-idle: 0  #连接池中的最小空闲连接
+      shutdown-timeout: 100  #关闭超时时间
+
+  # 上传文件的大小limit
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+# 文件上传与下载地址
+file:
+  upload:
+    filePath: E:/sdms-repo/file/upload
+  view:
+    addr: http://localhost:8088
+  download:
+    divider: /file/view/
+
+# 首页爬取数据的地址前缀
+data:
+  school:
+    prefix: http://www.cdut.edu.cn/
+

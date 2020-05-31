@@ -103,6 +103,10 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (one.getPrizewinnerList() == null) {
             one.setPrizewinnerList(new ArrayList<>());
         }
+        Account accountByAccountNo = accountDAO.getAccountByAccountNo(vo.getAccountNo());
+        if (!one.getAttendeeList().contains(accountByAccountNo)) {
+            return "notJoin";
+        }
         CompetitionResult competitionResult = competitionResultDAO.save(vo.toDTO());
         one.getPrizewinnerList().add(competitionResult);
         return competitionDAO.save(one).getName();

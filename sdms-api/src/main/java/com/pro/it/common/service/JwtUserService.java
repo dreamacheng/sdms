@@ -36,9 +36,7 @@ public class JwtUserService implements UserDetailsService {
     }
 
     public String saveUserLoginInfo(UserDetails user) throws UnsupportedEncodingException, AccountLockedException {
-        // String genSalt = BCrypt.gensalt();
-        String genSalt = salt;
-        //将用户登录信息存入数据库
+        String genSalt = BCrypt.gensalt();        //将用户登录信息存入数据库
         Account loginAccount = accountDAO.getAccountByAccountNo(user.getUsername());
         if (loginAccount == null) {
             throw new UsernameNotFoundException("user does not exist");

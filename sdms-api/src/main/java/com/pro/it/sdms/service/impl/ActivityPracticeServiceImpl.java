@@ -49,7 +49,7 @@ public class ActivityPracticeServiceImpl implements ActivityPracticeService {
         Account current = accountDAO.getAccountByAccountNo(no);
         String organization = current.getAccountInfo().getCollege();
         if (StringUtils.isEmpty(current.getAccountInfo().getCollege())) {
-            organization = "湖南工学院";
+            organization = "成都理工大学";
         }
         activityPracticeDAO.save(vo.toDTO().toBuilder().organization(organization).build());
         return null;

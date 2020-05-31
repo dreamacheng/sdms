@@ -110,7 +110,7 @@ public class ScholarshipServiceImpl implements ScholarshipService {
         dto.setApplyComment(vo.getApplyComment());
         String approver = accountByAccountNo.getAccountInfo().getCollege();
         if (StringUtils.isEmpty(accountByAccountNo.getAccountInfo().getCollege())) {
-            approver = "湖南工学院";
+            approver = "成都理工大学";
         }
         dto.setApprover(approver);
         dto.setStatus(ApprovalResult.valueOf(vo.getStatus()).getCode());

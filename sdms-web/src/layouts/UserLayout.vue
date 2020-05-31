@@ -9,7 +9,7 @@
           </a>
         </div>
         <div class="desc">
-          湖南工学院
+          成都理工大学
         </div>
       </div>
 
@@ -22,7 +22,7 @@
           <a href="_self">条款</a>
         </div>
         <div class="copyright">
-          Copyright &copy; 2020 湖南工学院
+          Copyright &copy; 2020 成都理工大学
         </div>
       </div>
     </div>
