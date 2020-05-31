@@ -29,13 +29,13 @@ public class FileOperationController extends BaseController {
     public InfoAPIResult<String> uploadFile(@RequestParam("objectType") String objectType,
                                             @RequestParam("file")MultipartFile file) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.UPLOAD_FILE);
-        log.info("=== > request parameter Upload Type : [ {} ]", objectType);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.UPLOAD_FILE);
+        log.info("======> request parameter Upload Type : [ {} ]", objectType);
 
         String filePath = fileOperationService.uploadFile(objectType, file);
         result.setInfo(filePath);
 
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
 
     }

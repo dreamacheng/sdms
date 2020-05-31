@@ -33,63 +33,63 @@ public class ScholarshipController extends BaseController {
     @PostMapping(URL.SCHOLARSHIP_ADD)
     public InfoAPIResult<BigDecimal> competitionAdd(@RequestBody ScholarshipVO vo) {
         InfoAPIResult<BigDecimal> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.SCHOLARSHIP_ADD);
-        log.info("=== > request parameter {} : {} ", ScholarshipVO.class.getSimpleName(), vo);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.SCHOLARSHIP_ADD);
+        log.info("======> request parameter {} : {} ", ScholarshipVO.class.getSimpleName(), vo);
         BigDecimal s = scholarshipService.addApply(vo);
         result.setInfo(s);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.SCHOLARSHIP_APPROVAL)
     public InfoAPIResult<BigDecimal> approval(@RequestBody ScholarshipVO vo) {
         InfoAPIResult<BigDecimal> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.SCHOLARSHIP_APPROVAL);
-        log.info("=== > request parameter {} : {} ", ScholarshipVO.class.getSimpleName(), vo);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.SCHOLARSHIP_APPROVAL);
+        log.info("======> request parameter {} : {} ", ScholarshipVO.class.getSimpleName(), vo);
         BigDecimal s = scholarshipService.approval(vo);
         result.setInfo(s);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.CURRENT_TERM)
     public InfoAPIResult<ScholarshipVO> semesterEvalCur(@PathVariable("curTerm") String curTerm) {
         InfoAPIResult<ScholarshipVO> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.CURRENT_TERM);
-        log.info("=== > request parameter current Term : {} ", curTerm);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.CURRENT_TERM);
+        log.info("======> request parameter current Term : {} ", curTerm);
         ScholarshipVO vo = scholarshipService.getCurrentTerm(curTerm);
         result.setInfo(vo);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.QUERY_CURRENT_STUDENT)
     public ListAPIResult<ScholarshipVO> queryByAccountNo() {
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.QUERY_CURRENT_STUDENT);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.QUERY_CURRENT_STUDENT);
         ListAPIResult<ScholarshipVO> result = new ListAPIResult<>();
         List<ScholarshipVO> list = scholarshipService.query();
         result.setList(list);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.QUERY_CURRENT_STUDENT_PASS)
     public ListAPIResult<ScholarshipVO> queryByAccountNoPass(@PathVariable("accountNo") String accountNo) {
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.QUERY_CURRENT_STUDENT_PASS);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.QUERY_CURRENT_STUDENT_PASS);
         ListAPIResult<ScholarshipVO> result = new ListAPIResult<>();
         List<ScholarshipVO> list = scholarshipService.queryPass(accountNo);
         result.setList(list);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.SCHOLARSHIP_QUERY)
     public InfoAPIResult<ScholarshipListResponseEntity> queryAll() {
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.SCHOLARSHIP_QUERY);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.SCHOLARSHIP_QUERY);
         InfoAPIResult<ScholarshipListResponseEntity> result = new InfoAPIResult<>();
         ScholarshipListResponseEntity info = scholarshipService.queryAll();
         result.setInfo(info);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 

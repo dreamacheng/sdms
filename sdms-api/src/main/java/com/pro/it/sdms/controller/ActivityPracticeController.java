@@ -38,13 +38,13 @@ public class ActivityPracticeController extends BaseController {
     @PostMapping(URL.ACTIVITY_ADD)
     public InfoAPIResult<String> activityAdd(@RequestBody ActivityPracticeVO vo) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.ACTIVITY_ADD);
-        log.info("=== > request parameter {} : {} ", ActivityPracticeVO.class.getSimpleName(), vo);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.ACTIVITY_ADD);
+        log.info("======> request parameter {} : {} ", ActivityPracticeVO.class.getSimpleName(), vo);
 
         String s = activityPracticeService.activityAdd(vo);
         result.setInfo(s);
 
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
@@ -52,12 +52,12 @@ public class ActivityPracticeController extends BaseController {
     @GetMapping(URL.ACTIVITY_QUERY)
     public ListAPIResult<ActivityPracticeVO> queryList() {
         ListAPIResult<ActivityPracticeVO> result = new ListAPIResult<>();
-        log.info("=== > request method : [ GET ], request path [ {} ]", URL.ACTIVITY_QUERY);
+        log.info("======> request method : [ GET ], request path [ {} ]", URL.ACTIVITY_QUERY);
 
         List<ActivityPracticeVO> list = activityPracticeService.queryAll();
         result.setList(list);
 
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
@@ -65,34 +65,34 @@ public class ActivityPracticeController extends BaseController {
     public InfoAPIResult<ActivityResultVO> summaryView(@RequestParam("accountNo") String accountNo,
                                                        @RequestParam("activityId") BigDecimal activityId) {
         InfoAPIResult<ActivityResultVO> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ GET ], request path [ {} ]", URL.SUMMARY_VIEW);
+        log.info("======> request method : [ GET ], request path [ {} ]", URL.SUMMARY_VIEW);
 
         ActivityResultVO info = activityPracticeService.summaryView(accountNo, activityId);
         result.setInfo(info);
 
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.ACTIVITY_QUERY_DETAIL)
     public InfoAPIResult<ActivityPracticeVO> query(@PathVariable("id") BigDecimal id) {
         InfoAPIResult<ActivityPracticeVO> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ GET ], request path [ {} ]", URL.ACTIVITY_QUERY_DETAIL);
-        log.info("=== > request parameter id : {} ", id);
+        log.info("======> request method : [ GET ], request path [ {} ]", URL.ACTIVITY_QUERY_DETAIL);
+        log.info("======> request parameter id : {} ", id);
         ActivityPracticeVO vo = activityPracticeService.query(id);
         result.setInfo(vo);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.ACTIVITY_JOIN)
     public InfoAPIResult<String> join(@RequestParam("activityId") BigDecimal activityId) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ POST ], request path [ {} ]", URL.ACTIVITY_JOIN);
-        log.info("=== > request parameter activityId : {} ", activityId);
+        log.info("======> request method : [ POST ], request path [ {} ]", URL.ACTIVITY_JOIN);
+        log.info("======> request parameter activityId : {} ", activityId);
         String s = activityPracticeService.join(activityId);
         result.setInfo(s);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
@@ -100,25 +100,25 @@ public class ActivityPracticeController extends BaseController {
     public InfoAPIResult<String> summary(@RequestParam("activityResultId") BigDecimal activityResultId,
                                          @RequestParam("summary") String summary) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ POST ], request path [ {} ]", URL.ACTIVITY_SUMMARY);
-        log.info("=== > request parameter activityResultId : {} ", activityResultId);
+        log.info("======> request method : [ POST ], request path [ {} ]", URL.ACTIVITY_SUMMARY);
+        log.info("======> request parameter activityResultId : {} ", activityResultId);
 
         String s = activityPracticeService.summary(activityResultId, summary);
         result.setInfo(s);
 
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.ACTIVITY_JOINED)
     public ListAPIResult<ActivityResultVO> queryJoin() {
         ListAPIResult<ActivityResultVO> result = new ListAPIResult<>();
-        log.info("=== > request method : [ POST ], request path [ {} ]", URL.ACTIVITY_JOINED);
+        log.info("======> request method : [ POST ], request path [ {} ]", URL.ACTIVITY_JOINED);
 
         List<ActivityResultVO> list = activityPracticeService.queryJoin();
         result.setList(list);
 
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 }

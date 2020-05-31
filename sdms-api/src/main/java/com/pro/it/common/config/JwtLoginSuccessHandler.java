@@ -29,7 +29,7 @@ public class JwtLoginSuccessHandler implements AuthenticationSuccessHandler {
         String token = null;
         try {
             token = jwtUserService.saveUserLoginInfo((UserDetails) authentication.getPrincipal());
-            log.info("=== > Return token : [ {} ]", token);
+            log.info("======> Return token : [ {} ]", token);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("token", token);
             response.getWriter().write(jsonObject.toString());

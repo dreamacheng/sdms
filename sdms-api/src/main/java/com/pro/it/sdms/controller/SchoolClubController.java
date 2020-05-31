@@ -40,32 +40,32 @@ public class SchoolClubController extends BaseController {
     @PostMapping(URL.CLUB_ADD)
     public InfoAPIResult<String> addClub(@RequestBody SchoolClubVO vo) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.CLUB_ADD);
-        log.info("=== > request parameter {} : {} ", SchoolClubVO.class.getSimpleName(), vo);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.CLUB_ADD);
+        log.info("======> request parameter {} : {} ", SchoolClubVO.class.getSimpleName(), vo);
         String s = schoolClubService.addClub(vo);
         result.setInfo(s);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.CLUB_QUERY)
     public ListAPIResult<SchoolClubVO> query() {
         ListAPIResult<SchoolClubVO> result = new ListAPIResult<>();
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.CLUB_QUERY);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.CLUB_QUERY);
         List<SchoolClubVO> list = schoolClubService.queryAll();
         result.setList(list);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.CLUB_JOIN)
     public InfoAPIResult<String> joinClub(@PathVariable("clubId") BigDecimal clubId) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.CLUB_JOIN);
-        log.info("=== > request parameter clubId: {} ", clubId);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.CLUB_JOIN);
+        log.info("======> request parameter clubId: {} ", clubId);
         String s = schoolClubService.joinClub(clubId);
         result.setInfo(s);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
@@ -73,53 +73,53 @@ public class SchoolClubController extends BaseController {
     public ListAPIResult<ClubMemberVO> queryDetail(@RequestParam(value = "clubId", required = false) BigDecimal clubId,
                                                    @RequestParam(value = "type") String type) {
         ListAPIResult<ClubMemberVO> result = new ListAPIResult<>();
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.QUERY_CLUB_OR_ACCOUNT);
-        log.info("=== > request parameter type: {} , clubId: {} ", type, clubId);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.QUERY_CLUB_OR_ACCOUNT);
+        log.info("======> request parameter type: {} , clubId: {} ", type, clubId);
         List<ClubMemberVO> list = schoolClubService.queryDetail(clubId, type);
         result.setList(list);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.CLUB_JOIN_APPROVAL)
     public InfoAPIResult<String> approval(@RequestBody ApprovalClubRequestEntity approvalClubRequestEntity) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.CLUB_JOIN_APPROVAL);
-        log.info("=== > request parameter  {} : {} ", ApprovalClubRequestEntity.class.getSimpleName(), approvalClubRequestEntity);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.CLUB_JOIN_APPROVAL);
+        log.info("======> request parameter  {} : {} ", ApprovalClubRequestEntity.class.getSimpleName(), approvalClubRequestEntity);
         String status = schoolClubService.approval(approvalClubRequestEntity.getId(), approvalClubRequestEntity.getOperation());
         result.setInfo(status);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.CLUB_APPROVAL)
     public InfoAPIResult<BigDecimal> approvalAdd(@RequestBody CreateClubApprovalRequestEntity createClubApprovalRequestEntity) {
         InfoAPIResult<BigDecimal> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.CLUB_APPROVAL);
-        log.info("=== > request parameter  {} : {} ", CreateClubApprovalRequestEntity.class.getSimpleName(), createClubApprovalRequestEntity);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.CLUB_APPROVAL);
+        log.info("======> request parameter  {} : {} ", CreateClubApprovalRequestEntity.class.getSimpleName(), createClubApprovalRequestEntity);
         BigDecimal status = schoolClubService.approvalAdd(createClubApprovalRequestEntity);
         result.setInfo(status);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.CLUB_APPROVAL_LIST)
     public InfoAPIResult<ClubApprovalListResponseEntity> queryAllApproval() {
         InfoAPIResult<ClubApprovalListResponseEntity> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.CLUB_APPROVAL_LIST);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.CLUB_APPROVAL_LIST);
         ClubApprovalListResponseEntity info = schoolClubService.queryAllApproval();
         result.setInfo(info);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.CLUB_MY_MENTION)
     public ListAPIResult<ClubApplyVO> myMention() {
         ListAPIResult<ClubApplyVO> result = new ListAPIResult<>();
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.CLUB_MY_MENTION);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.CLUB_MY_MENTION);
         List<ClubApplyVO> list = schoolClubService.myMention();
         result.setList(list);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 

@@ -25,7 +25,7 @@ public class BaseController {
 			final BadRequestException bdEx = (BadRequestException) ex;
 
 			// info log
-			log.info( "=== > Result=fail, HttpStatus:400, ErrorCode:{}, ErrorInfo:{}", bdEx.getCode(), bdEx.getErrMsg() );
+			log.info( "======> Result=fail, HttpStatus:400, ErrorCode:{}, ErrorInfo:{}", bdEx.getCode(), bdEx.getErrMsg() );
 
 			return ResponseEntity
 					.ok()
@@ -41,7 +41,7 @@ public class BaseController {
 			final AuthenticationException bdEx = (AuthenticationException) ex;
 
 			// info log
-			log.info( "=== > Result=fail, HttpStatus:401, ErrorCode:{}, ErrorInfo:{}", bdEx.getCode(), bdEx.getErrMsg() );
+			log.info( "======> Result=fail, HttpStatus:401, ErrorCode:{}, ErrorInfo:{}", bdEx.getCode(), bdEx.getErrMsg() );
 
 			return ResponseEntity
 					.status( HttpStatus.UNAUTHORIZED )
@@ -57,7 +57,7 @@ public class BaseController {
 			final ForbiddenException bdEx = (ForbiddenException) ex;
 
 			// info log
-			log.info( "=== > Result=fail, HttpStatus:403, ErrorCode:{}, ErrorInfo:{}", bdEx.getCode(), bdEx.getErrMsg() );
+			log.info( "======> Result=fail, HttpStatus:403, ErrorCode:{}, ErrorInfo:{}", bdEx.getCode(), bdEx.getErrMsg() );
 
 			return ResponseEntity
 					.status( HttpStatus.FORBIDDEN )
@@ -81,7 +81,7 @@ public class BaseController {
 			log.error( "Un-Excepted Error occured.", ex.getCause() );
 
 			// info log
-			log.info( "=== > Result=fail, HttpStatus:500" );
+			log.info( "======> Result=fail, HttpStatus:500" );
 
 			return ResponseEntity
 					.status( HttpStatus.INTERNAL_SERVER_ERROR )

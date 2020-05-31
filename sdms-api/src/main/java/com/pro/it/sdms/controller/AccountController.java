@@ -46,24 +46,24 @@ public class AccountController extends BaseController {
     @PostMapping(URL.REGISTER_URL)
     public InfoAPIResult<String> register(@RequestBody PersistAccountRequestEntity createAccountRequestEntity) throws Exception {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.REGISTER_URL);
-        log.info("=== > request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), createAccountRequestEntity);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.REGISTER_URL);
+        log.info("======> request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), createAccountRequestEntity);
         if (StringUtils.isEmpty(createAccountRequestEntity.getAccountNo())
                 || StringUtils.isEmpty(createAccountRequestEntity.getUsername()) ) {
             throw new BadRequestException(Constants.Code.PARAM_REQUIRED, "parameter require");
         }
         accountService.registerAccount(createAccountRequestEntity);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.DELETE_ACCOUNT)
     public InfoAPIResult<String> deleteAccount(@RequestParam("accountNo") String accountNo) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.DELETE_ACCOUNT);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.DELETE_ACCOUNT);
         String card = accountService.deleteAccount(accountNo);
         result.setInfo(card);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
@@ -74,115 +74,115 @@ public class AccountController extends BaseController {
                                            @RequestParam("tel") String tel,
                                            @RequestParam("pwd") String pwd) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.RESET_PWD_CHECK);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.RESET_PWD_CHECK);
         String card = accountService.checkInfo(identityCard, accountNo, username, tel, pwd);
         result.setInfo(card);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.CHANGE_TEL)
     public InfoAPIResult<String> changeTel(@RequestParam("newTel") String newTel) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.CHANGE_TEL);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.CHANGE_TEL);
         String card = accountService.changeTel(newTel);
         result.setInfo(card);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.REGISTER_CODE)
     public InfoAPIResult<String> generateCode() {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.REGISTER_CODE);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.REGISTER_CODE);
         String code = accountService.generate();
         result.setInfo(code);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.REGISTER_CODE)
     public InfoAPIResult<RegisterCode> getCode() {
         InfoAPIResult<RegisterCode> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.REGISTER_CODE);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.REGISTER_CODE);
         RegisterCode code = accountService.query();
         result.setInfo(code);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.ACCOUNT_LIST)
     public InfoAPIResult<QueryResult> queryAccounts(@RequestBody QueryAccountRequestEntity queryAccountRequestEntity) {
         InfoAPIResult<QueryResult> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.ACCOUNT_LIST);
-        log.info("=== > request parameter {} : {} ", QueryAccountRequestEntity.class.getSimpleName(), queryAccountRequestEntity);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.ACCOUNT_LIST);
+        log.info("======> request parameter {} : {} ", QueryAccountRequestEntity.class.getSimpleName(), queryAccountRequestEntity);
         QueryResult<AccountVO> queryResult = accountService.queryAccount(queryAccountRequestEntity);
         result.setInfo(queryResult);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.CURRENT_ACCOUNT)
     public InfoAPIResult<AccountVO> currentAccount() {
         InfoAPIResult<AccountVO> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.CURRENT_ACCOUNT);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.CURRENT_ACCOUNT);
         AccountVO vo = accountService.currentAccount();
         result.setInfo(vo);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.LOCK_ACCOUNT)
     public InfoAPIResult<String> lockAccount(@PathVariable("accountNo") String accountNo) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.LOCK_ACCOUNT);
-        log.info("=== > request parameter {} : {} ", "AccountNo", accountNo);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.LOCK_ACCOUNT);
+        log.info("======> request parameter {} : {} ", "AccountNo", accountNo);
         String ret = accountService.lockAccount(accountNo);
         result.setInfo(ret);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.UPDATE_ACCOUNT)
     public InfoAPIResult<String> updateAccount(@RequestBody PersistAccountRequestEntity param) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
-        log.info("=== > request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), param);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
+        log.info("======> request parameter {} : {} ", PersistAccountRequestEntity.class.getSimpleName(), param);
         accountService.updateAccount(param);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.UPDATE_PWD)
     public InfoAPIResult<String> updatePwd(@RequestBody UpdatePwdRequestEntity param) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
-        log.info("=== > request parameter {} : {} ", UpdatePwdRequestEntity.class.getSimpleName(), param);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.UPDATE_ACCOUNT);
+        log.info("======> request parameter {} : {} ", UpdatePwdRequestEntity.class.getSimpleName(), param);
         accountService.updatePwd(param);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.TEACHER_QUERY)
     public ListAPIResult<AccountVO> teacherList() {
         ListAPIResult<AccountVO> result = new ListAPIResult<>();
-        log.info("=== > request method : [ Get ]", URL.TEACHER_QUERY);
+        log.info("======> request method : [ Get ]", URL.TEACHER_QUERY);
         List<AccountVO> teacherList = accountService.queryTeacher();
         result.setList(teacherList);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @PostMapping(URL.AVATAR_UPDATE)
     public InfoAPIResult<String> avatarUpdate(@RequestParam("avatar") String avatar) {
         InfoAPIResult<String> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.AVATAR_UPDATE);
-        log.info("=== > request parameter avatar : {} ", avatar);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.AVATAR_UPDATE);
+        log.info("======> request parameter avatar : {} ", avatar);
 
         String url = accountService.updateAvatar(avatar);
         result.setInfo(url);
 
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 }

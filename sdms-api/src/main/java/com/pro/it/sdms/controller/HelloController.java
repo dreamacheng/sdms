@@ -22,10 +22,10 @@ public class HelloController {
     @GetMapping(URL.INDEX_NEWS)
     public InfoAPIResult<IndexListResponseEntity> welcome() {
         InfoAPIResult<IndexListResponseEntity> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.INDEX_NEWS);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.INDEX_NEWS);
         IndexListResponseEntity s = catchDataService.catchData();
         result.setInfo(s);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 }

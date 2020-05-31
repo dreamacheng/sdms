@@ -31,43 +31,43 @@ public class SemesterEvaluationController extends BaseController {
     @PostMapping(URL.SEMESTER_EVALUATION_EVAL)
     public InfoAPIResult<SemesterEvaluationVO> semesterEval(@RequestBody SemesterEvaluationVO vo) {
         InfoAPIResult<SemesterEvaluationVO> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.SEMESTER_EVALUATION_EVAL);
-        log.info("=== > request parameter {} : {} ", SemesterEvaluationVO.class.getSimpleName(), vo);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.SEMESTER_EVALUATION_EVAL);
+        log.info("======> request parameter {} : {} ", SemesterEvaluationVO.class.getSimpleName(), vo);
         SemesterEvaluationVO ret = semesterEvaluationService.SemesterEval(vo);
         result.setInfo(ret);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.SEMESTER_EVALUATION_QUERY)
     public ListAPIResult<SemesterEvaluationVO> queryByAccountNo(String accountNo) {
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.SEMESTER_EVALUATION_QUERY);
-        log.info("=== > request parameter accountNo : {} ", accountNo);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.SEMESTER_EVALUATION_QUERY);
+        log.info("======> request parameter accountNo : {} ", accountNo);
         ListAPIResult<SemesterEvaluationVO> result = new ListAPIResult<>();
         List<SemesterEvaluationVO> list = semesterEvaluationService.queryByAccountNo(accountNo);
         result.setList(list);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.SEMESTER_EVALUATION_ALL_QUERY)
     public InfoAPIResult<EvaluateListResponseEntity> queryAllStudentCurTerm() {
-        log.info("=== > request method : [ Get ], request path [ {} ]", URL.SEMESTER_EVALUATION_ALL_QUERY);
+        log.info("======> request method : [ Get ], request path [ {} ]", URL.SEMESTER_EVALUATION_ALL_QUERY);
         InfoAPIResult<EvaluateListResponseEntity> result = new InfoAPIResult<>();
         EvaluateListResponseEntity info = semesterEvaluationService.query();
         result.setInfo(info);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
     @GetMapping(URL.SEMESTER_EVALUATION_CUR)
     public InfoAPIResult<SemesterEvaluationVO> semesterEvalCur(@PathVariable("curTerm") String curTerm) {
         InfoAPIResult<SemesterEvaluationVO> result = new InfoAPIResult<>();
-        log.info("=== > request method : [ Post ], request path [ {} ]", URL.SEMESTER_EVALUATION_CUR);
-        log.info("=== > request parameter current Term : {} ", curTerm);
+        log.info("======> request method : [ Post ], request path [ {} ]", URL.SEMESTER_EVALUATION_CUR);
+        log.info("======> request parameter current Term : {} ", curTerm);
         SemesterEvaluationVO vo = semesterEvaluationService.queryCurrent(curTerm);
         result.setInfo(vo);
-        log.info("=== > response result {}", result);
+        log.info("======> response result {}", result);
         return result;
     }
 
